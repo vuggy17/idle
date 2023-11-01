@@ -1,0 +1,33 @@
+{
+  "name": "idle.chat-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/idle.chat-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/idle.chat-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "idle.chat:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "idle.chat:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "idle.chat:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/idle.chat-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "implicitDependencies": ["idle.chat"],
+  "tags": []
+}
