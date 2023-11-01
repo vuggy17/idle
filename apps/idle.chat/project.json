@@ -24,7 +24,8 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "idle.chat:build"
+        "buildTarget": "idle.chat:build",
+        "proxyConfig": "apps/idle.chat/proxy.conf.json"
       },
       "configurations": {
         "development": {

@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Watch chat client",
+      "type": "npm",
+      "script": "start:chat",
+      "isBackground": true,
+    },
+    {
+      "label": "Watch chat API",
+      "type": "npm",
+      "script": "start:chatapi",
+      "isBackground": true
+    },
+    {
+      "label": "Watch chat",
+      "type": "shell",
+      "dependsOn": [
+        "Watch chat API",
+        "Watch chat client"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

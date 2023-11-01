@@ -2,11 +2,10 @@
 import styles from './app.module.css';
 
 import NxWelcome from './nx-welcome';
-
 export function App() {
   return (
     <div>
-      <NxWelcome title="idle.chat" />
+      <NxWelcome title="idle.mhr" />
     </div>
   );
 }
