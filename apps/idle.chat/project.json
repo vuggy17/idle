@@ -1,7 +1,7 @@
 {
-  "name": "chat",
+  "name": "idle.chat",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/chat/src",
+  "sourceRoot": "apps/idle.chat/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/chat"
+        "outputPath": "dist/apps/idle.chat"
       },
       "configurations": {
         "development": {
@@ -24,16 +24,16 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "chat:build",
-        "proxyConfig": "apps/chat/proxy.conf.json"
+        "buildTarget": "idle.chat:build",
+        "proxyConfig": "apps/idle.chat/proxy.conf.json"
       },
       "configurations": {
         "development": {
-          "buildTarget": "chat:build:development",
+          "buildTarget": "idle.chat:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "chat:build:production",
+          "buildTarget": "idle.chat:build:production",
           "hmr": false
         }
       }
@@ -42,14 +42,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "chat:build"
+        "buildTarget": "idle.chat:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "chat:build:development"
+          "buildTarget": "idle.chat:build:development"
         },
         "production": {
-          "buildTarget": "chat:build:production"
+          "buildTarget": "idle.chat:build:production"
         }
       }
     },
@@ -58,20 +58,20 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/apps/chat"
+        "reportsDirectory": "../../coverage/apps/idle.chat"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/chat/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/idle.chat/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "chat:build"
+        "buildTarget": "idle.chat:build"
       }
     }
   },

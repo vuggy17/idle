@@ -5,12 +5,12 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import NxWelcome from '../app/nx-welcome';
 import Register from '../modules/auth/pages/Register';
 import { ProtectedRoute } from './ProtectedRoute';
 import { ReactNode } from 'react';
 import { ErrorFallback } from '../main';
 import { ErrorBoundary } from 'react-error-boundary';
+import ChatIndex from 'chat/pages';
 
 function wrapErrorBoundary(component: ReactNode) {
   return (
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     path: '/chat',
     element: wrapErrorBoundary(
       <ProtectedRoute>
-        <NxWelcome title="idle.mhr" />
+        <ChatIndex />
       </ProtectedRoute>
     ),
   },
