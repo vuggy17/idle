@@ -130,6 +130,9 @@ devDependencies:
   '@vitest/ui':
     specifier: ~0.32.0
     version: 0.32.0(vitest@0.32.0)
+  '@webpro/nx-tsc':
+    specifier: ^0.0.1
+    version: 0.0.1
   autoprefixer:
     specifier: ^10.4.16
     version: 10.4.16(postcss@8.4.31)
@@ -4417,6 +4420,10 @@ packages:
     dependencies:
       '@webassemblyjs/ast': 1.11.6
       '@xtuc/long': 4.2.2
+    dev: true
+
+  /@webpro/nx-tsc@0.0.1:
+    resolution: {integrity: sha512-snYRGq3xG/tgPEUWV4ES/4gbEJtKAqfwou/Denq14G7hQ2aqP52mej26iS4Sb/2nd7ryEz1cml8efsNNgtbs6A==}
     dev: true
 
   /@xtuc/ieee754@1.2.0:

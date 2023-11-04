@@ -73,6 +73,12 @@
       "options": {
         "buildTarget": "idle.chat:build"
       }
+    },
+    "typecheck": {
+      "executor": "@webpro/nx-tsc:tsc",
+      "options": {
+        "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json"]
+      }
     }
   },
   "tags": []

@@ -10,7 +10,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { ReactNode } from 'react';
 import { ErrorFallback } from '../main';
 import { ErrorBoundary } from 'react-error-boundary';
-import ChatIndex from 'chat/pages';
+import ChatIndex from 'modules/chat/pages';
 
 function wrapErrorBoundary(component: ReactNode) {
   return (

@@ -16,13 +16,7 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  plugins: [
-    react(),
-    nxViteTsPaths(),
-    tsconfigPaths({
-      root: './',
-    }),
-  ],
+  plugins: [react(), nxViteTsPaths(), tsconfigPaths()],
 
   // Uncomment this if you are using workers.
   // worker: {

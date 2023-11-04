@@ -25,7 +25,8 @@
     "nx": "nx",
     "workspace-generator": "nx workspace-generator",
     "start:chat": "pnpm run start idle.chat:serve",
-    "start:chatapi": "pnpm run start idle.api:serve"
+    "start:chatapi": "pnpm run start idle.api:serve",
+    "typecheck": "nx run-many --target=typecheck --all=true --verbose"
   },
   "private": true,
   "dependencies": {
@@ -72,6 +73,7 @@
     "@vitejs/plugin-react": "~4.0.0",
     "@vitest/coverage-c8": "~0.32.0",
     "@vitest/ui": "~0.32.0",
+    "@webpro/nx-tsc": "^0.0.1",
     "autoprefixer": "^10.4.16",
     "cypress": "^13.0.0",
     "eslint-config-prettier": "^9.0.0",
