@@ -9,14 +9,14 @@
       "options": {
         "cypressConfig": "e2e/idle.chat-e2e/cypress.config.ts",
         "testingType": "e2e",
-        "devServerTarget": "idle.chat:serve"
+        "devServerTarget": "chat:serve"
       },
       "configurations": {
         "production": {
-          "devServerTarget": "idle.chat:serve:production"
+          "devServerTarget": "chat:serve:production"
         },
         "ci": {
-          "devServerTarget": "idle.chat:serve-static"
+          "devServerTarget": "chat:serve-static"
         }
       }
     },
@@ -28,6 +28,6 @@
       }
     }
   },
-  "implicitDependencies": ["idle.chat"],
+  "implicitDependencies": ["chat"],
   "tags": []
 }

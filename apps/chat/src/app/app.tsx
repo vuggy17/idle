@@ -1,13 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
+import AppRouter from '../router/AppRouter';
 
 import NxWelcome from './nx-welcome';
 export function App() {
-  return (
-    <div>
-      <NxWelcome title="idle.mhr" />
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;

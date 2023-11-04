@@ -6,6 +6,7 @@
       "type": "npm",
       "script": "start:chat",
       "isBackground": true,
+      "problemMatcher": []
     },
     {
       "label": "Watch chat API",
