@@ -58,6 +58,12 @@
           "codeCoverage": true
         }
       }
+    },
+    "typecheck": {
+      "executor": "@webpro/nx-tsc:tsc",
+      "options": {
+        "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json"]
+      }
     }
   },
   "tags": []

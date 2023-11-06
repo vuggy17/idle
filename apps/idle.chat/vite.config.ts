@@ -2,8 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import path from 'path';
-
+import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/idle.chat',
 
@@ -17,7 +16,7 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [react(), nxViteTsPaths(), tsconfigPaths()],
 
   // Uncomment this if you are using workers.
   // worker: {

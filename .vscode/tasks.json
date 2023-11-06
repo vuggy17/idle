@@ -6,6 +6,7 @@
       "type": "npm",
       "script": "start:chat",
       "isBackground": true,
+      "problemMatcher": []
     },
     {
       "label": "Watch chat API",
@@ -21,6 +22,16 @@
         "Watch chat client"
       ],
       "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "typecheck",
+      "group": "build",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "label": "Run typecheck",
+      "detail": "Checks all typescript projects and report problems to VSCode"
     }
   ]
 }

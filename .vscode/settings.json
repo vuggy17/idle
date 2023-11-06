@@ -1,7 +1,8 @@
 {
   "cSpell.words": [
     "chatapi",
-    "nestjs"
+    "nestjs",
+    "typecheck"
   ],
   "files.exclude": {
     "**/.git": true,
