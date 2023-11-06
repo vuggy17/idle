@@ -1,14 +1,19 @@
 import { Button, Form, FormProps, Input } from 'antd';
 import { RegisterFormData } from '../Register';
 
-type RegisterFormProps = FormProps<RegisterFormData>;
+type RegisterFormProps = FormProps<RegisterFormData> & {
+  isPending?: boolean;
+};
 
 /**
  *
  * @param formConfig: atnd form props
  * @returns
  */
-export default function RegisterForm({ ...formConfig }: RegisterFormProps) {
+export default function RegisterForm({
+  isPending,
+  ...formConfig
+}: RegisterFormProps) {
   return (
     <Form {...formConfig} layout="vertical" scrollToFirstError>
       <Form.Item
@@ -67,8 +72,8 @@ export default function RegisterForm({ ...formConfig }: RegisterFormProps) {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item >
-        <Button type="primary" htmlType="submit">
+      <Form.Item>
+        <Button loading={isPending} type="primary" htmlType="submit">
           Register
         </Button>
       </Form.Item>
