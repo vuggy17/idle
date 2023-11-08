@@ -1,0 +1,2 @@
+DEV_APPWRITE_PROJECT_HOST=your project host
+DEV_APPWRITE_PROJECT_ID=your project ID

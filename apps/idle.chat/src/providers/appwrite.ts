@@ -1,15 +1,10 @@
 import { Client } from 'appwrite';
+import { resolveEnv } from 'utils/envResolver';
+
+const endpoint = resolveEnv('APPWRITE_PROJECT_HOST');
+const projectId = resolveEnv('APPWRITE_PROJECT_ID');
 
 const client = new Client();
-const endpoint = import.meta.env.VITE_APPWRITE_PROJECT_HOST;
-console.log('🚀 ~ file: appwrite.ts:5 ~ endpoint:', endpoint);
-const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID;
-console.log('🚀 ~ file: appwrite.ts:7 ~ projectId:', projectId);
-
-if (!endpoint || !projectId) {
-  throw new Error('Please provide appwrite projectId or project url');
-}
-
 client.setEndpoint(endpoint).setProject(projectId);
 
 export const AppWriteProvider = client;

@@ -41,7 +41,4 @@ Thumbs.db
 .nx/cache
 
 .pnpm-store
-.yarn
-.pnp.cjs
-.pnp.loader.mjs
-.env
+*.env
