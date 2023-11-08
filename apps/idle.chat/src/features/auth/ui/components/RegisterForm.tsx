@@ -1,5 +1,5 @@
 import { Button, Form, FormProps, Input } from 'antd';
-import { RegisterFormData } from '../Register';
+import { RegisterFormData } from '../pages/Register';
 
 type RegisterFormProps = FormProps<RegisterFormData> & {
   isPending?: boolean;
@@ -17,6 +17,18 @@ export default function RegisterForm({
   return (
     <Form {...formConfig} layout="vertical" scrollToFirstError>
       <Form.Item
+        name="name"
+        label="Name"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your E-mail!',
+          },
+        ]}
+      >
+        <Input placeholder='Your name' />
+      </Form.Item>
+      <Form.Item
         name="email"
         label="E-mail"
         rules={[
@@ -30,7 +42,7 @@ export default function RegisterForm({
           },
         ]}
       >
-        <Input />
+        <Input placeholder='Your email'/>
       </Form.Item>
 
       <Form.Item
@@ -44,7 +56,7 @@ export default function RegisterForm({
         ]}
         hasFeedback
       >
-        <Input.Password />
+        <Input.Password placeholder='Your password' />
       </Form.Item>
 
       <Form.Item
@@ -69,7 +81,7 @@ export default function RegisterForm({
           }),
         ]}
       >
-        <Input.Password />
+        <Input.Password placeholder='Confirm password' />
       </Form.Item>
 
       <Form.Item>

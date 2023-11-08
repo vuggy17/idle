@@ -8,3 +8,10 @@ const client = new Client();
 client.setEndpoint(endpoint).setProject(projectId);
 
 export const AppWriteProvider = client;
+
+export type AppWriteErrorResponse = {
+  code: number;
+  message: string;
+  type: string;
+  version: string;
+};

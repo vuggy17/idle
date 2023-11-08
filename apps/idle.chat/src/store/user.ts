@@ -1,10 +1,24 @@
 import { atom } from 'jotai';
 
-const userAtom = atom<any>(null);
+type User = {
+  $id: string;
+  email: string;
+  name: string;
+  phone: string;
+};
+
+const guest: User = {
+  $id: '',
+  email: 'guest',
+  name: 'guest',
+  phone: 'guest',
+};
+
+const userAtom = atom<User>(guest);
 
 export const currentUser = atom(
   (get) => get(userAtom),
-  (get, set, user) => {
+  (get, set, user: User) => {
     set(userAtom, user);
     // you can set as many atoms as you want at the same time
   }

@@ -3,42 +3,43 @@ import { Card, Form, Layout, Space, Typography } from 'antd';
 import { useSetAtom } from 'jotai';
 import { currentUser } from 'store/user';
 import { useNavigate } from 'react-router-dom';
-import RegisterForm from '../components/RegisterForm';
-import { RegisterUseCase } from 'features/auth/useCases/register';
 import { AuthService } from 'services/authService';
 import { AppWriteProvider } from 'providers/appwrite';
 import { Account, AppwriteException } from 'appwrite';
 import { useState } from 'react';
+import { LoginUseCase } from 'features/auth/useCases/login';
+import LoginForm from '../components/LoginForm';
 
-export type RegisterFormData = {
-  name: string;
+export type LoginFormData = {
   email: string;
   password: string;
-  confirmPassword: string;
 };
 
 // test user
-const testUserRegisterInfo: RegisterFormData = {
-  name: 'appwrite dev',
+const testUserRegisterInfo: LoginFormData = {
   email: 'devtest@gmail.com',
   password: 'Zg92K2jHN8rkbW',
-  confirmPassword: 'Zg92K2jHN8rkbW',
 };
 
-export default function Register() {
-  const [form] = Form.useForm<RegisterFormData>();
-  const [isRegistering, setIsRegistering] = useState(false);
+export default function Login() {
+  const [form] = Form.useForm<LoginFormData>();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const setUserAtom = useSetAtom(currentUser);
   const navigate = useNavigate();
 
-  const onUserSubmitRegisterForm = async (formValues: RegisterFormData) => {
-    setIsRegistering(true);
+  const onUserSubmitLoginForm = async (formValues: LoginFormData) => {
+    setIsLoggingIn(true);
 
     try {
       const authRepo = new AuthService(new Account(AppWriteProvider));
-      const registerUseCase = new RegisterUseCase(authRepo);
-      const newUser = await registerUseCase.execute(formValues);
-      setUserAtom(newUser);
+      const loginUseCase = new LoginUseCase(authRepo);
+      const user = await loginUseCase.execute(formValues);
+      setUserAtom({
+        $id: user.userId,
+        email: formValues.email,
+        name: '',
+        phone: '',
+      });
       navigate('/welcome');
     } catch (error) {
       if (error instanceof AppwriteException) {
@@ -52,39 +53,43 @@ export default function Register() {
         } else {
           form.setFields([
             {
-              name: 'email',
+              name: 'password',
               errors: ['Internal server error'],
             },
           ]);
         }
       }
     } finally {
-      setIsRegistering(false);
+      setIsLoggingIn(false);
     }
   };
 
   return (
     <Layout className="h-full items-center justify-center">
       <Space className="w-[448px]" direction="vertical">
-        <Card>
+        <Card className="flex-col">
           <Space className="w-full" direction="vertical">
             <Typography.Title level={2} className="underline">
-              Register for idle.app
+              Sign in to idle.app{' '}
+              <span role="img" aria-label="airplane icon">
+                ✈️
+              </span>
             </Typography.Title>
-            <RegisterForm
-              isPending={isRegistering}
+            <LoginForm
+              isPending={isLoggingIn}
               form={form}
+              validateTrigger=""
               initialValues={testUserRegisterInfo}
-              onFinish={onUserSubmitRegisterForm}
+              onFinish={onUserSubmitLoginForm}
             />
           </Space>
         </Card>
         <Card>
           <Typography>
-            Already have an account?
-            <Typography.Link href="login">
+            New to Idle?
+            <Typography.Link href="register">
               {' '}
-              Sign in <span role='img' aria-label="airplane icon">✈️</span>
+              Create an account
             </Typography.Link>
           </Typography>
         </Card>

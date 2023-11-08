@@ -1,19 +1,15 @@
 import { UseCase } from 'type';
 import { UserRepository } from '../repositories/userRepository';
+import { RegisterUserRequestDTO, RegisterUserResponseDTO } from 'dto/authDto';
 
 export class RegisterUseCase
-  implements
-    UseCase<
-      { email: string; password: string },
-      { email: string; password: string }
-    >
+  implements UseCase<RegisterUserRequestDTO, RegisterUserResponseDTO>
 {
   constructor(private userRepository: UserRepository) {}
 
-  async execute(registerInfo: {
-    email: string;
-    password: string;
-  }): Promise<{ email: string; password: string }> {
+  async execute(
+    registerInfo: RegisterUserRequestDTO
+  ): Promise<RegisterUserResponseDTO> {
     return await this.userRepository.register(registerInfo);
   }
 }

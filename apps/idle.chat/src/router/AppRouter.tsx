@@ -10,7 +10,8 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { ReactNode } from 'react';
 import { ErrorFallback } from '../main';
 import { ErrorBoundary } from 'react-error-boundary';
-import ChatIndex from 'features/chat/pages';
+import Welcome from 'features/welcome/pages';
+import Login from 'features/auth/ui/pages/Login';
 
 function wrapErrorBoundary(component: ReactNode) {
   return (
@@ -20,12 +21,16 @@ function wrapErrorBoundary(component: ReactNode) {
 
 const router = createBrowserRouter([
   {
-    path: '/chat',
+    path: '/welcome',
     element: wrapErrorBoundary(
       <ProtectedRoute>
-        <ChatIndex />
+        <Welcome />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: '/login',
+    element: wrapErrorBoundary(<Login />),
   },
   {
     path: '/',

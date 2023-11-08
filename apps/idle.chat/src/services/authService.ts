@@ -1,24 +1,35 @@
-import { Account } from 'appwrite';
-import { RegisterUserRequestDTO, RegisterUserResponseDTO } from 'dto/authDto';
+import { Account, ID } from 'appwrite';
+import {
+  LoginUserResponseDTO,
+  RegisterUserRequestDTO,
+  RegisterUserResponseDTO,
+  User,
+} from 'dto/authDto';
 import { UserRepository } from 'features/auth/repositories/userRepository';
-import { uniqueId } from 'utils/uniqueId';
 
 export class AuthService implements UserRepository {
   constructor(private accountGateway: Account) {}
+  async login(email: string, password: string): Promise<LoginUserResponseDTO> {
+    const response = await this.accountGateway.createEmailSession(
+      email,
+      password
+    );
+    return response;
+  }
 
   async register(
     userData: RegisterUserRequestDTO
   ): Promise<RegisterUserResponseDTO> {
     const response = await this.accountGateway.create(
-      uniqueId(),
+      ID.unique(),
       userData.email,
-      userData.password
+      userData.password,
+      userData.name
     );
-    console.log(
-      '🚀 ~ file: authService.ts:17 ~ AuthService ~ response:',
-      response
-    );
+    return response;
+  }
 
-    return userData;
+  async getCurrentLoggedInUser(): Promise<User> {
+    return this.accountGateway.get();
   }
 }
