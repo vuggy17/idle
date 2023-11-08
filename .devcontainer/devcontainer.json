@@ -19,7 +19,8 @@
 				"dbaeumer.vscode-eslint",
 				"firsttris.vscode-jest-runner",
 				"spmeesseman.vscode-taskexplorer",
-				"streetsidesoftware.code-spell-checker"
+				"streetsidesoftware.code-spell-checker",
+				"bradlc.vscode-tailwindcss"
 			]
 		}
 	}, 
