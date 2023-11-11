@@ -5,15 +5,13 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import Register from '../features/auth/ui/pages/Register';
 import { ProtectedRoute } from './ProtectedRoute';
 import { ReactNode } from 'react';
 import { ErrorFallback } from '../main';
 import { ErrorBoundary } from 'react-error-boundary';
 import Welcome from 'features/welcome/pages';
-import Login from 'features/auth/ui/pages/Login';
 
-function wrapErrorBoundary(component: ReactNode) {
+export function wrapErrorBoundary(component: ReactNode) {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>{component}</ErrorBoundary>
   );
@@ -30,15 +28,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: wrapErrorBoundary(<Login />),
+    lazy: () => import('features/auth/ui/pages/Login'),
   },
   {
     path: '/',
-    element: wrapErrorBoundary(<Navigate to={'chat'} />),
+    element: <Navigate to={'welcome'} />,
   },
   {
     path: 'register',
-    element: wrapErrorBoundary(<Register />),
+    lazy: () => import('features/auth/ui/pages/Register'),
   },
 ]);
 

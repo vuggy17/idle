@@ -2,13 +2,15 @@ import { Card, Form, Layout, Space, Typography } from 'antd';
 
 import { useSetAtom } from 'jotai';
 import { currentUser } from 'store/user';
-import { useNavigate } from 'react-router-dom';
+import { LoaderFunction, useNavigate } from 'react-router-dom';
 import { AuthService } from 'services/authService';
 import { AppWriteProvider } from 'providers/appwrite';
 import { Account, AppwriteException } from 'appwrite';
 import { useState } from 'react';
 import { LoginUseCase } from 'features/auth/useCases/login';
 import LoginForm from '../components/LoginForm';
+import { wrapErrorBoundary } from 'router/AppRouter';
+import { ProtectedRoute } from 'router/ProtectedRoute';
 
 export type LoginFormData = {
   email: string;
@@ -21,7 +23,7 @@ const testUserRegisterInfo: LoginFormData = {
   password: 'Zg92K2jHN8rkbW',
 };
 
-export default function Login() {
+function Login() {
   const [form] = Form.useForm<LoginFormData>();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const setUserAtom = useSetAtom(currentUser);
@@ -97,3 +99,9 @@ export default function Login() {
     </Layout>
   );
 }
+
+export const Component = () => wrapErrorBoundary(<Login />);
+
+Component.displayName = 'Register page';
+
+export const loader: LoaderFunction = async ({ params }) => null;

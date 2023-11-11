@@ -2,13 +2,15 @@ import { Card, Form, Layout, Space, Typography } from 'antd';
 
 import { useSetAtom } from 'jotai';
 import { currentUser } from 'store/user';
-import { useNavigate } from 'react-router-dom';
+import { LoaderFunction, useNavigate } from 'react-router-dom';
 import RegisterForm from '../components/RegisterForm';
 import { RegisterUseCase } from 'features/auth/useCases/register';
 import { AuthService } from 'services/authService';
 import { AppWriteProvider } from 'providers/appwrite';
 import { Account, AppwriteException } from 'appwrite';
 import { useState } from 'react';
+import { wrapErrorBoundary } from 'router/AppRouter';
+import { ProtectedRoute } from 'router/ProtectedRoute';
 
 export type RegisterFormData = {
   name: string;
@@ -25,7 +27,7 @@ const testUserRegisterInfo: RegisterFormData = {
   confirmPassword: 'Zg92K2jHN8rkbW',
 };
 
-export default function Register() {
+function Register() {
   const [form] = Form.useForm<RegisterFormData>();
   const [isRegistering, setIsRegistering] = useState(false);
   const setUserAtom = useSetAtom(currentUser);
@@ -84,7 +86,10 @@ export default function Register() {
             Already have an account?
             <Typography.Link href="login">
               {' '}
-              Sign in <span role='img' aria-label="airplane icon">✈️</span>
+              Sign in{' '}
+              <span role="img" aria-label="airplane icon">
+                ✈️
+              </span>
             </Typography.Link>
           </Typography>
         </Card>
@@ -92,3 +97,9 @@ export default function Register() {
     </Layout>
   );
 }
+
+export const Component = () => wrapErrorBoundary(<Register />);
+
+Component.displayName = 'Register page';
+
+export const loader: LoaderFunction = async ({ params }) => null;

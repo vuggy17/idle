@@ -2,6 +2,8 @@ import { Button, Card } from 'antd';
 import Typography from 'antd/es/typography/Typography';
 import NxWelcome from 'app/nx-welcome';
 import { useAtomValue } from 'jotai';
+import { LoaderFunction } from 'react-router-dom';
+import { wrapErrorBoundary } from 'router/AppRouter';
 import { currentUser } from 'store/user';
 
 export default function Welcome() {
@@ -16,3 +18,6 @@ export default function Welcome() {
     </div>
   );
 }
+
+export const Component = () => wrapErrorBoundary(<Welcome />);
+export const loader: LoaderFunction = async ({ params }) => null;
