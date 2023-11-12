@@ -13,7 +13,8 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "dist":true
   },
   "explorer.excludeGitIgnore": false,
   "taskExplorer.enabledTasks": {
