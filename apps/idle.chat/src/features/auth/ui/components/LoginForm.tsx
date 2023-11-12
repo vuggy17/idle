@@ -1,5 +1,6 @@
-import { Input, Form, FormProps, Button } from 'antd';
+import { Input, Form, FormProps, Button, Space, Typography } from 'antd';
 import { LoginFormData } from '../pages/Login';
+import "./loginForm.css"
 
 type LoginFormProps = FormProps<LoginFormData> & {
   isPending?: boolean;
@@ -26,11 +27,18 @@ export default function LoginForm({
 
       <Form.Item
         name="password"
-        label="Password"
+        id="loginForm_password"
+        className='loginForm_password'
+        label={
+          <Space className="justify-between w-full">
+            <Typography.Text>Password</Typography.Text>
+            <Typography.Link href='/register'>Forgot password?</Typography.Link>
+          </Space>
+        }
         rules={[
           {
             required: true,
-            message : 'Please input your password!',
+            message: 'Please input your password!',
           },
         ]}
         hasFeedback
@@ -39,7 +47,7 @@ export default function LoginForm({
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={isPending}>
           Sign in
         </Button>
       </Form.Item>

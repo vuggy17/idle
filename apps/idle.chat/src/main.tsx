@@ -35,13 +35,11 @@ async function main() {
 
   const root = document.getElementById('root') as HTMLElement;
   createRoot(root).render(
-    <StrictMode>
-      <Suspense fallback={<AppFallback key="AppLoading" />}>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <App />
-        </ErrorBoundary>
-      </Suspense>
-    </StrictMode>
+    <Suspense fallback={<AppFallback key="AppLoading" />}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <App />
+      </ErrorBoundary>
+    </Suspense>
   );
 }
 

@@ -1,13 +1,11 @@
 import { Card, Form, Layout, Space, Typography } from 'antd';
 
 import { LoaderFunction, useNavigate } from 'react-router-dom';
-import { AuthService } from 'services/authService';
-import { AppWriteProvider } from 'providers/appwrite';
-import { Account, AppwriteException } from 'appwrite';
+import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
-import { LoginUseCase } from 'features/auth/useCases/login';
 import LoginForm from '../components/LoginForm';
 import { wrapErrorBoundary } from 'router/AppRouter';
+import { useAuth } from 'hooks/useAuth';
 
 export type LoginFormData = {
   email: string;
@@ -24,14 +22,13 @@ function Login() {
   const [form] = Form.useForm<LoginFormData>();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onUserSubmitLoginForm = async (formValues: LoginFormData) => {
     setIsLoggingIn(true);
 
     try {
-      const authRepo = new AuthService(new Account(AppWriteProvider));
-      const loginUseCase = new LoginUseCase(authRepo);
-      await loginUseCase.execute(formValues);
+      await login(formValues.email, formValues.password);
       navigate('/welcome');
     } catch (error) {
       if (error instanceof AppwriteException) {

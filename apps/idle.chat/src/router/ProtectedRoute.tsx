@@ -1,13 +1,12 @@
-import { useAtomValue } from 'jotai';
-import { PropsWithChildren, useEffect } from 'react';
-import { currentUserAtom } from '../store/user';
+import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useAuth } from 'hooks/useAuth';
 
 export function ProtectedRoute({ children }: PropsWithChildren) {
-  const user = useAtomValue(currentUserAtom);
+  const { isAuthenticated } = useAuth();
+
   // guest
-  if (!user.$id) {
-    // user is not authenticated
+  if (!isAuthenticated) {
     return <Navigate to="/login" />;
   } else {
     return children;
