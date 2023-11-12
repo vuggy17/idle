@@ -4,20 +4,27 @@ import NxWelcome from 'app/nx-welcome';
 import { useAtomValue } from 'jotai';
 import { LoaderFunction } from 'react-router-dom';
 import { wrapErrorBoundary } from 'router/AppRouter';
-import { currentUser } from 'store/user';
+import { ProtectedRoute } from 'router/ProtectedRoute';
+import { currentUserAtom } from 'store/user';
 
 export default function Welcome() {
-  const userInfo = useAtomValue(currentUser);
+  const userInfo = useAtomValue(currentUserAtom);
+  console.log("🚀 ~ file: index.tsx:12 ~ Welcome ~ userInfo:", userInfo)
   return (
     <div>
       <Card>
-        <Typography>You have logged in as </Typography>
+        <Typography>You have logged in as  {userInfo.name}  </Typography>
         <Button>Logout</Button>
       </Card>
-      <NxWelcome title={userInfo.email} />
+      <NxWelcome title={userInfo.name} />
     </div>
   );
 }
 
-export const Component = () => wrapErrorBoundary(<Welcome />);
+export const Component = () =>
+  wrapErrorBoundary(
+    <ProtectedRoute>
+      <Welcome />
+    </ProtectedRoute>
+  );
 export const loader: LoaderFunction = async ({ params }) => null;

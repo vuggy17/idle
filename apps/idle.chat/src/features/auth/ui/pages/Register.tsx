@@ -1,7 +1,7 @@
 import { Card, Form, Layout, Space, Typography } from 'antd';
 
 import { useSetAtom } from 'jotai';
-import { currentUser } from 'store/user';
+import { currentUserAtom } from 'store/user';
 import { LoaderFunction, useNavigate } from 'react-router-dom';
 import RegisterForm from '../components/RegisterForm';
 import { RegisterUseCase } from 'features/auth/useCases/register';
@@ -30,7 +30,7 @@ const testUserRegisterInfo: RegisterFormData = {
 function Register() {
   const [form] = Form.useForm<RegisterFormData>();
   const [isRegistering, setIsRegistering] = useState(false);
-  const setUserAtom = useSetAtom(currentUser);
+  const setUserAtom = useSetAtom(currentUserAtom);
   const navigate = useNavigate();
 
   const onUserSubmitRegisterForm = async (formValues: RegisterFormData) => {

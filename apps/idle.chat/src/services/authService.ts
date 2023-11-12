@@ -3,12 +3,13 @@ import {
   LoginUserResponseDTO,
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
-  User,
+  UserDTO,
 } from 'dto/authDto';
 import { UserRepository } from 'features/auth/repositories/userRepository';
 
 export class AuthService implements UserRepository {
   constructor(private accountGateway: Account) {}
+
   async login(email: string, password: string): Promise<LoginUserResponseDTO> {
     const response = await this.accountGateway.createEmailSession(
       email,
@@ -29,7 +30,18 @@ export class AuthService implements UserRepository {
     return response;
   }
 
-  async getCurrentLoggedInUser(): Promise<User> {
+  /**
+   *
+   * @return current logged in user
+   */
+  async getCurrentUser(): Promise<UserDTO> {
     return this.accountGateway.get();
+  }
+
+  /**
+   * logout user by delete the `current` session
+   */
+  async logout(sessionId = 'current'): Promise<void> {
+    await this.accountGateway.deleteSession(sessionId);
   }
 }

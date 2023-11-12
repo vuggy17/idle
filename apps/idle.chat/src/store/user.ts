@@ -16,7 +16,7 @@ const guest: User = {
 
 const userAtom = atom<User>(guest);
 
-export const currentUser = atom(
+export const currentUserAtom = atom(
   (get) => get(userAtom),
   (get, set, user: User) => {
     set(userAtom, user);

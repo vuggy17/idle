@@ -5,11 +5,9 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import { ProtectedRoute } from './ProtectedRoute';
 import { ReactNode } from 'react';
 import { ErrorFallback } from '../main';
 import { ErrorBoundary } from 'react-error-boundary';
-import Welcome from 'features/welcome/pages';
 
 export function wrapErrorBoundary(component: ReactNode) {
   return (
@@ -20,11 +18,7 @@ export function wrapErrorBoundary(component: ReactNode) {
 const router = createBrowserRouter([
   {
     path: '/welcome',
-    element: wrapErrorBoundary(
-      <ProtectedRoute>
-        <Welcome />
-      </ProtectedRoute>
-    ),
+    lazy: () => import('features/welcome/pages/index'),
   },
   {
     path: '/login',

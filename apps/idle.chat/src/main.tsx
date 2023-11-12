@@ -1,8 +1,9 @@
-import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom/client';
+import { StrictMode, Suspense } from 'react';
+import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
-import App from './app/app';
+import { App } from './app/app';
 import './styles.css';
+import { getCurrentStore } from 'store/atom';
 
 export function ErrorFallback({
   error,
@@ -21,13 +22,27 @@ export function ErrorFallback({
   );
 }
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+const AppFallback = () => (
+  <div className="underline h-full w-full flex items-center justify-center">
+    App Loading...
+  </div>
 );
-root.render(
-  <StrictMode>
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <App />
-    </ErrorBoundary>
-  </StrictMode>
-);
+
+async function main() {
+  const { setup } = await import('./bootstrap/setup');
+  const rootStore = getCurrentStore();
+  await setup(rootStore);
+
+  const root = document.getElementById('root') as HTMLElement;
+  createRoot(root).render(
+    <StrictMode>
+      <Suspense fallback={<AppFallback key="AppLoading" />}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <App />
+        </ErrorBoundary>
+      </Suspense>
+    </StrictMode>
+  );
+}
+
+await main();

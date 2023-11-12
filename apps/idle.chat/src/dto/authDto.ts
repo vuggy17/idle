@@ -13,4 +13,4 @@ export type LoginUserRequestDTO = {
   password: string;
 };
 
-export type User = Promise<Models.User<Models.Preferences>>;
+export type UserDTO = Promise<Models.User<Models.Preferences>>;

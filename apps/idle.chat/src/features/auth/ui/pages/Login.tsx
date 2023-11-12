@@ -1,7 +1,5 @@
 import { Card, Form, Layout, Space, Typography } from 'antd';
 
-import { useSetAtom } from 'jotai';
-import { currentUser } from 'store/user';
 import { LoaderFunction, useNavigate } from 'react-router-dom';
 import { AuthService } from 'services/authService';
 import { AppWriteProvider } from 'providers/appwrite';
@@ -10,7 +8,6 @@ import { useState } from 'react';
 import { LoginUseCase } from 'features/auth/useCases/login';
 import LoginForm from '../components/LoginForm';
 import { wrapErrorBoundary } from 'router/AppRouter';
-import { ProtectedRoute } from 'router/ProtectedRoute';
 
 export type LoginFormData = {
   email: string;
@@ -26,7 +23,6 @@ const testUserRegisterInfo: LoginFormData = {
 function Login() {
   const [form] = Form.useForm<LoginFormData>();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const setUserAtom = useSetAtom(currentUser);
   const navigate = useNavigate();
 
   const onUserSubmitLoginForm = async (formValues: LoginFormData) => {
@@ -35,13 +31,7 @@ function Login() {
     try {
       const authRepo = new AuthService(new Account(AppWriteProvider));
       const loginUseCase = new LoginUseCase(authRepo);
-      const user = await loginUseCase.execute(formValues);
-      setUserAtom({
-        $id: user.userId,
-        email: formValues.email,
-        name: '',
-        phone: '',
-      });
+      await loginUseCase.execute(formValues);
       navigate('/welcome');
     } catch (error) {
       if (error instanceof AppwriteException) {
@@ -80,7 +70,6 @@ function Login() {
             <LoginForm
               isPending={isLoggingIn}
               form={form}
-              validateTrigger=""
               initialValues={testUserRegisterInfo}
               onFinish={onUserSubmitLoginForm}
             />
