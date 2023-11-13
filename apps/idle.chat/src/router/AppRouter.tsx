@@ -21,6 +21,10 @@ const router = createBrowserRouter([
     lazy: () => import('features/welcome/pages/index'),
   },
   {
+    path: '/setting',
+    lazy: () => import('features/preference/ui/pages/Preference'),
+  },
+  {
     path: '/login',
     lazy: () => import('features/auth/ui/pages/Login'),
   },
