@@ -1,4 +1,13 @@
-import { ConfigProvider, Layout, Menu, Space, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Layout,
+  Menu,
+  Modal,
+  Space,
+  Typography,
+} from 'antd';
 import { Link, LoaderFunction } from 'react-router-dom';
 import { wrapErrorBoundary } from 'router/AppRouter';
 import { ProtectedRoute } from 'router/ProtectedRoute';
@@ -21,6 +30,7 @@ const contentStyle: React.CSSProperties = {
   lineHeight: '120px',
   color: '#fff',
   backgroundColor: '#108ee9',
+  paddingTop: 42,
 };
 
 const menuIcon = (
@@ -106,7 +116,8 @@ function Preference() {
   }, [pageSelection]);
 
   return (
-    <Layout className="max-w-3xl min-w-3xl mx-auto">
+    // <Layout className="max-w-3xl min-w-3xl mx-auto">
+    <Layout>
       <ConfigProvider
         theme={{
           components: {
@@ -121,22 +132,21 @@ function Preference() {
           },
         }}
       >
-        <Header>
-          <Typography.Text
-            strong
-            className="text-[#807f7a] text-xs tracking-wide"
-          >
-            Account
-          </Typography.Text>
-        </Header>
         <Layout>
-          <Sider theme="light" width={360}>
-            <Space direction="vertical" className='w-full max-w-xs'>
+          <Sider theme="light" width={360} className="pt-3">
+            <Header>
+              <Typography.Text
+                strong
+                className="text-[#807f7a] text-xs tracking-wide"
+              >
+                Account
+              </Typography.Text>
+            </Header>
+            <Space direction="vertical" className="w-full max-w-xs">
               <div className="pl-4">
                 <UserCard
                   name={currentUser.name}
                   userName={currentUser.email}
-                  avatar="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/d8/d849425c7d8e1a5f90c8aed9f2fca8ad52d2d7be.jpg"
                 />
               </div>
               <Menu

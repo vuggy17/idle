@@ -1,5 +1,12 @@
+import { Layout } from 'antd';
+import { Content } from 'antd/es/layout/layout';
+
 export default function MyAccount() {
   return (
-    <div>MyAccount</div>
-  )
+    <Layout>
+      <Content className='bg-white'>
+        <div>MyAccount</div>
+      </Content>
+    </Layout>
+  );
 }
