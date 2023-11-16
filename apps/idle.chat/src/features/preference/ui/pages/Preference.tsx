@@ -25,12 +25,11 @@ type MenuItem = Required<MenuProps>['items'][number];
 const { Sider, Content, Header } = Layout;
 
 const contentStyle: React.CSSProperties = {
-  textAlign: 'center',
-  minHeight: 120,
+  minHeight: 640,
   lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#108ee9',
-  paddingTop: 42,
+  // color: '#fff',
+  backgroundColor: '#fff',
+  // paddingTop: 42,
 };
 
 const menuIcon = (
@@ -109,11 +108,11 @@ function Preference() {
       case PreferenceSubPages.MySetting:
         return <UnderConstruction />;
       case PreferenceSubPages.MyAccount:
-        return <MyAccount />;
+        return <MyAccount user={currentUser} />;
       default:
         return <UnderConstruction />;
     }
-  }, [pageSelection]);
+  }, [currentUser, pageSelection]);
 
   return (
     // <Layout className="max-w-3xl min-w-3xl mx-auto">
