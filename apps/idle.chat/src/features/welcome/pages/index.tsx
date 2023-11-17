@@ -1,35 +1,59 @@
-import { Button, Card } from 'antd';
+import { Button, Card, Modal } from 'antd';
 import Typography from 'antd/es/typography/Typography';
 import NxWelcome from 'app/nx-welcome';
+import ModalFallback from 'components/Fallbacks/ModalFallback';
 import { useAuth } from 'hooks/useAuth';
-import { useAtom } from 'jotai';
-import { LoaderFunction } from 'react-router-dom';
+import { useAtomValue } from 'jotai';
+import { Suspense, lazy, useState } from 'react';
 import { wrapErrorBoundary } from 'router/AppRouter';
 import { ProtectedRoute } from 'router/ProtectedRoute';
 import { currentUserAtom } from 'store/user';
 
-export default function Welcome() {
-  const [userInfo] = useAtom(currentUserAtom);
+const PreferencePage = lazy(() => import('features/preference/ui/pages'));
+
+function Welcome() {
+  const userInfo = useAtomValue(currentUserAtom);
   const { logout } = useAuth();
+  const [openSettingModal, setOpenSettingModal] = useState(false);
 
   const logOutUser = async () => {
     await logout();
   };
+
   return (
     <div>
       <Card>
         <Typography>You have logged in as {userInfo.name} </Typography>
         <Button onClick={logOutUser}>Logout</Button>
+        <Button onClick={() => setOpenSettingModal(true)}>Open setting</Button>
       </Card>
       <NxWelcome title={userInfo.name} />
+      <Modal
+        centered={true}
+        closeIcon={null}
+        footer={null}
+        open={openSettingModal}
+        width={1280}
+        onCancel={() => setOpenSettingModal(false)}
+      >
+        <Suspense
+          fallback={
+            <ModalFallback className="w-full min-h-[300px] align-middle" />
+          }
+        >
+          <PreferencePage />
+        </Suspense>
+      </Modal>
     </div>
   );
 }
 
-export const Component = () =>
-  wrapErrorBoundary(
+export const Component = () => {
+  return wrapErrorBoundary(
     <ProtectedRoute>
       <Welcome />
     </ProtectedRoute>
   );
-export const loader: LoaderFunction = async ({ params }) => null;
+};
+
+// export const loader: LoaderFunction = async ({ params }) => null;

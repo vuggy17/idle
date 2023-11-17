@@ -1,8 +1,6 @@
 import { ConfigProvider, Layout, Menu, Space, Typography } from 'antd';
-import { Link, LoaderFunction } from 'react-router-dom';
+import { LoaderFunction } from 'react-router-dom';
 import { wrapErrorBoundary } from 'router/AppRouter';
-import { ProtectedRoute } from 'router/ProtectedRoute';
-
 import type { MenuProps } from 'antd/es/menu';
 import { useMemo, useState } from 'react';
 import MyAccount from './MyAccount';
@@ -16,11 +14,8 @@ type MenuItem = Required<MenuProps>['items'][number];
 const { Sider, Content, Header } = Layout;
 
 const contentStyle: React.CSSProperties = {
-  textAlign: 'center',
-  minHeight: 120,
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#108ee9',
+  minHeight: 640,
+  backgroundColor: '#fff',
 };
 
 const menuIcon = (
@@ -65,7 +60,6 @@ const PreferenceSubPages = {
 type ValueOf<T> = T[keyof T];
 type SubPages = ValueOf<typeof PreferenceSubPages>;
 
-// <Link to="General">
 const settings: MenuItem[] = [
   getSettingMenu('General', PreferenceSubPages.General, menuIcon),
   getSettingMenu('My account', PreferenceSubPages.MyAccount, menuIcon),
@@ -82,7 +76,6 @@ function Preference() {
     PreferenceSubPages.General
   );
   const currentUser = useAtomValue(currentUserAtom);
-
   const onPageSelected = (page: SubPages) => {
     if (pageSelection === page) {
       return;
@@ -99,14 +92,14 @@ function Preference() {
       case PreferenceSubPages.MySetting:
         return <UnderConstruction />;
       case PreferenceSubPages.MyAccount:
-        return <MyAccount />;
+        return <MyAccount user={currentUser} />;
       default:
         return <UnderConstruction />;
     }
-  }, [pageSelection]);
+  }, [currentUser, pageSelection]);
 
   return (
-    <Layout className="max-w-3xl min-w-3xl mx-auto">
+    <Layout>
       <ConfigProvider
         theme={{
           components: {
@@ -121,22 +114,21 @@ function Preference() {
           },
         }}
       >
-        <Header>
-          <Typography.Text
-            strong
-            className="text-[#807f7a] text-xs tracking-wide"
-          >
-            Account
-          </Typography.Text>
-        </Header>
         <Layout>
           <Sider theme="light" width={360}>
-            <Space direction="vertical" className='w-full max-w-xs'>
+            <Header>
+              <Typography.Text
+                strong
+                className="text-[#807f7a] text-xs tracking-wide"
+              >
+                Account
+              </Typography.Text>
+            </Header>
+            <Space direction="vertical" className="w-full max-w-xs">
               <div className="pl-4">
                 <UserCard
                   name={currentUser.name}
                   userName={currentUser.email}
-                  avatar="https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/d8/d849425c7d8e1a5f90c8aed9f2fca8ad52d2d7be.jpg"
                 />
               </div>
               <Menu
@@ -159,10 +151,5 @@ function Preference() {
   );
 }
 
-export const Component = () =>
-  wrapErrorBoundary(
-    <ProtectedRoute>
-      <Preference />
-    </ProtectedRoute>
-  );
+export const Component = () => wrapErrorBoundary(<Preference />);
 export const loader: LoaderFunction = async ({ params }) => null;

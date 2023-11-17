@@ -1,6 +1,8 @@
 import { Models } from 'appwrite';
 
-export type RegisterUserResponseDTO = Models.User<Models.Preferences>;
+export type UserDTO = Models.User<Models.Preferences> & { avatar?: string };
+
+export type RegisterUserResponseDTO = UserDTO;
 export type RegisterUserRequestDTO = {
   email: string;
   password: string;
@@ -13,4 +15,5 @@ export type LoginUserRequestDTO = {
   password: string;
 };
 
-export type UserDTO = Promise<Models.User<Models.Preferences>>;
+export type ChangePasswordResponseDTO = UserDTO;
+export type ChangePasswordRequestDTO = { currentPass: string; newPass: string };

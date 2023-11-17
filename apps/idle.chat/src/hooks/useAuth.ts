@@ -1,7 +1,7 @@
 import { Account } from 'appwrite';
 import { useAtom } from 'jotai';
 import { AppWriteProvider } from 'providers/appwrite';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { AuthService } from 'services/authService';
 import { currentUserAtom } from 'store/user';
 
@@ -10,19 +10,21 @@ const guest = {
   email: 'guest',
   name: 'guest',
   phone: 'guest',
+  avatar: '',
 };
 
 const authRepo = new AuthService(new Account(AppWriteProvider));
 
 export function useAuth() {
-  const [currentUser, setUser] = useAtom(currentUserAtom);
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    currentUser.$id ? true : false
-  );
-
-  useEffect(() => {
-    setIsAuthenticated(currentUser.$id ? true : false);
-  }, [currentUser]);
+  // const [currentUser, setUser] = useAtom(currentUserAtom);
+  // const isAuthenticated = useMemo(
+  //   () => (currentUser.$id ? true : false),
+  //   [currentUser.$id]
+  // );
+  const isAuthenticated = true;
+  const setUser = (use: any) => {
+    return use;
+  };
 
   return {
     isAuthenticated,

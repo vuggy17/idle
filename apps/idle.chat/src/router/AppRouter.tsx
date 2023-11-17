@@ -1,5 +1,3 @@
-// const routes =
-
 import {
   Navigate,
   RouterProvider,
@@ -8,7 +6,6 @@ import {
 import { ReactNode } from 'react';
 import { ErrorFallback } from '../main';
 import { ErrorBoundary } from 'react-error-boundary';
-
 export function wrapErrorBoundary(component: ReactNode) {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>{component}</ErrorBoundary>

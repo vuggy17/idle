@@ -5,6 +5,7 @@ type User = {
   email: string;
   name: string;
   phone: string;
+  avatar?: string;
 };
 
 const guest: User = {
@@ -12,6 +13,7 @@ const guest: User = {
   email: 'guest',
   name: 'guest',
   phone: 'guest',
+  avatar: '',
 };
 
 const userAtom = atom<User>(guest);

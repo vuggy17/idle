@@ -19,6 +19,7 @@
     "antd": "^5.11.0",
     "appwrite": "^13.0.0",
     "axios": "^1.0.0",
+    "iconoir-react": "^7.0.2",
     "jotai": "^2.5.0",
     "node-appwrite": "^11.0.0",
     "react": "18.2.0",
@@ -27,6 +28,7 @@
     "react-router-dom": "^6.18.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
+    "string-to-color": "^2.2.2",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
