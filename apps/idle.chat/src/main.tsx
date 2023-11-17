@@ -1,9 +1,8 @@
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
-import { App } from './app/app';
-import './styles.css';
 import { getCurrentStore } from 'store/atom';
+import './styles.css';
 
 export function ErrorFallback({
   error,
@@ -28,11 +27,12 @@ const AppFallback = () => (
   </div>
 );
 
+const App = lazy(() => import('app/app'));
+
 async function main() {
   const { setup } = await import('./bootstrap/setup');
   const rootStore = getCurrentStore();
   await setup(rootStore);
-
   const root = document.getElementById('root') as HTMLElement;
   createRoot(root).render(
     <Suspense fallback={<AppFallback key="AppLoading" />}>

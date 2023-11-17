@@ -1,7 +1,7 @@
 import type { createStore } from 'jotai';
 import { PropsWithChildren } from 'react';
 import { Provider } from 'jotai';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App } from 'antd';
 
 export type IldeContextProps = PropsWithChildren<{
   store?: ReturnType<typeof createStore>;
@@ -19,7 +19,7 @@ export function IdleContextProvider({ children, ...props }: IldeContextProps) {
           },
         }}
       >
-        {children}
+        <App>{children}</App>
       </ConfigProvider>
     </Provider>
   );

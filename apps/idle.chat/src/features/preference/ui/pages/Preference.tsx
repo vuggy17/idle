@@ -1,17 +1,6 @@
-import {
-  Button,
-  Card,
-  ConfigProvider,
-  Layout,
-  Menu,
-  Modal,
-  Space,
-  Typography,
-} from 'antd';
-import { Link, LoaderFunction } from 'react-router-dom';
+import { ConfigProvider, Layout, Menu, Space, Typography } from 'antd';
+import { LoaderFunction } from 'react-router-dom';
 import { wrapErrorBoundary } from 'router/AppRouter';
-import { ProtectedRoute } from 'router/ProtectedRoute';
-
 import type { MenuProps } from 'antd/es/menu';
 import { useMemo, useState } from 'react';
 import MyAccount from './MyAccount';
@@ -26,10 +15,7 @@ const { Sider, Content, Header } = Layout;
 
 const contentStyle: React.CSSProperties = {
   minHeight: 640,
-  lineHeight: '120px',
-  // color: '#fff',
   backgroundColor: '#fff',
-  // paddingTop: 42,
 };
 
 const menuIcon = (
@@ -74,7 +60,6 @@ const PreferenceSubPages = {
 type ValueOf<T> = T[keyof T];
 type SubPages = ValueOf<typeof PreferenceSubPages>;
 
-// <Link to="General">
 const settings: MenuItem[] = [
   getSettingMenu('General', PreferenceSubPages.General, menuIcon),
   getSettingMenu('My account', PreferenceSubPages.MyAccount, menuIcon),
@@ -91,7 +76,6 @@ function Preference() {
     PreferenceSubPages.General
   );
   const currentUser = useAtomValue(currentUserAtom);
-
   const onPageSelected = (page: SubPages) => {
     if (pageSelection === page) {
       return;
@@ -115,7 +99,6 @@ function Preference() {
   }, [currentUser, pageSelection]);
 
   return (
-    // <Layout className="max-w-3xl min-w-3xl mx-auto">
     <Layout>
       <ConfigProvider
         theme={{
@@ -132,7 +115,7 @@ function Preference() {
         }}
       >
         <Layout>
-          <Sider theme="light" width={360} className="pt-3">
+          <Sider theme="light" width={360}>
             <Header>
               <Typography.Text
                 strong
@@ -168,10 +151,5 @@ function Preference() {
   );
 }
 
-export const Component = () =>
-  wrapErrorBoundary(
-    <ProtectedRoute>
-      <Preference />
-    </ProtectedRoute>
-  );
+export const Component = () => wrapErrorBoundary(<Preference />);
 export const loader: LoaderFunction = async ({ params }) => null;

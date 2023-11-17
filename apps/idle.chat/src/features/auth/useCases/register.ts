@@ -10,6 +10,7 @@ export class RegisterUseCase
   async execute(
     registerInfo: RegisterUserRequestDTO
   ): Promise<RegisterUserResponseDTO> {
-    return await this.userRepository.register(registerInfo);
+    const baseUserInfo = await this.userRepository.register(registerInfo);
+    return { ...baseUserInfo, avatar: '' };
   }
 }

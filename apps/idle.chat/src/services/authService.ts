@@ -44,4 +44,8 @@ export class AuthService implements UserRepository {
   async logout(sessionId = 'current'): Promise<void> {
     await this.accountGateway.deleteSession(sessionId);
   }
+
+  async changePassword(currentPass: string, newPass: string): Promise<any> {
+    return this.accountGateway.updatePassword(newPass, currentPass);
+  }
 }

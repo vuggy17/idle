@@ -4,7 +4,7 @@ import { useAuth } from 'hooks/useAuth';
 
 export function ProtectedRoute({ children }: PropsWithChildren) {
   const { isAuthenticated } = useAuth();
-
+  console.log("route rendering")
   // guest
   if (!isAuthenticated) {
     return <Navigate to="/login" />;

@@ -29,6 +29,9 @@ dependencies:
   axios:
     specifier: ^1.0.0
     version: 1.6.0
+  iconoir-react:
+    specifier: ^7.0.2
+    version: 7.0.2(react@18.2.0)
   jotai:
     specifier: ^2.5.0
     version: 2.5.0(@types/react@18.2.24)(react@18.2.0)
@@ -53,6 +56,9 @@ dependencies:
   rxjs:
     specifier: ^7.8.0
     version: 7.8.0
+  string-to-color:
+    specifier: ^2.2.2
+    version: 2.2.2
   tslib:
     specifier: ^2.3.0
     version: 2.6.2
@@ -5887,6 +5893,10 @@ packages:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
     dev: true
 
+  /colornames@1.1.1:
+    resolution: {integrity: sha512-/pyV40IrsdulWv+wFPmERh9k/mjsPZ64yUMDmWrtj/k1nmgrzzIENWKdaVKyBbvFdQWqkcaRxr+polCo3VMe7A==}
+    dev: false
+
   /columnify@1.6.0:
     resolution: {integrity: sha512-lomjuFZKfM6MSAnV9aCZC9sc0qGbmZdfygNv+nCpqVkSKdCxCklLtd16O0EILGkImHw9ZpHkAnHaB+8Zxq5W6Q==}
     engines: {node: '>=8.0.0'}
@@ -7981,6 +7991,11 @@ packages:
     hasBin: true
     dev: true
 
+  /hex-rgb@4.3.0:
+    resolution: {integrity: sha512-Ox1pJVrDCyGHMG9CFg1tmrRUMRPRsAWYc/PinY0XzJU4K7y7vjNoLKIQ7BR5UJMCxNN8EM1MNDmHWA/B3aZUuw==}
+    engines: {node: '>=6'}
+    dev: false
+
   /hosted-git-info@7.0.1:
     resolution: {integrity: sha512-+K84LB1DYwMHoHSgaOY/Jfhw3ucPmSET5v98Ke/HdNSw4a0UktWzyW1mjhjpuxxTqOOsfWT/7iVshHmVZ4IpOA==}
     engines: {node: ^16.14.0 || >=18.0.0}
@@ -8144,6 +8159,14 @@ packages:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
     dev: true
+
+  /iconoir-react@7.0.2(react@18.2.0):
+    resolution: {integrity: sha512-1F5Qt8gVZrrjnFEeav/JafrQSzIwFPqGWR8HiJUd8hkDaQ7ByKLUqhirPpOvanJJNAcr3rrFD427ml6FZhnhoA==}
+    peerDependencies:
+      react: ^16.8.6 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -9392,9 +9415,21 @@ packages:
     resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
     dev: true
 
+  /lodash.padend@4.6.1:
+    resolution: {integrity: sha512-sOQs2aqGpbl27tmCS1QNZA09Uqp01ZzWfDUoD+xzTii0E7dSQfRKcRetFwa+uXaxaqL+TKm7CgD2JdKP7aZBSw==}
+    dev: false
+
+  /lodash.trimstart@4.5.1:
+    resolution: {integrity: sha512-b/+D6La8tU76L/61/aN0jULWHkT0EeJCmVstPBn/K9MtD2qBW83AsBNrr63dKuWYwVMO7ucv13QNO/Ek/2RKaQ==}
+    dev: false
+
   /lodash.uniq@4.5.0:
     resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
     dev: true
+
+  /lodash.words@4.2.0:
+    resolution: {integrity: sha512-mXxqd8Yx9BGPij3lZKFSdOsjOTbL4krbCCp9slEozaN4EMppA2dFmK/f8HeohodprY6W0vOdiQ5WFgPaTI75xQ==}
+    dev: false
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -11738,6 +11773,11 @@ packages:
     resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}
     dev: true
 
+  /rgb-hex@3.0.0:
+    resolution: {integrity: sha512-8h7ZcwxCBDKvchSWbWngJuSCqJGQ6nDuLLg+QcRyQDbX9jMWt+PpPeXAhSla0GOooEomk3lCprUpGkMdsLjKyg==}
+    engines: {node: '>=8'}
+    dev: false
+
   /rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
@@ -12269,6 +12309,17 @@ packages:
       char-regex: 1.0.2
       strip-ansi: 6.0.1
     dev: true
+
+  /string-to-color@2.2.2:
+    resolution: {integrity: sha512-XeA2goP7PNsSlz8RRn6KhYswnMf5Tl+38ajfy8n4oZJyMGC4qqKgHNHsZ/3qwvr42NRIjf9eSr721SyetDeMkA==}
+    dependencies:
+      colornames: 1.1.1
+      hex-rgb: 4.3.0
+      lodash.padend: 4.6.1
+      lodash.trimstart: 4.5.1
+      lodash.words: 4.2.0
+      rgb-hex: 3.0.0
+    dev: false
 
   /string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
