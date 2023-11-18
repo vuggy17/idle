@@ -19,5 +19,6 @@
   "explorer.excludeGitIgnore": false,
   "taskExplorer.enabledTasks": {
     "tsc": false
-  }
+  },
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

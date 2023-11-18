@@ -1,0 +1,17 @@
+{
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": [
+        "airbnb",
+        "airbnb-typescript",
+        "plugin:@nx/react",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "react/react-in-jsx-scope": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ]
+}
