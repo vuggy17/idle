@@ -19,7 +19,7 @@ export function IdleContextProvider({ children, store }: IldeContextProps) {
           },
         }}
       >
-        <App>{children}</App>
+        <App className="h-full">{children}</App>
       </ConfigProvider>
     </Provider>
   );
