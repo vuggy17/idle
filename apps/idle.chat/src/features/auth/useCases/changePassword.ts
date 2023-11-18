@@ -1,16 +1,17 @@
 import { UseCase } from 'type';
-import { UserRepository } from '../repositories/userRepository';
 import {
   ChangePasswordRequestDTO,
   ChangePasswordResponseDTO,
 } from 'dto/authDto';
+import { UserRepository } from '../repositories/userRepository';
 
-export class ChangePasswordUseCase
+export default class ChangePasswordUseCase
   implements UseCase<ChangePasswordRequestDTO, ChangePasswordResponseDTO>
 {
   constructor(private userRepository: UserRepository) {}
+
   async execute(
-    data: ChangePasswordRequestDTO
+    data: ChangePasswordRequestDTO,
   ): Promise<ChangePasswordResponseDTO> {
     // return new Promise((resolve, reject) => {
     //   setTimeout(() => {

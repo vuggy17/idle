@@ -4,8 +4,9 @@ import {
   createBrowserRouter,
 } from 'react-router-dom';
 import { ReactNode } from 'react';
-import { ErrorFallback } from '../main';
 import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from '../main';
+
 export function wrapErrorBoundary(component: ReactNode) {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>{component}</ErrorBoundary>
@@ -18,16 +19,12 @@ const router = createBrowserRouter([
     lazy: () => import('features/welcome/pages/index'),
   },
   {
-    path: '/setting',
-    lazy: () => import('features/preference/ui/pages/Preference'),
-  },
-  {
     path: '/login',
     lazy: () => import('features/auth/ui/pages/Login'),
   },
   {
     path: '/',
-    element: <Navigate to={'welcome'} />,
+    element: <Navigate to="welcome" />,
   },
   {
     path: 'register',

@@ -3,21 +3,13 @@ import { Card, Form, Layout, Space, Typography } from 'antd';
 import { useSetAtom } from 'jotai';
 import { currentUserAtom } from 'store/user';
 import { LoaderFunction, useNavigate } from 'react-router-dom';
-import RegisterForm from '../components/RegisterForm';
-import { RegisterUseCase } from 'features/auth/useCases/register';
-import { AuthService } from 'services/authService';
+import RegisterUseCase from 'features/auth/useCases/register';
+import AuthService from 'services/authService';
 import { AppWriteProvider } from 'providers/appwrite';
 import { Account, AppwriteException } from 'appwrite';
 import { useState } from 'react';
 import { wrapErrorBoundary } from 'router/AppRouter';
-import { ProtectedRoute } from 'router/ProtectedRoute';
-
-export type RegisterFormData = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import RegisterForm, { RegisterFormData } from '../components/RegisterForm';
 
 // test user
 const testUserRegisterInfo: RegisterFormData = {

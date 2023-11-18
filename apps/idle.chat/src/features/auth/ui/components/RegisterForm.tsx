@@ -1,8 +1,15 @@
 import { Button, Form, FormProps, Input } from 'antd';
-import { RegisterFormData } from '../pages/Register';
 
 type RegisterFormProps = FormProps<RegisterFormData> & {
+  // eslint-disable-next-line react/require-default-props
   isPending?: boolean;
+};
+
+export type RegisterFormData = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 };
 
 /**
@@ -26,7 +33,7 @@ export default function RegisterForm({
           },
         ]}
       >
-        <Input placeholder='Your name' />
+        <Input placeholder="Your name" />
       </Form.Item>
       <Form.Item
         name="email"
@@ -42,7 +49,7 @@ export default function RegisterForm({
           },
         ]}
       >
-        <Input placeholder='Your email'/>
+        <Input placeholder="Your email" />
       </Form.Item>
 
       <Form.Item
@@ -56,7 +63,7 @@ export default function RegisterForm({
         ]}
         hasFeedback
       >
-        <Input.Password placeholder='Your password' />
+        <Input.Password placeholder="Your password" />
       </Form.Item>
 
       <Form.Item
@@ -75,13 +82,13 @@ export default function RegisterForm({
                 return Promise.resolve();
               }
               return Promise.reject(
-                new Error('The new password that you entered do not match!')
+                new Error('The new password that you entered do not match!'),
               );
             },
           }),
         ]}
       >
-        <Input.Password placeholder='Confirm password' />
+        <Input.Password placeholder="Confirm password" />
       </Form.Item>
 
       <Form.Item>

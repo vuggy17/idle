@@ -1,11 +1,19 @@
 import { Input, Form, FormProps, Button, Space, Typography } from 'antd';
-import { LoginFormData } from '../pages/Login';
-import "./loginForm.css"
+
+import './loginForm.css';
+
+export type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 type LoginFormProps = FormProps<LoginFormData> & {
   isPending?: boolean;
 };
 
+LoginForm.defaultProps = {
+  isPending: false,
+};
 export default function LoginForm({
   isPending,
   ...formConfig
@@ -28,11 +36,11 @@ export default function LoginForm({
       <Form.Item
         name="password"
         id="loginForm_password"
-        className='loginForm_password'
+        className="loginForm_password"
         label={
           <Space className="justify-between w-full">
             <Typography.Text>Password</Typography.Text>
-            <Typography.Link href='/register'>Forgot password?</Typography.Link>
+            <Typography.Link href="/register">Forgot password?</Typography.Link>
           </Space>
         }
         rules={[

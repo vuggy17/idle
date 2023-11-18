@@ -9,7 +9,7 @@ import {
   Typography,
 } from 'antd';
 import { useAtomValue } from 'jotai';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { currentUserAtom } from 'store/user';
 
 type DeleteAccountModalProps = ModalProps;
@@ -107,11 +107,10 @@ export default function DeleteAccountModal({
                   validator(_, value) {
                     if (!value || value === email) {
                       return Promise.resolve();
-                    } else {
-                      return Promise.reject(
-                        new Error('Please type in correct email')
-                      );
                     }
+                    return Promise.reject(
+                      new Error('Please type in correct email'),
+                    );
                   },
                 }),
               ]}
@@ -143,11 +142,10 @@ export default function DeleteAccountModal({
                   validator(_, value) {
                     if (!value || value == CONFIRM_DELETE_PHRASE) {
                       return Promise.resolve();
-                    } else {
-                      return Promise.reject(
-                        new Error('Please type in correct phrase')
-                      );
                     }
+                    return Promise.reject(
+                      new Error('Please type in correct phrase'),
+                    );
                   },
                 }),
               ]}
@@ -190,7 +188,7 @@ export default function DeleteAccountModal({
           type="default"
           onClick={(e) =>
             modalProps.onCancel?.(
-              e as React.MouseEvent<HTMLButtonElement, MouseEvent>
+              e as React.MouseEvent<HTMLButtonElement, MouseEvent>,
             )
           }
         >

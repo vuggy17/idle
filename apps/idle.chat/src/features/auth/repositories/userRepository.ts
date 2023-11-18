@@ -10,5 +10,5 @@ export interface UserRepository {
   login(email: string, password: string): Promise<LoginUserResponseDTO>;
   getCurrentUser(): Promise<UserDTO>;
   logout(sessionId: string): Promise<void>;
-  changePassword(currentPass: string, newPass: string): Promise<any>;
+  changePassword(currentPass: string, newPass: string): Promise<unknown>;
 }

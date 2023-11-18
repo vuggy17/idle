@@ -1,8 +1,8 @@
 import { UseCase } from 'type';
-import { UserRepository } from '../repositories/userRepository';
 import { LoginUserRequestDTO, LoginUserResponseDTO } from 'dto/authDto';
+import { UserRepository } from '../repositories/userRepository';
 
-export class LoginUseCase
+export default class LoginUseCase
   implements UseCase<LoginUserRequestDTO, LoginUserResponseDTO>
 {
   constructor(private userRepository: UserRepository) {}

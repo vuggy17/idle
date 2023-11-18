@@ -7,7 +7,11 @@ type UserCardProps = {
   avatar?: string;
 };
 
-export function UserCard({ name, userName, avatar }: UserCardProps) {
+UserCard.defaultProps = {
+  avatar: '',
+};
+
+export default function UserCard({ name, userName, avatar }: UserCardProps) {
   return (
     <Space>
       <PartialAvatar shape="square" src={avatar} />

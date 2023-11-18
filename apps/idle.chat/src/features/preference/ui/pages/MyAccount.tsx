@@ -17,10 +17,10 @@ import { User } from 'features/auth/entities/user';
 import { NavArrowRight } from 'iconoir-react';
 import { useSetAtom } from 'jotai';
 import { currentUserAtom } from 'store/user';
-import ChangePasswordModal from '../components/ChangePasswordModal';
 import { useState } from 'react';
-import { flushSync } from 'react-dom';
+import ChangePasswordModal from '../components/ChangePasswordModal';
 import DeleteAccountModal from '../components/DeleteAccountModal';
+
 type MyAccountProps = {
   user: User;
 };
@@ -163,23 +163,21 @@ export default function MyAccount({ user }: MyAccountProps) {
                         Delete my account
                       </Typography.Text>
                     }
-                    description={
-                      'Permanently delete the account and remove access from all workspaces.'
-                    }
+                    description="Permanently delete the account and remove access from all workspaces."
                   />
                 </List.Item>
               </List>
             </section>
           </Space>
           <ChangePasswordModal
-            destroyOnClose={true}
+            destroyOnClose
             onCancel={() => setChangePasswordModalOpened(false)}
             open={changePasswordModalOpened}
             onOk={() => setChangePasswordModalOpened(false)}
           />
           <DeleteAccountModal
             closeIcon={null}
-            destroyOnClose={true}
+            destroyOnClose
             onCancel={() => setDeleteAccountModalOpened(false)}
             open={deleteAccountModalOpened}
             onOk={() => setDeleteAccountModalOpened(false)}

@@ -3,11 +3,11 @@ import { LoaderFunction } from 'react-router-dom';
 import { wrapErrorBoundary } from 'router/AppRouter';
 import type { MenuProps } from 'antd/es/menu';
 import { useMemo, useState } from 'react';
-import MyAccount from './MyAccount';
 import UnderConstruction from 'components/UnderConstruction';
-import { UserCard } from '../components/UserCard';
 import { useAtomValue } from 'jotai';
 import { currentUserAtom } from 'store/user';
+import UserCard from '../components/UserCard';
+import MyAccount from './MyAccount';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -40,7 +40,7 @@ function getSettingMenu(
   label: React.ReactNode,
   key?: React.Key | null,
   icon?: React.ReactNode,
-  children?: MenuItem[]
+  children?: MenuItem[],
 ): MenuItem {
   return {
     key,
@@ -67,13 +67,13 @@ const settings: MenuItem[] = [
   getSettingMenu(
     'My notifications',
     PreferenceSubPages.MyNotification,
-    menuIcon
+    menuIcon,
   ),
 ];
 
 function Preference() {
   const [pageSelection, setPageSelection] = useState<SubPages>(
-    PreferenceSubPages.General
+    PreferenceSubPages.General,
   );
   const currentUser = useAtomValue(currentUserAtom);
   const onPageSelected = (page: SubPages) => {
@@ -151,5 +151,7 @@ function Preference() {
   );
 }
 
-export const Component = () => wrapErrorBoundary(<Preference />);
+const Component = () => wrapErrorBoundary(<Preference />);
 export const loader: LoaderFunction = async ({ params }) => null;
+
+export default Component;

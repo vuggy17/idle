@@ -2,7 +2,7 @@ import { Account } from 'appwrite';
 import { useAtom } from 'jotai';
 import { AppWriteProvider } from 'providers/appwrite';
 import { useCallback, useMemo } from 'react';
-import { AuthService } from 'services/authService';
+import AuthService from 'services/authService';
 import { currentUserAtom } from 'store/user';
 
 const guest = {
@@ -15,16 +15,13 @@ const guest = {
 
 const authRepo = new AuthService(new Account(AppWriteProvider));
 
-export function useAuth() {
-  // const [currentUser, setUser] = useAtom(currentUserAtom);
-  // const isAuthenticated = useMemo(
-  //   () => (currentUser.$id ? true : false),
-  //   [currentUser.$id]
-  // );
-  const isAuthenticated = true;
-  const setUser = (use: any) => {
-    return use;
-  };
+export default function useAuth() {
+  const [currentUser, setUser] = useAtom(currentUserAtom);
+  const isAuthenticated = useMemo(() => !!currentUser.$id, [currentUser.$id]);
+  // const isAuthenticated = true;
+  // const setUser = (use: any) => {
+  //   return use;
+  // };
 
   return {
     isAuthenticated,
@@ -38,7 +35,7 @@ export function useAuth() {
         const user = await authRepo.getCurrentUser();
         setUser(user);
       },
-      [setUser]
+      [setUser],
     ),
   };
 }

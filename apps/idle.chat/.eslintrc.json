@@ -18,13 +18,12 @@
     "../../.eslint.react.json"
   ],
   "parserOptions": {
-    // "project": ["apps/idle.chat/tsconfig.json"]
     "project": [
       "apps/idle.chat/tsconfig.eslint.json"
     ]
   },
   "ignorePatterns": [
-    "!**/*"
+    "!**/*", "vite.config.ts"
   ],
   "overrides": [
     {

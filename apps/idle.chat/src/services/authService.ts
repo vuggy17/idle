@@ -7,25 +7,25 @@ import {
 } from 'dto/authDto';
 import { UserRepository } from 'features/auth/repositories/userRepository';
 
-export class AuthService implements UserRepository {
+export default class AuthService implements UserRepository {
   constructor(private accountGateway: Account) {}
 
   async login(email: string, password: string): Promise<LoginUserResponseDTO> {
     const response = await this.accountGateway.createEmailSession(
       email,
-      password
+      password,
     );
     return response;
   }
 
   async register(
-    userData: RegisterUserRequestDTO
+    userData: RegisterUserRequestDTO,
   ): Promise<RegisterUserResponseDTO> {
     const response = await this.accountGateway.create(
       ID.unique(),
       userData.email,
       userData.password,
-      userData.name
+      userData.name,
     );
     return response;
   }

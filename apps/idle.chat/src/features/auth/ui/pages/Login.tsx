@@ -3,14 +3,9 @@ import { Card, Form, Layout, Space, Typography } from 'antd';
 import { LoaderFunction, useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
-import LoginForm from '../components/LoginForm';
 import { wrapErrorBoundary } from 'router/AppRouter';
-import { useAuth } from 'hooks/useAuth';
-
-export type LoginFormData = {
-  email: string;
-  password: string;
-};
+import useAuth from 'hooks/useAuth';
+import LoginForm, { LoginFormData } from '../components/LoginForm';
 
 // test user
 const testUserRegisterInfo: LoginFormData = {

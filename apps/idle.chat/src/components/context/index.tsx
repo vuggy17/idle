@@ -4,14 +4,14 @@ import { Provider } from 'jotai';
 import { ConfigProvider, App } from 'antd';
 
 export type IldeContextProps = PropsWithChildren<{
-  store?: ReturnType<typeof createStore>;
+  store: ReturnType<typeof createStore> | undefined;
 }>;
 
 // global context
 // TODO: theme context,..
-export function IdleContextProvider({ children, ...props }: IldeContextProps) {
+export function IdleContextProvider({ children, store }: IldeContextProps) {
   return (
-    <Provider store={props.store}>
+    <Provider store={store}>
       <ConfigProvider
         theme={{
           token: {

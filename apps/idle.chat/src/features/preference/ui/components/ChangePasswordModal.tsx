@@ -11,11 +11,11 @@ import {
   Typography,
 } from 'antd';
 import { Account, AppwriteException } from 'appwrite';
-import { ChangePasswordUseCase } from 'features/auth/useCases/changePassword';
+import ChangePasswordUseCase from 'features/auth/useCases/changePassword';
 import { PasswordCursor } from 'iconoir-react';
 import { AppWriteProvider } from 'providers/appwrite';
 import { useState } from 'react';
-import { AuthService } from 'services/authService';
+import AuthService from 'services/authService';
 
 type ChangePasswordForm = {
   password: string;
@@ -34,7 +34,7 @@ export default function ChangePasswordModal({
 
   const onPasswordSubmitFailed = (
     error: unknown,
-    formInstance: FormInstance<ChangePasswordForm>
+    formInstance: FormInstance<ChangePasswordForm>,
   ) => {
     if (error instanceof AppwriteException) {
       if (error.type === 'user_invalid_credentials' || error.code === 401) {
@@ -115,7 +115,7 @@ export default function ChangePasswordModal({
             >
               Use a password at least 15 letters long, or at least 8 characters
               long with both letters and numbers. If you lose access to your
-              school email address, you'll be able to log in using your
+              school email address, you&apos;ll be able to log in using your
               password.
             </Typography.Text>
           </Flex>
@@ -204,7 +204,9 @@ export default function ChangePasswordModal({
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error('The new password that you entered do not match!')
+                    new Error(
+                      'The new password that you entered do not match!',
+                    ),
                   );
                 },
               }),

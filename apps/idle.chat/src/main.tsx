@@ -1,15 +1,15 @@
 import { Suspense, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
-import { getCurrentStore } from 'store/atom';
+import getCurrentStore from 'store/atom';
 import './styles.css';
 
-export function ErrorFallback({
+export default function ErrorFallback({
   error,
   resetErrorBoundary,
 }: {
-  error: any;
-  resetErrorBoundary: any;
+  error: Error;
+  resetErrorBoundary: unknown;
 }) {
   // Call resetErrorBoundary() to reset the error boundary and retry the render.
 
@@ -21,16 +21,18 @@ export function ErrorFallback({
   );
 }
 
-const AppFallback = () => (
-  <div className="underline h-full w-full flex items-center justify-center">
-    App Loading...
-  </div>
-);
+function AppFallback() {
+  return (
+    <div className="underline h-full w-full flex items-center justify-center">
+      App Loading...
+    </div>
+  );
+}
 
 const App = lazy(() => import('app/app'));
 
 async function main() {
-  const { setup } = await import('./bootstrap/setup');
+  const setup = (await import('./bootstrap/setup')).default;
   const rootStore = getCurrentStore();
   await setup(rootStore);
   const root = document.getElementById('root') as HTMLElement;
@@ -39,7 +41,7 @@ async function main() {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <App />
       </ErrorBoundary>
-    </Suspense>
+    </Suspense>,
   );
 }
 

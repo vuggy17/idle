@@ -2,16 +2,18 @@ import { Button, Card, Modal } from 'antd';
 import Typography from 'antd/es/typography/Typography';
 import NxWelcome from 'app/nx-welcome';
 import ModalFallback from 'components/Fallbacks/ModalFallback';
-import { useAuth } from 'hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 import { useAtomValue } from 'jotai';
 import { Suspense, lazy, useState } from 'react';
 import { wrapErrorBoundary } from 'router/AppRouter';
-import { ProtectedRoute } from 'router/ProtectedRoute';
+import ProtectedRoute from 'router/ProtectedRoute';
 import { currentUserAtom } from 'store/user';
 
-const PreferencePage = lazy(() => import('features/preference/ui/pages'));
+const PreferencePage = lazy(
+  () => import('features/preference/ui/pages/Preference'),
+);
 
-function Welcome() {
+export default function Welcome() {
   const userInfo = useAtomValue(currentUserAtom);
   const { logout } = useAuth();
   const [openSettingModal, setOpenSettingModal] = useState(false);
@@ -29,7 +31,7 @@ function Welcome() {
       </Card>
       <NxWelcome title={userInfo.name} />
       <Modal
-        centered={true}
+        centered
         closeIcon={null}
         footer={null}
         open={openSettingModal}
@@ -52,7 +54,7 @@ export const Component = () => {
   return wrapErrorBoundary(
     <ProtectedRoute>
       <Welcome />
-    </ProtectedRoute>
+    </ProtectedRoute>,
   );
 };
 

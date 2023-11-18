@@ -9,7 +9,10 @@ export default function UnderConstruction() {
           <div>
             {' '}
             <Typography.Text>
-              Please come back later <span role="img">🐺😿🐺</span>
+              Please come back later{' '}
+              <span role="img" aria-label="dog and cat icon">
+                🐺😿🐺
+              </span>
             </Typography.Text>
           </div>
         </Space>
