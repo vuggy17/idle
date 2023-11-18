@@ -7,7 +7,8 @@
     "start:chat": "pnpm run start idle.chat:serve",
     "start:chatapi": "pnpm run start idle.api:serve",
     "typecheck": "nx run-many --target=typecheck --all=true --verbose",
-    "postinstall": "npx playwright install --with-deps"
+    "postinstall": "npx playwright install --with-deps",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -86,7 +87,8 @@
     "typescript": "~5.1.3",
     "vite": "~4.3.9",
     "vite-tsconfig-paths": "^4.2.1",
-    "vitest": "~0.32.0"
+    "vitest": "~0.32.0",
+    "husky": "^8.0.0"
   },
   "packageManager": "pnpm@8.10.2"
 }
