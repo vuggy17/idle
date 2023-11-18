@@ -1,17 +1,53 @@
+// {
+//   "extends": [
+//     "plugin:@nx/react",
+//     "../../.eslintrc.json",
+//     "airbnb",
+//     "airbnb-typescript",
+//     "plugin:prettier/recommended"
+//   ],
+//   "parserOptions": {
+//     "project": "./tsconfig.base.json"
+//   },
+//   "ignorePatterns": ["!**/*"]
+// }
 {
-  "extends": ["plugin:@nx/react", "../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
+  "extends": [
+    "plugin:@nx/react",
+    "../../.eslintrc.json",
+    "../../.eslint.react.json"
+  ],
+  "parserOptions": {
+    // "project": ["apps/idle.chat/tsconfig.json"]
+    "project": [
+      "apps/idle.chat/tsconfig.eslint.json"
+    ]
+  },
+  "ignorePatterns": [
+    "!**/*"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.js", "*.jsx"],
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {}
     }
   ]
