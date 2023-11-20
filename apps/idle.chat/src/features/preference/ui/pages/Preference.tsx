@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai';
 import { currentUserAtom } from 'store/user';
 import UserCard from '../components/UserCard';
 import MyAccount from './MyAccount';
+import MyNotification from './MyNotification';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -88,7 +89,7 @@ function Preference() {
       case PreferenceSubPages.General:
         return <UnderConstruction />;
       case PreferenceSubPages.MyNotification:
-        return <UnderConstruction />;
+        return <MyNotification />;
       case PreferenceSubPages.MySetting:
         return <UnderConstruction />;
       case PreferenceSubPages.MyAccount:

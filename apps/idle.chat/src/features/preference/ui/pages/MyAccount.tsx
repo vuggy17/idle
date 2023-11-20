@@ -52,7 +52,7 @@ export default function MyAccount({ user }: MyAccountProps) {
   };
 
   return (
-    <Layout className="h-full bg-white">
+    <Layout className="h-full">
       <ConfigProvider
         theme={{
           components: {
@@ -65,7 +65,7 @@ export default function MyAccount({ user }: MyAccountProps) {
           },
         }}
       >
-        <Content className="pt-[5px]">
+        <Content className="pt-[5px] bg-white">
           <Space direction="vertical" className="w-full" size="large">
             <section>
               <Typography.Title level={4}>My profile</Typography.Title>
