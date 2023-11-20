@@ -117,6 +117,7 @@ export default function DeactivateAccountModal({
           }}
         >
           <Form
+            preserve={false}
             layout="vertical"
             form={form}
             autoComplete="off"

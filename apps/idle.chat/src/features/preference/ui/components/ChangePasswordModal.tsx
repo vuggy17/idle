@@ -134,6 +134,7 @@ export default function ChangePasswordModal({
         }}
       >
         <Form
+          preserve={false}
           form={form}
           layout="vertical"
           className="pt-2"
