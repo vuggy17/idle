@@ -9,6 +9,7 @@ import { currentUserAtom } from 'store/user';
 import UserCard from '../components/UserCard';
 import MyAccount from './MyAccount';
 import MyNotification from './MyNotification';
+import General from './General';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -87,7 +88,7 @@ function Preference() {
   const subPage = useMemo(() => {
     switch (pageSelection) {
       case PreferenceSubPages.General:
-        return <UnderConstruction />;
+        return <General />;
       case PreferenceSubPages.MyNotification:
         return <MyNotification />;
       case PreferenceSubPages.MySetting:
