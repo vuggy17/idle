@@ -18,6 +18,7 @@ import { NavArrowRight } from 'iconoir-react';
 import { useSetAtom } from 'jotai';
 import { currentUserAtom } from 'store/user';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ChangePasswordModal from '../components/ChangePasswordModal';
 import DeleteAccountModal from '../components/DeleteAccountModal';
 
@@ -29,17 +30,25 @@ const { useToken } = theme;
 const { useForm } = Form;
 
 export default function MyAccount({ user }: MyAccountProps) {
-  const [form] = useForm();
-  const { token } = useToken();
-  const [changePasswordModalOpened, setChangePasswordModalOpened] =
-    useState(false);
-  const [deleteAccountModalOpened, setDeleteAccountModalOpened] =
-    useState(false);
   const { email, name, avatar } = user;
+  const { token } = useToken();
+
+  const [form] = useForm();
+  const navigate = useNavigate();
   const setCurrentUser = useSetAtom(currentUserAtom);
+
+  const [pwdModalOpen, setPwdModalOpen] = useState(false);
+  const [delAccountModalOpen, setDelAccountModalOpen] = useState(false);
 
   const updateUserInfo = (info: { name?: string; avatar?: string }) => {
     setCurrentUser({ ...user, ...info });
+  };
+
+  const onAccountDeleted = () => {
+    setDelAccountModalOpen(false);
+    setTimeout(() => {
+      navigate('/login');
+    }, 300);
   };
 
   return (
@@ -123,7 +132,7 @@ export default function MyAccount({ user }: MyAccountProps) {
                   actions={[
                     <Button
                       type="default"
-                      onClick={() => setChangePasswordModalOpened(true)}
+                      onClick={() => setPwdModalOpen(true)}
                     >
                       Change password
                     </Button>,
@@ -145,11 +154,11 @@ export default function MyAccount({ user }: MyAccountProps) {
               <Divider />
               <List itemLayout="horizontal" split={false}>
                 <List.Item
-                  onClick={() => setDeleteAccountModalOpened(true)}
+                  onClick={() => setDelAccountModalOpen(true)}
                   actions={[
                     <Button
                       type="text"
-                      onClick={() => setDeleteAccountModalOpened(true)}
+                      onClick={() => setDelAccountModalOpen(true)}
                       icon={
                         <NavArrowRight color={token.colorTextDescription} />
                       }
@@ -171,16 +180,16 @@ export default function MyAccount({ user }: MyAccountProps) {
           </Space>
           <ChangePasswordModal
             destroyOnClose
-            onCancel={() => setChangePasswordModalOpened(false)}
-            open={changePasswordModalOpened}
-            onOk={() => setChangePasswordModalOpened(false)}
+            onCancel={() => setPwdModalOpen(false)}
+            open={pwdModalOpen}
+            onOk={() => setPwdModalOpen(false)}
           />
           <DeleteAccountModal
             closeIcon={null}
             destroyOnClose
-            onCancel={() => setDeleteAccountModalOpened(false)}
-            open={deleteAccountModalOpened}
-            onOk={() => setDeleteAccountModalOpened(false)}
+            onCancel={() => setDelAccountModalOpen(false)}
+            open={delAccountModalOpen}
+            onOk={onAccountDeleted}
           />
         </Content>
       </ConfigProvider>

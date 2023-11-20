@@ -9,8 +9,8 @@ export class HttpClient {
   constructor(private readonly client: AxiosInstance = axiosClient) {}
 
   // TODO: add dto
-  async disableAccount(body: { id: string }) {
-    return this.client.post('auth/disable', body);
+  async disableAccount<Response>(body: { id: string }) {
+    return this.client.post<Response>('auth/disable', body);
   }
 }
 

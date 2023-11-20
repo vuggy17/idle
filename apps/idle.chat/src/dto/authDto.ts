@@ -17,3 +17,6 @@ export type LoginUserRequestDTO = {
 
 export type ChangePasswordResponseDTO = UserDTO;
 export type ChangePasswordRequestDTO = { currentPass: string; newPass: string };
+
+export type DeleteAccountResponseDTO = UserDTO;
+export type DeleteAccountRequestDTO = { email: string; password: string };

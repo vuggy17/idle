@@ -54,15 +54,11 @@ export default class AuthService implements UserRepository {
     return this.accountGateway.updatePassword(newPass, currentPass);
   }
 
-  async disableAccount(accId: string): Promise<unknown> {
-    const result = await this.httpGateway.disableAccount({
+  async disableAccount(accId: string): Promise<UserDTO> {
+    const result = await this.httpGateway.disableAccount<UserDTO>({
       id: accId,
     });
-    console.log(
-      '🚀 ~ file: authService.ts:60 ~ AuthService ~ disableAccount ~ result:',
-      result,
-    );
-    return result;
+    return result.data;
   }
 }
 

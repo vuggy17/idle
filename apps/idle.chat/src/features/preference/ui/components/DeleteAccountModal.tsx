@@ -2,12 +2,15 @@ import {
   Button,
   ConfigProvider,
   Form,
+  FormInstance,
   Input,
   Modal,
   ModalProps,
   Space,
   Typography,
 } from 'antd';
+import { AppwriteException } from 'appwrite';
+import DeleteAccountUseCase from 'features/auth/useCases/deleteAccount';
 import { useAtomValue } from 'jotai';
 import { useLayoutEffect, useState } from 'react';
 import { currentUserAtom } from 'store/user';
@@ -37,9 +40,36 @@ export default function DeleteAccountModal({
     setClientReady(true);
   }, []);
 
-  const onDeleteAccountConfirmed = (data: DeleteAccountForm) => {
+  const onDeleteAccountFailed = (
+    error: unknown,
+    formInstance: FormInstance<DeleteAccountForm>,
+  ) => {
+    if (error instanceof AppwriteException) {
+      if (error.type === 'user_invalid_credentials' || error.code === 401) {
+        formInstance.setFields([
+          {
+            name: 'email',
+            errors: [''],
+          },
+          {
+            name: 'password',
+            errors: ['Incorrect password.'],
+          },
+        ]);
+      } else {
+        formInstance.setFields([
+          {
+            name: 'password',
+            errors: ['Internal server error'],
+          },
+        ]);
+      }
+    }
+  };
+
+  const onDeleteAccountConfirmed = async (data: DeleteAccountForm) => {
     try {
-      // last check
+      setIsDeleting(true);
       if (data.confirmPhrase !== CONFIRM_DELETE_PHRASE) {
         form.setFields([
           {
@@ -48,15 +78,17 @@ export default function DeleteAccountModal({
           },
         ]);
       }
-      // login
-      // delete account
-      // close modal if everything ok
-      onOk?.({} as any);
+
+      const executor = new DeleteAccountUseCase();
+      await executor.execute(data);
+
+      setTimeout(() => {
+        onOk?.({} as any);
+      }, 300);
     } catch (error) {
-      // handle error
-      // wrong password
-      // wrong email
-      // etc..
+      onDeleteAccountFailed(error, form);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -92,21 +124,18 @@ export default function DeleteAccountModal({
           >
             <Form.Item<DeleteAccountForm>
               name="email"
-              label={
-                <Typography.Text className="font-medium">
-                  Your email
-                </Typography.Text>
-              }
+              label={<Typography.Text strong>Your email</Typography.Text>}
               hasFeedback
               rules={[
-                {
-                  required: true,
-                  message: 'Please type in correct email',
-                },
                 () => ({
                   validator(_, value) {
-                    if (!value || value === email) {
+                    if (value === email) {
                       return Promise.resolve();
+                    }
+                    if (!value) {
+                      return Promise.reject(
+                        new Error('Please type in your email'),
+                      );
                     }
                     return Promise.reject(
                       new Error('Please type in correct email'),
@@ -122,15 +151,11 @@ export default function DeleteAccountModal({
               hasFeedback
               label={
                 <>
-                  <Typography.Text className="font-medium">
-                    To verify, type
-                  </Typography.Text>{' '}
+                  <Typography.Text strong>To verify, type</Typography.Text>
                   <Typography.Text italic>
                     &nbsp;delete my account&nbsp;
                   </Typography.Text>
-                  <Typography.Text className="font-medium">
-                    below
-                  </Typography.Text>
+                  <Typography.Text strong>below</Typography.Text>
                 </>
               }
               rules={[
@@ -140,7 +165,7 @@ export default function DeleteAccountModal({
                 },
                 () => ({
                   validator(_, value) {
-                    if (!value || value == CONFIRM_DELETE_PHRASE) {
+                    if (!value || value === CONFIRM_DELETE_PHRASE) {
                       return Promise.resolve();
                     }
                     return Promise.reject(
@@ -153,9 +178,16 @@ export default function DeleteAccountModal({
               <Input />
             </Form.Item>
             <Form.Item<DeleteAccountForm>
-              required
-              className="font-medium"
-              label="Confirm your password"
+              name="password"
+              label={
+                <Typography.Text strong>Confirm your password</Typography.Text>
+              }
+              rules={[
+                {
+                  required: true,
+                  message: 'Please type in your password',
+                },
+              ]}
             >
               <Input.Password />
             </Form.Item>

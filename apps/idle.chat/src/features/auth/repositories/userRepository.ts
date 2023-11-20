@@ -1,4 +1,5 @@
 import {
+  DeleteAccountResponseDTO,
   LoginUserResponseDTO,
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
@@ -11,4 +12,5 @@ export interface UserRepository {
   getCurrentUser(): Promise<UserDTO>;
   logout(sessionId: string): Promise<void>;
   changePassword(currentPass: string, newPass: string): Promise<UserDTO>;
+  disableAccount(accId: string): Promise<DeleteAccountResponseDTO>;
 }
