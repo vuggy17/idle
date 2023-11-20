@@ -1,7 +1,5 @@
-import { Account } from 'appwrite';
 import { createStore } from 'jotai';
-import { AppWriteProvider } from 'providers/appwrite';
-import AuthService from 'services/authService';
+import { AuthServiceImpl } from 'services/authService';
 import { currentUserAtom } from 'store/user';
 
 const guest = {
@@ -12,7 +10,7 @@ const guest = {
 };
 export default async function setup(store: ReturnType<typeof createStore>) {
   try {
-    const authProvider = new AuthService(new Account(AppWriteProvider));
+    const authProvider = AuthServiceImpl;
     const currentLoggedInUser = await authProvider.getCurrentUser();
     store.set(currentUserAtom, currentLoggedInUser);
   } catch (error) {

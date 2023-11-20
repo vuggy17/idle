@@ -1,8 +1,7 @@
-import { Account } from 'appwrite';
+import LoginUseCase from 'features/auth/useCases/login';
 import { useAtom } from 'jotai';
-import { AppWriteProvider } from 'providers/appwrite';
 import { useCallback, useMemo } from 'react';
-import AuthService from 'services/authService';
+import { AuthServiceImpl } from 'services/authService';
 import { currentUserAtom } from 'store/user';
 
 const guest = {
@@ -13,26 +12,21 @@ const guest = {
   avatar: '',
 };
 
-const authRepo = new AuthService(new Account(AppWriteProvider));
-
 export default function useAuth() {
   const [currentUser, setUser] = useAtom(currentUserAtom);
   const isAuthenticated = useMemo(() => !!currentUser.$id, [currentUser.$id]);
-  // const isAuthenticated = true;
-  // const setUser = (use: any) => {
-  //   return use;
-  // };
 
   return {
     isAuthenticated,
     logout: useCallback(async () => {
-      await authRepo.logout();
+      await AuthServiceImpl.logout();
       setUser(guest);
     }, [setUser]),
     login: useCallback(
       async (email: string, password: string) => {
-        await authRepo.login(email, password);
-        const user = await authRepo.getCurrentUser();
+        const loginUseCase = new LoginUseCase();
+        await loginUseCase.execute({ email, password });
+        const user = await AuthServiceImpl.getCurrentUser();
         setUser(user);
       },
       [setUser],

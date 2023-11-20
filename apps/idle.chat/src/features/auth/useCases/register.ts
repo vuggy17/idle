@@ -1,11 +1,12 @@
 import { UseCase } from 'type';
 import { RegisterUserRequestDTO, RegisterUserResponseDTO } from 'dto/authDto';
+import { AuthServiceImpl } from 'services/authService';
 import { UserRepository } from '../repositories/userRepository';
 
 export default class RegisterUseCase
   implements UseCase<RegisterUserRequestDTO, RegisterUserResponseDTO>
 {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepository = AuthServiceImpl) {}
 
   async execute(
     registerInfo: RegisterUserRequestDTO,

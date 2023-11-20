@@ -81,8 +81,7 @@ export default function ChangePasswordModal({
     setLoading(true);
 
     try {
-      const authRepo = new AuthService(new Account(AppWriteProvider));
-      const executor = new ChangePasswordUseCase(authRepo);
+      const executor = new ChangePasswordUseCase();
       await executor.execute({
         currentPass: data.password,
         newPass: data.newPass,

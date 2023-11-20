@@ -12,7 +12,8 @@
       "label": "Watch chat API",
       "type": "npm",
       "script": "start:chatapi",
-      "isBackground": true
+      "isBackground": true,
+      "problemMatcher": []
     },
     {
       "label": "Watch chat",

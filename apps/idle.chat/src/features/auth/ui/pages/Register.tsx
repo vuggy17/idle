@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai';
 import { currentUserAtom } from 'store/user';
 import { LoaderFunction, useNavigate } from 'react-router-dom';
 import RegisterUseCase from 'features/auth/useCases/register';
-import AuthService from 'services/authService';
+import AuthService, { AuthServiceImpl } from 'services/authService';
 import { AppWriteProvider } from 'providers/appwrite';
 import { Account, AppwriteException } from 'appwrite';
 import { useState } from 'react';
@@ -29,8 +29,7 @@ function Register() {
     setIsRegistering(true);
 
     try {
-      const authRepo = new AuthService(new Account(AppWriteProvider));
-      const registerUseCase = new RegisterUseCase(authRepo);
+      const registerUseCase = new RegisterUseCase();
       const newUser = await registerUseCase.execute(formValues);
       setUserAtom(newUser);
       navigate('/welcome');

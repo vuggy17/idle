@@ -6,9 +6,14 @@ import {
   UserDTO,
 } from 'dto/authDto';
 import { UserRepository } from 'features/auth/repositories/userRepository';
+import { AppWriteProvider } from 'providers/appwrite';
+import HttpProvider, { HttpClient } from 'providers/http';
 
 export default class AuthService implements UserRepository {
-  constructor(private accountGateway: Account) {}
+  constructor(
+    private accountGateway: Account,
+    private httpGateway: HttpClient,
+  ) {}
 
   async login(email: string, password: string): Promise<LoginUserResponseDTO> {
     const response = await this.accountGateway.createEmailSession(
@@ -45,7 +50,23 @@ export default class AuthService implements UserRepository {
     await this.accountGateway.deleteSession(sessionId);
   }
 
-  async changePassword(currentPass: string, newPass: string): Promise<any> {
+  async changePassword(currentPass: string, newPass: string): Promise<UserDTO> {
     return this.accountGateway.updatePassword(newPass, currentPass);
   }
+
+  async disableAccount(accId: string): Promise<unknown> {
+    const result = await this.httpGateway.disableAccount({
+      id: accId,
+    });
+    console.log(
+      '🚀 ~ file: authService.ts:60 ~ AuthService ~ disableAccount ~ result:',
+      result,
+    );
+    return result;
+  }
 }
+
+export const AuthServiceImpl = new AuthService(
+  new Account(AppWriteProvider),
+  HttpProvider,
+);

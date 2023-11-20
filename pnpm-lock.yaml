@@ -27,7 +27,7 @@ dependencies:
     specifier: ^13.0.0
     version: 13.0.0
   axios:
-    specifier: ^1.0.0
+    specifier: ^1.6.0
     version: 1.6.0
   iconoir-react:
     specifier: ^7.0.2
