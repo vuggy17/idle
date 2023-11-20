@@ -63,5 +63,8 @@ Nx comes with local caching already built-in (check your `nx.json`). On CI you m
 - [Follow us on Twitter](https://twitter.com/nxdevtools)
 
 
+## Feature list & use cases
+- [Check it out](https://features.strategium.com.au/document?DocID=1698675724752x409866550069520000)
+
 ## Project stucture
 ![Visualization of this repo](./diagram.svg)
