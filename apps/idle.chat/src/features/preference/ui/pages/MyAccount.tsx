@@ -20,7 +20,7 @@ import { currentUserAtom } from 'store/user';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChangePasswordModal from '../components/ChangePasswordModal';
-import DeleteAccountModal from '../components/DeleteAccountModal';
+import DeactivateAccountModal from '../components/DeactivateAccountModal';
 
 type MyAccountProps = {
   user: User;
@@ -169,10 +169,10 @@ export default function MyAccount({ user }: MyAccountProps) {
                   <List.Item.Meta
                     title={
                       <Typography.Text type="danger" className="font-normal">
-                        Delete my account
+                        Deactivate my account
                       </Typography.Text>
                     }
-                    description="Permanently delete the account and remove access from all workspaces."
+                    description="Instantly close the account and remove access from idle.chat."
                   />
                 </List.Item>
               </List>
@@ -184,7 +184,7 @@ export default function MyAccount({ user }: MyAccountProps) {
             open={pwdModalOpen}
             onOk={() => setPwdModalOpen(false)}
           />
-          <DeleteAccountModal
+          <DeactivateAccountModal
             closeIcon={null}
             destroyOnClose
             onCancel={() => setDelAccountModalOpen(false)}

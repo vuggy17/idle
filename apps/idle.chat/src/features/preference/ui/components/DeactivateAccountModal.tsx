@@ -10,13 +10,13 @@ import {
   Typography,
 } from 'antd';
 import { AppwriteException } from 'appwrite';
-import DeleteAccountUseCase from 'features/auth/useCases/deleteAccount';
+import DeactivateAccountUseCase from 'features/auth/useCases/deactivateAccount';
 import { useAtomValue } from 'jotai';
 import { useLayoutEffect, useState } from 'react';
 import { currentUserAtom } from 'store/user';
 
-type DeleteAccountModalProps = ModalProps;
-type DeleteAccountForm = {
+type DeactivateAccountModalProps = ModalProps;
+type DeactivateAccountForm = {
   email: string;
   password: string;
   confirmPhrase: string;
@@ -25,9 +25,9 @@ const CONFIRM_DELETE_PHRASE = 'delete my account';
 
 const { useForm } = Form;
 
-export default function DeleteAccountModal({
+export default function DeactivateAccountModal({
   ...modalProps
-}: DeleteAccountModalProps) {
+}: DeactivateAccountModalProps) {
   const { email } = useAtomValue(currentUserAtom);
   const [form] = useForm();
   const { onOk, width, footer, centered } = modalProps;
@@ -40,9 +40,9 @@ export default function DeleteAccountModal({
     setClientReady(true);
   }, []);
 
-  const onDeleteAccountFailed = (
+  const onDeactivateAccountFailed = (
     error: unknown,
-    formInstance: FormInstance<DeleteAccountForm>,
+    formInstance: FormInstance<DeactivateAccountForm>,
   ) => {
     if (error instanceof AppwriteException) {
       if (error.type === 'user_invalid_credentials' || error.code === 401) {
@@ -67,7 +67,7 @@ export default function DeleteAccountModal({
     }
   };
 
-  const onDeleteAccountConfirmed = async (data: DeleteAccountForm) => {
+  const onDeactivateAccountConfirmed = async (data: DeactivateAccountForm) => {
     try {
       setIsDeleting(true);
       if (data.confirmPhrase !== CONFIRM_DELETE_PHRASE) {
@@ -79,14 +79,14 @@ export default function DeleteAccountModal({
         ]);
       }
 
-      const executor = new DeleteAccountUseCase();
+      const executor = new DeactivateAccountUseCase();
       await executor.execute(data);
 
       setTimeout(() => {
         onOk?.({} as any);
       }, 300);
     } catch (error) {
-      onDeleteAccountFailed(error, form);
+      onDeactivateAccountFailed(error, form);
     } finally {
       setIsDeleting(false);
     }
@@ -120,9 +120,9 @@ export default function DeleteAccountModal({
             layout="vertical"
             form={form}
             autoComplete="off"
-            onFinish={onDeleteAccountConfirmed}
+            onFinish={onDeactivateAccountConfirmed}
           >
-            <Form.Item<DeleteAccountForm>
+            <Form.Item<DeactivateAccountForm>
               name="email"
               label={<Typography.Text strong>Your email</Typography.Text>}
               hasFeedback
@@ -177,7 +177,7 @@ export default function DeleteAccountModal({
             >
               <Input />
             </Form.Item>
-            <Form.Item<DeleteAccountForm>
+            <Form.Item<DeactivateAccountForm>
               name="password"
               label={
                 <Typography.Text strong>Confirm your password</Typography.Text>
