@@ -4,9 +4,7 @@ import { useSetAtom } from 'jotai';
 import { currentUserAtom } from 'store/user';
 import { LoaderFunction, useNavigate } from 'react-router-dom';
 import RegisterUseCase from 'features/auth/useCases/register';
-import AuthService, { AuthServiceImpl } from 'services/authService';
-import { AppWriteProvider } from 'providers/appwrite';
-import { Account, AppwriteException } from 'appwrite';
+import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
 import { wrapErrorBoundary } from 'router/AppRouter';
 import RegisterForm, { RegisterFormData } from '../components/RegisterForm';
@@ -40,6 +38,16 @@ function Register() {
             {
               name: 'email',
               errors: ['Email already taken'],
+            },
+          ]);
+        }
+        if (error.type === 'user_blocked' || error.code === 401) {
+          form.setFields([
+            {
+              name: 'email',
+              errors: [
+                'This account is locked by its owner, please reopen account to login',
+              ],
             },
           ]);
         } else {

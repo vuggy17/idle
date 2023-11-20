@@ -1,4 +1,4 @@
-import { Card, Form, Layout, Space, Typography } from 'antd';
+import { Card, Form, FormInstance, Layout, Space, Typography } from 'antd';
 
 import { LoaderFunction, useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
@@ -26,25 +26,59 @@ function Login() {
       await login(formValues.email, formValues.password);
       navigate('/welcome');
     } catch (error) {
-      if (error instanceof AppwriteException) {
-        if (error.type === 'user_already_exists' || error.code === 409) {
-          form.setFields([
-            {
-              name: 'email',
-              errors: ['Email already taken'],
-            },
-          ]);
-        } else {
-          form.setFields([
-            {
-              name: 'password',
-              errors: ['Internal server error'],
-            },
-          ]);
-        }
-      }
+      onLoginFailed(error, form);
     } finally {
       setIsLoggingIn(false);
+    }
+  };
+
+  const onLoginFailed = (
+    error: unknown,
+    formInstance: FormInstance<LoginFormData>,
+  ) => {
+    if (error instanceof AppwriteException) {
+      if (error.type === 'user_already_exists' || error.code === 409) {
+        formInstance.setFields([
+          {
+            name: 'email',
+            errors: ['Email already taken'],
+          },
+        ]);
+      } else if (error.code === 401) {
+        switch (error.type) {
+          case 'user_invalid_credentials':
+            formInstance.setFields([
+              {
+                name: 'email',
+                errors: [''],
+              },
+              {
+                name: 'password',
+                errors: ['Incorrect email or password.'],
+              },
+            ]);
+            break;
+          case 'user_blocked':
+            formInstance.setFields([
+              {
+                name: 'email',
+                errors: [''],
+              },
+              {
+                name: 'password',
+                errors: ['This account was locked by its owner.'],
+              },
+            ]);
+            break;
+        }
+      } else {
+        formInstance.setFields([
+          {
+            name: 'password',
+            errors: ['Internal server error'],
+          },
+        ]);
+      }
     }
   };
 
