@@ -12,7 +12,7 @@ import {
   theme,
 } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import PartialAvatar from 'components/PartialAvatar';
+import PartialAvatar from 'components/UserCard/PartialAvatar';
 import { User } from 'features/auth/entities/user';
 import { NavArrowRight } from 'iconoir-react';
 import { useSetAtom } from 'jotai';

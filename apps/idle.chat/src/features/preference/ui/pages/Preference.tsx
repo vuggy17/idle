@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import UnderConstruction from 'components/UnderConstruction';
 import { useAtomValue } from 'jotai';
 import { currentUserAtom } from 'store/user';
-import UserCard from '../components/UserCard';
+import UserCard from 'components/UserCard';
 import MyAccount from './MyAccount';
 import MyNotification from './MyNotification';
 import General from './General';
