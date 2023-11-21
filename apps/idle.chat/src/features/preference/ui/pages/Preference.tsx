@@ -11,6 +11,7 @@ import MyAccount from './MyAccount';
 import MyNotification from './MyNotification';
 import General from './General';
 import { PreferenceSubPages, SubPages } from './availablePages';
+import MySetting from './MySetting';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -88,7 +89,7 @@ function Preference() {
       case PreferenceSubPages.MyNotification:
         return <MyNotification />;
       case PreferenceSubPages.MySetting:
-        return <UnderConstruction />;
+        return <MySetting />;
       case PreferenceSubPages.MyAccount:
         return <MyAccount user={currentUser} />;
       default:
