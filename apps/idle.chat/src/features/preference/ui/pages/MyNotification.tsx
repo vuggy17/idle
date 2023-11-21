@@ -51,7 +51,7 @@ export default function MyNotification() {
           },
         }}
       >
-        <Content className="pt-[5px] bg-white">
+        <Content className="pt-[5px]">
           <Form<NotificationSetting>
             name="user-noti"
             form={form}

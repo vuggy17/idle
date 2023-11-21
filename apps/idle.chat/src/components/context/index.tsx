@@ -1,26 +1,74 @@
 import type { createStore } from 'jotai';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
 import { Provider } from 'jotai';
-import { ConfigProvider, App } from 'antd';
+import { ConfigProvider, ThemeConfig, theme } from 'antd';
+import getCurrentStore from 'store/atom';
+import { Modify } from 'utils/typing';
 
-export type IldeContextProps = PropsWithChildren<{
+export type SerializableThemeConfig = Modify<
+  ThemeConfig,
+  {
+    algorithm?: 'dark' | 'default' | 'compact';
+  }
+>;
+
+export type IldeContextProps = {
   store: ReturnType<typeof createStore> | undefined;
-}>;
+  themeConfig: SerializableThemeConfig;
+  overrideThemeConfig: (config: SerializableThemeConfig) => void;
+};
+export type IdleContextProviderProps = PropsWithChildren<IldeContextProps>;
 
-// global context
-// TODO: theme context,..
-export function IdleContextProvider({ children, store }: IldeContextProps) {
+const IdleContext = createContext<IldeContextProps>({
+  store: getCurrentStore(),
+  overrideThemeConfig: () => {},
+  themeConfig: {},
+});
+
+export function readThemeConfig(config: SerializableThemeConfig): ThemeConfig {
+  const algorithmMapping = {
+    default: theme.defaultAlgorithm,
+    dark: theme.darkAlgorithm,
+    compact: theme.compactAlgorithm,
+  };
+
+  const algorithm = algorithmMapping[config.algorithm ?? 'default'];
+
+  return {
+    ...config,
+    algorithm,
+  };
+}
+
+export function IdleContextProvider({
+  children,
+  store,
+  themeConfig = {},
+  overrideThemeConfig,
+}: IdleContextProviderProps) {
   return (
     <Provider store={store}>
-      <ConfigProvider
-        theme={{
-          token: {
-            // fontFamily: 'Inter, sans-serif',
-          },
-        }}
+      <IdleContext.Provider
+        value={useMemo(
+          () => ({
+            overrideThemeConfig,
+            store,
+            themeConfig,
+          }),
+          [overrideThemeConfig, store, themeConfig],
+        )}
       >
-        <App className="h-full">{children}</App>
-      </ConfigProvider>
+        <ConfigProvider theme={readThemeConfig(themeConfig)}>
+          {children}
+        </ConfigProvider>
+      </IdleContext.Provider>
     </Provider>
   );
 }
+
+/**
+ * follow https://ant.design/docs/react/customize-theme
+ *
+ * see {@linkcode ThemeConfig}
+ */
+export const useIdleContext = () => useContext(IdleContext);

@@ -10,6 +10,7 @@ import UserCard from '../components/UserCard';
 import MyAccount from './MyAccount';
 import MyNotification from './MyNotification';
 import General from './General';
+import { PreferenceSubPages, SubPages } from './availablePages';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -17,7 +18,8 @@ const { Sider, Content, Header } = Layout;
 
 const contentStyle: React.CSSProperties = {
   minHeight: 640,
-  backgroundColor: '#fff',
+  paddingLeft: 40,
+  paddingRight: 24,
 };
 
 const menuIcon = (
@@ -52,16 +54,6 @@ function getSettingMenu(
   } as MenuItem;
 }
 
-const PreferenceSubPages = {
-  General: '1',
-  MyAccount: '2',
-  MySetting: '3',
-  MyNotification: '4',
-} as const;
-
-type ValueOf<T> = T[keyof T];
-type SubPages = ValueOf<typeof PreferenceSubPages>;
-
 const settings: MenuItem[] = [
   getSettingMenu('General', PreferenceSubPages.General, menuIcon),
   getSettingMenu('My account', PreferenceSubPages.MyAccount, menuIcon),
@@ -88,7 +80,11 @@ function Preference() {
   const subPage = useMemo(() => {
     switch (pageSelection) {
       case PreferenceSubPages.General:
-        return <General />;
+        return (
+          <General
+            navigateToPage={(page: SubPages) => setPageSelection(page)}
+          />
+        );
       case PreferenceSubPages.MyNotification:
         return <MyNotification />;
       case PreferenceSubPages.MySetting:
@@ -117,7 +113,7 @@ function Preference() {
         }}
       >
         <Layout>
-          <Sider theme="light" width={360}>
+          <Sider theme="light" width={320}>
             <Header>
               <Typography.Text
                 strong
@@ -126,7 +122,7 @@ function Preference() {
                 Account
               </Typography.Text>
             </Header>
-            <Space direction="vertical" className="w-full max-w-xs">
+            <Space direction="vertical" className="w-full ">
               <div className="pl-4">
                 <UserCard
                   name={currentUser.name}
