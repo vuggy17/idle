@@ -39,7 +39,7 @@ const preMadeThemes: SerializableThemeConfig[] = [
   {
     algorithm: 'dark',
     token: {
-      colorPrimary: '#da10dc',
+      colorPrimary: '#84cc16',
     },
   },
   {
