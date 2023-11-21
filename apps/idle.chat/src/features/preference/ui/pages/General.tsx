@@ -1,25 +1,77 @@
 import {
   Card,
-  Col,
   ConfigProvider,
   Divider,
   Flex,
   Form,
-  Input,
   Layout,
+  List,
   Radio,
-  Row,
-  Space,
+  Switch,
   Typography,
 } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import ThemeCard from '../components/ThemeCard';
+import { SerializableThemeConfig, useIdleContext } from 'components/context';
+import ThemeSelect from '../components/ThemeSelect';
+import { PreferenceSubPages, SubPages } from './availablePages';
 
 const { useForm } = Form;
-export default function General() {
-  const [form] = useForm();
+
+const preMadeThemes: SerializableThemeConfig[] = [
+  {
+    algorithm: 'default',
+    token: {
+      colorPrimary: '#1677FF',
+    },
+  },
+  {
+    algorithm: 'default',
+    token: {
+      colorPrimary: '#5A54F9',
+    },
+  },
+  {
+    algorithm: 'dark',
+    token: {
+      colorPrimary: '#9E339F',
+    },
+  },
+  {
+    algorithm: 'dark',
+    token: {
+      colorPrimary: '#da10dc',
+    },
+  },
+  {
+    algorithm: 'default',
+    token: {
+      colorPrimary: '#E0282E',
+    },
+  },
+  {
+    algorithm: 'dark',
+    token: {
+      colorPrimary: '#F4801A',
+    },
+  },
+];
+
+type QuickSettingForm = {
+  preset: SerializableThemeConfig;
+  notification: {
+    dnd: boolean;
+  };
+};
+
+type GeneralProps = {
+  navigateToPage: (page: SubPages) => void;
+};
+
+export default function General({ navigateToPage }: GeneralProps) {
+  const [form] = useForm<QuickSettingForm>();
+  const { overrideThemeConfig } = useIdleContext();
   return (
-    <Layout className="h-full bg-white">
+    <Layout className="h-full">
       <ConfigProvider
         theme={{
           components: {
@@ -32,102 +84,88 @@ export default function General() {
           },
         }}
       >
-        <Content className="pt-[5px] overflow-auto  basis-0">
-          <section className="h-full ">
-            <Typography.Title level={4}>General</Typography.Title>
-            <Divider className="mb-3" />
-            <div className="grid-cols-2 grid gap-2">
-              <div id="col1">
-                <div className="h-72 mb-2">
-                  <Card
-                    className="h-full"
-                    bodyStyle={{
-                      height: '100%',
-                    }}
-                    title="Notification settings"
-                  >
-                    <div className="bg-slate-700 h-full"> home1</div>
+        <Content className="pt-[5px] overflow-y-auto basis-0">
+          <Form<QuickSettingForm>
+            preserve={false}
+            form={form}
+            initialValues={{
+              theme: 'default',
+            }}
+            onChange={() => {
+              if (form.getFieldValue('preset')) {
+                overrideThemeConfig(form.getFieldValue('preset'));
+              }
+            }}
+          >
+            <section>
+              <Typography.Title level={4}>General</Typography.Title>
+              <Divider className="mb-3" />
+              <div className="grid-cols-2 grid gap-2">
+                <div id="col1">
+                  <Card className="mb-2">
+                    <Card.Meta title="Notification settings" />
+                    <div className="mt-4">
+                      <List itemLayout="horizontal" split={false}>
+                        <List.Item
+                          actions={[
+                            <Form.Item name="dnd" valuePropName="checked">
+                              <Switch />
+                            </Form.Item>,
+                          ]}
+                        >
+                          <List.Item.Meta
+                            title={
+                              <Typography.Text className="font-normal">
+                                Do not disturb
+                              </Typography.Text>
+                            }
+                            description="Notification will be sent directly to notification center"
+                          />
+                        </List.Item>
+                      </List>
+                    </div>
                   </Card>
                 </div>
 
-                <div className="h-80">
-                  <Card
-                    className="h-full"
-                    bodyStyle={{
-                      height: '100%',
-                    }}
-                  >
-                    <div className="bg-slate-700 h-full"> home1.1</div>
-                  </Card>
-                </div>
-              </div>
-
-              <div id="col2">
-                <div className="h-80 mb-2">
-                  <Card
-                    className="h-full"
-                    bodyStyle={{
-                      height: '100%',
-                    }}
-                  >
-                    <div className="bg-slate-700 h-full"> home2</div>
-                  </Card>
-                </div>
-                <div className="h-80">
-                  <Card
-                    className="h-full"
-                    bodyStyle={{
-                      height: '100%',
-                    }}
-                    title="Personalize ilde"
-                  >
-                    <div className="h-full">
-                      <Form
-                        form={form}
-                        initialValues={{
-                          theme: 1,
-                        }}
-                        onChange={() => console.log(form.getFieldsValue())}
-                      >
-                        <Form.Item noStyle name="theme">
-                          <Flex wrap="wrap" gap={6}>
-                            <label
-                              htmlFor="theme1"
-                              className="relative inline-block"
-                              // onClick={() => form.setFieldValue('theme', 1)}
-                            >
-                              <ThemeCard value="1" name="default" />
-                              <input
-                                id="theme1"
-                                name="theme"
-                                type="radio"
-                                value="1"
-                                className="w-0 h-0 opacity-0 absolute"
+                <div id="col2">
+                  <Card>
+                    <Card.Meta
+                      title="Personalize ilde"
+                      description={
+                        <>
+                          <Typography.Text type="secondary">
+                            Chose our pre-made preset to customize your ilde
+                            appearance or
+                          </Typography.Text>
+                          <Typography.Link
+                            onClick={() =>
+                              navigateToPage(PreferenceSubPages.MySetting)
+                            }
+                          >
+                            &nbsp; customize your own
+                          </Typography.Link>
+                        </>
+                      }
+                    />
+                    <div className="h-full pt-4">
+                      <Form.Item<QuickSettingForm> name="preset">
+                        <Radio.Group>
+                          <Flex wrap="wrap" gap={4}>
+                            {preMadeThemes.map((preset) => (
+                              <ThemeSelect
+                                value={preset}
+                                key={`${preset.algorithm}_${preset.token?.colorPrimary}`}
                               />
-                            </label>
-                            <label
-                              htmlFor="theme2"
-                              className="relative inline-block"
-                              // onClick={() => form.setFieldValue('theme', 2)}
-                            >
-                              <ThemeCard value="2" name="default" />
-                              <input
-                                id="theme2"
-                                name="theme"
-                                value="2"
-                                type="radio"
-                                className="w-0 h-0 opacity-0 absolute"
-                              />
-                            </label>
+                            ))}
                           </Flex>
-                        </Form.Item>
-                      </Form>
+                        </Radio.Group>
+                      </Form.Item>
                     </div>
                   </Card>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </Form>
         </Content>
       </ConfigProvider>
     </Layout>

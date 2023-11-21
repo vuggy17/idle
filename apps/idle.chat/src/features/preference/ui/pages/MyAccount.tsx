@@ -65,7 +65,7 @@ export default function MyAccount({ user }: MyAccountProps) {
           },
         }}
       >
-        <Content className="pt-[5px] bg-white">
+        <Content className="pt-[5px]">
           <Space direction="vertical" className="w-full" size="large">
             <section>
               <Typography.Title level={4}>My profile</Typography.Title>

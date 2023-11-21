@@ -1,0 +1,24 @@
+.theme-card label {
+  position: relative;
+}
+
+/* hide radio input */
+.theme-card label > span:first-child {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+}
+
+/* disable padding on radio text wrapper */
+.theme-card label > span:last-child {
+  padding: 0;
+  margin: 0;
+}
+.theme-card label::after {
+  display: none;
+}
+
+.theme-card {
+  background-color: brown;
+}
