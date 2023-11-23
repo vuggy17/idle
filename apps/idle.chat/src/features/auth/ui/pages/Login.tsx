@@ -5,6 +5,7 @@ import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
 import { wrapErrorBoundary } from 'router/AppRouter';
 import useAuth from 'hooks/useAuth';
+import { AppRoutes } from 'router/routes';
 import LoginForm, { LoginFormData } from '../components/LoginForm';
 
 // test user
@@ -24,7 +25,7 @@ function Login() {
 
     try {
       await login(formValues.email, formValues.password);
-      navigate('/welcome');
+      navigate(AppRoutes.home.key);
     } catch (error) {
       onLoginFailed(error, form);
     } finally {
