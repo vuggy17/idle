@@ -41,7 +41,7 @@ export default function MyAccount({ user }: MyAccountProps) {
   const [delAccountModalOpen, setDelAccountModalOpen] = useState(false);
 
   const updateUserInfo = (info: { name?: string; avatar?: string }) => {
-    setCurrentUser({ ...user, ...info });
+    if (info.name?.trim() !== '') setCurrentUser({ ...user, ...info });
   };
 
   const onAccountDeleted = () => {
@@ -71,6 +71,7 @@ export default function MyAccount({ user }: MyAccountProps) {
               <Typography.Title level={4}>My profile</Typography.Title>
               <Divider className="mb-3" />
               <Form
+                requiredMark={false}
                 name="user-info"
                 onBlur={() => updateUserInfo(form.getFieldsValue())}
                 form={form}
@@ -90,7 +91,9 @@ export default function MyAccount({ user }: MyAccountProps) {
                     />
                   </Form.Item>
                   <Form.Item
+                    required
                     name="name"
+                    tooltip="Click away to apply change"
                     label={
                       <Typography.Text
                         type="secondary"
