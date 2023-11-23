@@ -7,6 +7,7 @@ import { ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../main';
 import { AppRoutes } from './routes';
+import NoMatch from './NoMatch';
 
 export function wrapErrorBoundary(component: ReactNode) {
   return (
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: AppRoutes.home.key,
-        lazy: () => import('features/home/pages/index'),
+        lazy: () => import('features/chat/pages/index'),
       },
       {
         path: AppRoutes.dm.key,
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
   {
     path: 'register',
     lazy: () => import('features/auth/ui/pages/Register'),
+  },
+  {
+    path: '*',
+    element: <NoMatch />,
+    lazy: () => import('./NoMatch'),
   },
 ]);
 
