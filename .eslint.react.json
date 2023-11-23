@@ -11,11 +11,14 @@
       "rules": {
         "react/react-in-jsx-scope": "off",
         "import/no-extraneous-dependencies": "off",
-        "react/jsx-props-no-spreading": ["error",
-        {
-          "custom": "ignore"
-        }
-      ]
+        "react/jsx-props-no-spreading": [
+          "error",
+          {
+            "custom": "ignore"
+          }
+        ],
+        "react/prop-types": "off",
+        "react/require-default-props": "off"
       }
     }
   ]
