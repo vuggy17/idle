@@ -16,6 +16,7 @@ import UserCard from 'components/UserCard';
 import { User } from 'features/auth/entities/user';
 import useAuth from 'hooks/useAuth';
 import { lazy, useState, Suspense } from 'react';
+import SetsStatusModal from './SetStatusModal';
 
 const PreferencePage = lazy(
   () => import('features/preference/ui/pages/Preference'),
@@ -39,12 +40,14 @@ function getSettingMenu(
 
 export const UserAction = {
   openAccountSetting: 'open_setting_action',
+  updateStatus: 'open_status_modal_action',
   logoutConfirm: 'logout_confirm_action',
   logout: 'logout_action',
   openThemeSetting: 'open_theme_setting',
 };
 
 const menuItems = [
+  getSettingMenu('Update your status', UserAction.updateStatus),
   getSettingMenu('Open account setting', UserAction.openAccountSetting),
   getSettingMenu('Change theme', UserAction.openThemeSetting),
 ];
@@ -54,6 +57,7 @@ const { useToken } = theme;
 
 export default function UserProfilePopupContent({ user }: { user: User }) {
   const [openSettingModal, setOpenSettingModal] = useState(false);
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
   const { modal } = useApp();
   const { token } = useToken();
   const { logout } = useAuth();
@@ -65,7 +69,7 @@ export default function UserProfilePopupContent({ user }: { user: User }) {
         break;
 
       case UserAction.logoutConfirm:
-        // open logout confirm box
+        //  logout confirm modal
         modal.confirm({
           centered: true,
           title: 'Sign out of Idle',
@@ -73,10 +77,14 @@ export default function UserProfilePopupContent({ user }: { user: User }) {
             "We'll sign you out and remove any offline data, including message drafts.",
           okText: 'Sign out',
           cancelText: 'Cancel',
+          onOk: async () => handleUserActions(UserAction.logout),
         });
         break;
       case UserAction.logout:
         logout();
+        break;
+      case UserAction.updateStatus:
+        setStatusModalOpen(true);
         break;
       default:
         console.warn(`Unknown handler for ${action} action`);
@@ -167,8 +175,11 @@ export default function UserProfilePopupContent({ user }: { user: User }) {
         </Suspense>
       </Modal>
 
-      {/* logout confirm modal */}
-      <Modal centered />
+      {/* status modal */}
+      <SetsStatusModal
+        open={statusModalOpen}
+        onCancel={() => setStatusModalOpen(false)}
+      />
     </div>
   );
 }
