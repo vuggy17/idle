@@ -6,6 +6,7 @@ import {
 import { ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../main';
+import { AppRoutes } from './routes';
 
 export function wrapErrorBoundary(component: ReactNode) {
   return (
@@ -15,8 +16,21 @@ export function wrapErrorBoundary(component: ReactNode) {
 
 const router = createBrowserRouter([
   {
-    path: '/welcome',
-    lazy: () => import('features/welcome/pages/index'),
+    lazy: () => import('app/AppLayoutWithGnb'),
+    children: [
+      {
+        path: AppRoutes.home.key,
+        lazy: () => import('features/home/pages/index'),
+      },
+      {
+        path: AppRoutes.dm.key,
+        element: 'dm',
+      },
+      {
+        path: AppRoutes.activity.key,
+        element: 'activity',
+      },
+    ],
   },
   {
     path: '/login',
@@ -24,7 +38,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Navigate to="welcome" />,
+    element: <Navigate to={`${AppRoutes.home.key}`} />,
   },
   {
     path: 'register',
