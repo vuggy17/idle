@@ -5,8 +5,9 @@ import {
 } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import path from 'path';
 import ErrorFallback from '../main';
-import { AppRoutes } from './routes';
+import { AppRoutes, AppSubPages } from './routes';
 import NoMatch from './NoMatch';
 
 export function wrapErrorBoundary(component: ReactNode) {
@@ -33,7 +34,19 @@ const router = createBrowserRouter([
       },
       {
         path: AppRoutes.discover.key,
-        element: 'discover',
+        lazy: () =>
+          import('features/profileManagement/ui/pages/DiscoverLayout'),
+        children: [
+          {
+            index: true,
+            lazy: () =>
+              import('features/profileManagement/ui/components/FindPeople'),
+          },
+          {
+            path: AppSubPages.discover_request,
+            element: 'requests',
+          },
+        ],
       },
     ],
   },
