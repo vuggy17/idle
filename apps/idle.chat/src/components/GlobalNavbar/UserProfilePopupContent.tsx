@@ -19,7 +19,7 @@ import { lazy, useState, Suspense } from 'react';
 import SetsStatusModal from './SetStatusModal';
 
 const PreferencePage = lazy(
-  () => import('features/preference/ui/pages/Preference'),
+  () => import('features/profileManagement/ui/pages/Preference'),
 );
 
 type MenuItem = Required<MenuProps>['items'][number];

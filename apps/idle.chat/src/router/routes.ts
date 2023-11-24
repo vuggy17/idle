@@ -1,4 +1,4 @@
-export type RouteKey = 'home' | 'dm' | 'activity';
+export type RouteKey = 'home' | 'dm' | 'activity' | 'discover';
 
 /**
  * @property key: route pathname
@@ -24,10 +24,15 @@ export const AppRoutes: Record<RouteKey, Route> = {
     key: 'activity',
     name: 'Activity',
   },
+  discover: {
+    key: 'discover',
+    name: 'Discover',
+  },
 } as const;
 
 export const AppPages: Record<RouteKey, RouteKey> = {
   home: 'home',
   dm: 'dm',
   activity: 'activity',
+  discover: 'discover',
 } as const;

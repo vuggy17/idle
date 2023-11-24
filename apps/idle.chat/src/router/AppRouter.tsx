@@ -31,6 +31,10 @@ const router = createBrowserRouter([
         path: AppRoutes.activity.key,
         element: 'activity',
       },
+      {
+        path: AppRoutes.discover.key,
+        element: 'discover',
+      },
     ],
   },
   {

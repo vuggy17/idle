@@ -7,13 +7,7 @@ import UnderConstruction from 'components/UnderConstruction';
 import { useAtomValue } from 'jotai';
 import { currentUserAtom } from 'store/user';
 import UserCard from 'components/UserCard';
-import {
-  Bell,
-  LayoutRight,
-  PeopleTag,
-  Settings,
-  UserCircle,
-} from 'iconoir-react';
+import { Bell, LayoutRight, PeopleTag, Settings } from 'iconoir-react';
 import MyAccount from './MyAccount';
 import MyNotification from './MyNotification';
 import General from './General';

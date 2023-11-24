@@ -34,6 +34,11 @@ const menuConfig = [
     icon: AppPages.activity,
     label: 'Activity',
   },
+  {
+    key: AppPages.discover,
+    icon: AppPages.discover,
+    label: 'Discover',
+  },
 ];
 
 type MenuItem = Required<MenuProps>['items'][number];
