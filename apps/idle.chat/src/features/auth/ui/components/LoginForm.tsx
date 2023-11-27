@@ -30,7 +30,7 @@ export default function LoginForm({
           },
         ]}
       >
-        <Input placeholder="Your email" />
+        <Input placeholder="Your email" data-testid="login-email-input" />
       </Form.Item>
 
       <Form.Item
@@ -51,7 +51,10 @@ export default function LoginForm({
         ]}
         hasFeedback
       >
-        <Input.Password placeholder="Your password" />
+        <Input.Password
+          placeholder="Your password"
+          data-testid="login-password-input"
+        />
       </Form.Item>
 
       <Form.Item>

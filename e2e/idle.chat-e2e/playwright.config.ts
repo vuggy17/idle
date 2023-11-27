@@ -1,8 +1,10 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
 
 import { workspaceRoot } from '@nx/devkit';
+import path = require('path');
 
+export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 // For CI, you may want to set BASE_URL to the deployed application.
 const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 
@@ -30,4 +32,19 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
   },
+  projects: [
+    {
+      name: 'setup',
+      testMatch: /global.setup\.ts/,
+    },
+    {
+      name: 'discover',
+      testDir: 'src/e2e/profileManagement',
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Edge'],
+        storageState: STORAGE_STATE,
+      },
+    },
+  ],
 });
