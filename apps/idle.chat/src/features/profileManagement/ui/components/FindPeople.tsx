@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  Button,
   Divider,
   Dropdown,
   Input,
@@ -16,16 +14,14 @@ import FindUserByNameUseCase from 'features/profileManagement/useCases/findUserB
 import React, {
   KeyboardEvent,
   cloneElement,
-  useMemo,
   useState,
   useRef,
   useEffect,
-  RefObject,
-  MouseEvent,
-  MutableRefObject,
   useCallback,
 } from 'react';
 import { useDebounce } from 'use-debounce';
+import useClickOutsideListener from 'hooks/useClickOutsideListener';
+import { SearchResultCard } from './SearchResultCard';
 
 const { useToken } = theme;
 
@@ -41,74 +37,6 @@ async function fetchUsersWithSimilarName(
   });
 
   resolve(result);
-}
-
-type SearchResultCardProps = {
-  name: string;
-  avatar: string;
-  isFriend?: boolean;
-  bio: string;
-};
-
-function SearchResultCard({
-  name,
-  avatar,
-  bio,
-  isFriend = false,
-}: SearchResultCardProps) {
-  const userDescription = useMemo(() => {
-    const sections: string[] = [];
-    if (isFriend) {
-      sections.push('Friend');
-    }
-    if (bio) {
-      sections.push(bio);
-    }
-    return sections.join('・');
-  }, [isFriend, bio]);
-
-  const resultAction = useMemo(() => {
-    if (isFriend) {
-      return <Button>Message</Button>;
-    }
-    return <Button>Add friend</Button>;
-  }, [isFriend]);
-
-  return (
-    <List.Item actions={[resultAction]}>
-      <List.Item.Meta
-        avatar={<Avatar src={avatar} />}
-        title={name}
-        description={userDescription}
-      />
-    </List.Item>
-  );
-}
-/**
- * Hook that alerts clicks outside of the passed ref
- * @param ref element to watch
- * @param onClickOutside callback function called when click outside element
- */
-function useClickOutsideListener(
-  ref: MutableRefObject<HTMLElement | null>,
-  onClickOutside: () => void,
-) {
-  useEffect(() => {
-    /**
-     * Alert if clicked on outside of element
-     */
-    function handleClickOutside(event: MouseEvent<Document>) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        onClickOutside();
-      }
-    }
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside as any);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside as any);
-    };
-  }, [ref, onClickOutside]);
 }
 
 export function FindPeople() {
@@ -152,6 +80,7 @@ export function FindPeople() {
     onSearch(searchText);
   };
 
+  // get search suggestions after user typed 300ms
   useEffect(() => {
     setSearching(true);
 
@@ -174,7 +103,7 @@ export function FindPeople() {
     cursor: 'pointer',
   };
 
-  // hide suggestion popup conditions
+  // hide suggestion popup conditions derived from component state
   const hasAnySearchSuggestions = searchSuggestions.length > 0;
   const didUserTyped = !!nameQuery;
 
@@ -211,10 +140,13 @@ export function FindPeople() {
               }}
               // eslint-disable-next-line react/no-unstable-nested-components
               dropdownRender={(menu) => (
-                <div style={contentStyle}>
+                <div
+                  style={contentStyle}
+                  data-testid="find-people-suggestion-popup"
+                >
                   <Space
                     className="w-full justify-between hover:font-semibold"
-                    onClick={(e) => {
+                    onClick={() => {
                       if (nameQuery) onSearch(nameQuery);
                     }}
                     role="button"
@@ -227,7 +159,9 @@ export function FindPeople() {
                   >
                     <Space style={{ padding: 8 }}>
                       <Typography.Text strong>Search: </Typography.Text>
-                      <Typography.Text>{nameQuery}</Typography.Text>
+                      <Typography.Text data-testid="find-people-search-phrase">
+                        {nameQuery}
+                      </Typography.Text>
                     </Space>
                     {searching ? <Spin size="small" className="mr-4" /> : null}
                   </Space>
@@ -237,19 +171,24 @@ export function FindPeople() {
               )}
             >
               <Input
+                data-testid="search-people-input"
                 onKeyDown={(e) => {
+                  // open popup when user is typing
+                  if (!resultSuggestionOpen) setResultSuggestionOpen(true);
                   if (e.key === 'Enter') onPressEnter(e);
                 }}
                 spellCheck={false}
-                onFocus={() =>
+                onFocus={() => {
                   setResultSuggestionOpen(
                     didUserTyped || hasAnySearchSuggestions,
-                  )
-                }
+                  );
+                }}
                 onClick={() => {
                   if (nameQuery) setResultSuggestionOpen(true);
                 }}
-                onChange={(e) => setNameQuery(e.target.value)}
+                onChange={(e) => {
+                  setNameQuery(e.target.value);
+                }}
                 size="large"
                 placeholder="Search for people"
               />
