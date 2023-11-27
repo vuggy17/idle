@@ -5,7 +5,6 @@ import {
 } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import path from 'path';
 import ErrorFallback from '../main';
 import { AppRoutes, AppSubPages } from './routes';
 import NoMatch from './NoMatch';

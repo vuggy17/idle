@@ -1,4 +1,5 @@
 import {
+  Card,
   Divider,
   Dropdown,
   Input,
@@ -21,7 +22,8 @@ import React, {
 } from 'react';
 import { useDebounce } from 'use-debounce';
 import useClickOutsideListener from 'hooks/useClickOutsideListener';
-import { SearchResultCard } from './SearchResultCard';
+import { SearchResultCard } from './SearchResult';
+import SearchResultModal from './SearchResultModal';
 
 const { useToken } = theme;
 
@@ -39,6 +41,8 @@ async function fetchUsersWithSimilarName(
   resolve(result);
 }
 
+type SearchUserResult = any;
+
 export function FindPeople() {
   const { token } = useToken();
 
@@ -48,10 +52,15 @@ export function FindPeople() {
 
   // search suggestions state
   const [resultSuggestionOpen, setResultSuggestionOpen] = useState(false);
-  const [searchSuggestions, setSearchSuggestions] = useState<any[]>([]);
+  const [searchSuggestions, setSearchSuggestions] = useState<
+    SearchUserResult[]
+  >([]);
 
   // search results
-  const [searchResult, setSearchResult] = useState<any[]>([]);
+  const [searchResult, setSearchResult] = useState<SearchUserResult[]>([]);
+  // selected user to view profile
+  const [userProfileToView, setUserProfileToView] =
+    useState<SearchUserResult | null>(null);
 
   // reference to suggestion popup
   const suggestionPopupRef = useRef<HTMLDivElement>(null);
@@ -107,6 +116,11 @@ export function FindPeople() {
   const hasAnySearchSuggestions = searchSuggestions.length > 0;
   const didUserTyped = !!nameQuery;
 
+  const shouldOpenProfileViewModal = !!userProfileToView;
+  console.log(
+    '🚀 ~ file: FindPeople.tsx:120 ~ FindPeople ~ shouldOpenProfileViewModal:',
+    shouldOpenProfileViewModal,
+  );
   return (
     <Layout>
       <Layout.Content>
@@ -136,7 +150,20 @@ export function FindPeople() {
                       avatar={user.avatar}
                     />
                   ),
+                  'data-testid': 'find-people-suggestion-item',
                 })),
+                onClick: ({ key }) => {
+                  // find user to select
+                  const profileToView = searchSuggestions.find(
+                    (suggestion) => suggestion.name === key,
+                  );
+                  console.log(
+                    '🚀 ~ file: FindPeople.tsx:160 ~ FindPeople ~ profileToView:',
+                    profileToView,
+                  );
+                  setUserProfileToView(profileToView);
+                  setResultSuggestionOpen(false);
+                },
               }}
               // eslint-disable-next-line react/no-unstable-nested-components
               dropdownRender={(menu) => (
@@ -196,20 +223,42 @@ export function FindPeople() {
           </div>
 
           {/* search results */}
-          <List
-            dataSource={searchResult}
-            renderItem={(item, index) => (
-              <SearchResultCard
-                name={item.name}
-                avatar={item.avatar}
-                key={item.name}
-                bio={item.status}
-                isFriend
-              />
-            )}
-          />
+          <div
+            style={{
+              paddingInline: token.paddingLG,
+              backgroundColor: token.colorBgElevated,
+              borderRadius: token.borderRadiusLG,
+            }}
+            className="mt-4"
+          >
+            <List
+              dataSource={searchResult}
+              renderItem={(item) => (
+                <SearchResultCard
+                  onClick={() => {
+                    setUserProfileToView(item);
+                  }}
+                  name={item.name}
+                  avatar={item.avatar}
+                  key={item.name}
+                  bio={item.status}
+                  isFriend
+                />
+              )}
+            />
+          </div>
         </div>
       </Layout.Content>
+
+      <SearchResultModal
+        name="Naruto"
+        bio="@naruto so strong! 👀💪✈️"
+        isFriend
+        modalProps={{
+          open: shouldOpenProfileViewModal,
+          onCancel: () => setUserProfileToView(null),
+        }}
+      />
     </Layout>
   );
 }

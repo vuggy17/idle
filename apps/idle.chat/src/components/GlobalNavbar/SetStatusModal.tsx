@@ -81,14 +81,14 @@ export default function SetsStatusModal({ ...modalProps }: ModalProps) {
               size="small"
               split={false}
               dataSource={recentStatus}
-              renderItem={(item) => (
-                <List.Item>
+              renderItem={(status) => (
+                <List.Item key={status}>
                   <Button
                     type="text"
                     className="w-full text-left"
-                    onClick={() => updateStatusText(item)}
+                    onClick={() => updateStatusText(status)}
                   >
-                    {item}
+                    {status}
                   </Button>
                 </List.Item>
               )}

@@ -1,5 +1,4 @@
 import { ConfigProvider, Layout, Menu, Space, Typography } from 'antd';
-import { LoaderFunction } from 'react-router-dom';
 import { wrapErrorBoundary } from 'router/AppRouter';
 import type { MenuProps } from 'antd/es/menu';
 import { useMemo, useState } from 'react';
@@ -146,6 +145,5 @@ function Preference() {
 }
 
 const Component = () => wrapErrorBoundary(<Preference />);
-export const loader: LoaderFunction = async ({ params }) => null;
 
 export default Component;

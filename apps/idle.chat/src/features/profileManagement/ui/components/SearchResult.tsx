@@ -1,11 +1,14 @@
-import { Avatar, Button, List } from 'antd';
+import { Avatar, Button, List, Typography } from 'antd';
 import { useMemo } from 'react';
+
+type ListItemProps = (typeof List)['Item']['defaultProps'];
 
 export function SearchResultCard({
   name,
   avatar,
   bio,
   isFriend = false,
+  ...listItemProps
 }: SearchResultCardProps) {
   const userDescription = useMemo(() => {
     const sections: string[] = [];
@@ -15,7 +18,18 @@ export function SearchResultCard({
     if (bio) {
       sections.push(bio);
     }
-    return sections.join('・');
+    return (
+      <Typography.Paragraph
+        style={{
+          margin: 0,
+        }}
+        ellipsis={{
+          rows: 2,
+        }}
+      >
+        {sections.join('・')}
+      </Typography.Paragraph>
+    );
   }, [isFriend, bio]);
 
   const resultAction = useMemo(() => {
@@ -26,7 +40,7 @@ export function SearchResultCard({
   }, [isFriend]);
 
   return (
-    <List.Item actions={[resultAction]}>
+    <List.Item actions={[resultAction]} {...listItemProps}>
       <List.Item.Meta
         avatar={<Avatar src={avatar} />}
         title={name}
@@ -40,4 +54,4 @@ export type SearchResultCardProps = {
   avatar: string;
   isFriend?: boolean;
   bio: string;
-};
+} & ListItemProps;

@@ -40,7 +40,8 @@ export default defineConfig({
     {
       name: 'discover',
       testDir: 'src/e2e/profileManagement',
-      dependencies: ['setup'],
+      // enable this line when login toke expire
+      // dependencies: ['setup'],
       use: {
         ...devices['Desktop Edge'],
         storageState: STORAGE_STATE,
