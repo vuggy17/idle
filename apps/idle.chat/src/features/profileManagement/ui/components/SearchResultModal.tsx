@@ -31,43 +31,45 @@ export default function SearchResultModal({
   const { modalProps, ...user } = props;
   return (
     <Modal {...modalProps} centered width={480} closeIcon={null} footer={null}>
-      {/* profile cover */}
-      <div className="h-[200px]">
-        <Image
-          src={tempProfileCover}
-          height="100%"
-          width="100%"
-          className="object-cover "
-        />
-      </div>
-      <div className="-my-10 pb-10">
-        <Space
-          direction="vertical"
-          className="w-full justify-center relative items-center"
-        >
-          <PartialAvatar size={96} shape="circle" />
-          <Flex vertical className="text-center">
-            <Typography.Text>{user.name}</Typography.Text>
-            <Typography.Text type="secondary">{user.bio}</Typography.Text>
-          </Flex>
+      <div data-testid="find-people-profile-view-popup">
+        {/* profile cover */}
+        <div className="h-[200px]">
+          <Image
+            src={tempProfileCover}
+            height="100%"
+            width="100%"
+            className="object-cover "
+          />
+        </div>
+        <div className="-my-10 pb-10">
+          <Space
+            direction="vertical"
+            className="w-full justify-center relative items-center"
+          >
+            <PartialAvatar size={96} shape="circle" />
+            <Flex vertical className="text-center">
+              <Typography.Text>{user.name}</Typography.Text>
+              <Typography.Text type="secondary">{user.bio}</Typography.Text>
+            </Flex>
 
-          <div className="mt-3">
-            <Button
-              icon={
-                <ChatBubble
-                  height={16}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    verticalAlign: '-.2em',
-                  }}
-                />
-              }
-            >
-              Send message
-            </Button>
-          </div>
-        </Space>
+            <div className="mt-3">
+              <Button
+                icon={
+                  <ChatBubble
+                    height={16}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      verticalAlign: '-.2em',
+                    }}
+                  />
+                }
+              >
+                Send message
+              </Button>
+            </div>
+          </Space>
+        </div>
       </div>
     </Modal>
   );

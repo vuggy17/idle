@@ -117,10 +117,6 @@ export function FindPeople() {
   const didUserTyped = !!nameQuery;
 
   const shouldOpenProfileViewModal = !!userProfileToView;
-  console.log(
-    '🚀 ~ file: FindPeople.tsx:120 ~ FindPeople ~ shouldOpenProfileViewModal:',
-    shouldOpenProfileViewModal,
-  );
   return (
     <Layout>
       <Layout.Content>
@@ -156,10 +152,6 @@ export function FindPeople() {
                   // find user to select
                   const profileToView = searchSuggestions.find(
                     (suggestion) => suggestion.name === key,
-                  );
-                  console.log(
-                    '🚀 ~ file: FindPeople.tsx:160 ~ FindPeople ~ profileToView:',
-                    profileToView,
                   );
                   setUserProfileToView(profileToView);
                   setResultSuggestionOpen(false);
