@@ -19,16 +19,14 @@ export function SearchResultCard({
       sections.push(bio);
     }
     return (
-      <Typography.Paragraph
+      <div
+        className="h-[3rem] line-clamp-2"
         style={{
           margin: 0,
         }}
-        ellipsis={{
-          rows: 2,
-        }}
       >
         {sections.join('・')}
-      </Typography.Paragraph>
+      </div>
     );
   }, [isFriend, bio]);
 

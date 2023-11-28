@@ -20,9 +20,11 @@ export default class SocialService implements SocialRepository {
 
     // map api data to data
     return result.data.data.map((user) => ({
+      id: 'dds',
       name: user.title,
       avatar: user.images.jpg.small_image_url,
-      status: user.background,
+      bio: user.background,
+      isFriend: user.title.length % 2 === 0,
     }));
   }
 }

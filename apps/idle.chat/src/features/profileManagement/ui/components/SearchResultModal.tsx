@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Flex,
   Image,
@@ -35,7 +34,7 @@ export default function SearchResultModal({
         {/* profile cover */}
         <div className="h-[200px]">
           <Image
-            src={tempProfileCover}
+            src={user.avatar ?? tempProfileCover}
             height="100%"
             width="100%"
             className="object-cover "
@@ -46,7 +45,12 @@ export default function SearchResultModal({
             direction="vertical"
             className="w-full justify-center relative items-center"
           >
-            <PartialAvatar size={96} shape="circle" />
+            <PartialAvatar
+              size={96}
+              shape="circle"
+              src={user.avatar ?? tempProfileCover}
+              className="shadow-lg"
+            />
             <Flex vertical className="text-center">
               <Typography.Text>{user.name}</Typography.Text>
               <Typography.Text type="secondary">{user.bio}</Typography.Text>
@@ -56,7 +60,7 @@ export default function SearchResultModal({
               <Button
                 icon={
                   <ChatBubble
-                    height={16}
+                    height={18}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',

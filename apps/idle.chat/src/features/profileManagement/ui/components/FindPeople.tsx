@@ -1,5 +1,6 @@
 import {
-  Card,
+  Button,
+  ConfigProvider,
   Divider,
   Dropdown,
   Input,
@@ -19,9 +20,12 @@ import React, {
   useRef,
   useEffect,
   useCallback,
+  useMemo,
 } from 'react';
 import { useDebounce } from 'use-debounce';
 import useClickOutsideListener from 'hooks/useClickOutsideListener';
+import { FindUserSingleResponseDTO } from 'dto/socialDto';
+import { UserCircle } from 'iconoir-react';
 import { SearchResultCard } from './SearchResult';
 import SearchResultModal from './SearchResultModal';
 
@@ -30,7 +34,7 @@ const { useToken } = theme;
 async function fetchUsersWithSimilarName(
   query: string,
   cancelSignal: AbortSignal,
-  resolve: (result: unknown[]) => void,
+  resolve: (result: SearchUserResult[]) => void,
 ) {
   const usecase = new FindUserByNameUseCase();
   const result = await usecase.execute({
@@ -41,7 +45,7 @@ async function fetchUsersWithSimilarName(
   resolve(result);
 }
 
-type SearchUserResult = any;
+type SearchUserResult = FindUserSingleResponseDTO;
 
 export function FindPeople() {
   const { token } = useToken();
@@ -59,8 +63,9 @@ export function FindPeople() {
   // search results
   const [searchResult, setSearchResult] = useState<SearchUserResult[]>([]);
   // selected user to view profile
-  const [userProfileToView, setUserProfileToView] =
-    useState<SearchUserResult | null>(null);
+  const [userProfileToView, setUserProfileToView] = useState<
+    SearchUserResult | undefined
+  >();
 
   // reference to suggestion popup
   const suggestionPopupRef = useRef<HTMLDivElement>(null);
@@ -91,15 +96,19 @@ export function FindPeople() {
 
   // get search suggestions after user typed 300ms
   useEffect(() => {
-    setSearching(true);
-
     const abortSignal = new AbortController();
-    fetchUsersWithSimilarName(
-      delayedQuery ?? '',
-      abortSignal.signal,
-      setSearchSuggestions,
-    ).finally(() => setSearching(false));
+    if (delayedQuery && delayedQuery.trim().length > 0) {
+      setSearching(true);
 
+      fetchUsersWithSimilarName(
+        delayedQuery ?? '',
+        abortSignal.signal,
+        setSearchSuggestions,
+      ).finally(() => setSearching(false));
+    } else {
+      setSearchSuggestions([]);
+      setResultSuggestionOpen(false);
+    }
     return () => {
       abortSignal.abort();
     };
@@ -117,6 +126,19 @@ export function FindPeople() {
   const didUserTyped = !!nameQuery;
 
   const shouldOpenProfileViewModal = !!userProfileToView;
+
+  // categorized search results
+  const friendList = useMemo(() => {
+    const listMaxLength = 4;
+    const friends = searchResult.filter(({ isFriend }) => isFriend);
+
+    return friends.slice(0, Math.min(listMaxLength, friends.length));
+  }, [searchResult]);
+
+  const people = useMemo(
+    () => searchResult.filter(({ isFriend }) => !isFriend),
+    [searchResult],
+  );
   return (
     <Layout>
       <Layout.Content>
@@ -214,41 +236,128 @@ export function FindPeople() {
             </Dropdown>
           </div>
 
-          {/* search results */}
-          <div
-            style={{
-              paddingInline: token.paddingLG,
-              backgroundColor: token.colorBgElevated,
-              borderRadius: token.borderRadiusLG,
-            }}
-            className="mt-4"
-          >
-            <List
-              dataSource={searchResult}
-              renderItem={(item) => (
-                <SearchResultCard
-                  onClick={() => {
-                    setUserProfileToView(item);
-                  }}
-                  name={item.name}
-                  avatar={item.avatar}
-                  key={item.name}
-                  bio={item.status}
-                  isFriend
+          {searchResult && searchResult.length > 0 ? (
+            <ConfigProvider
+              theme={{
+                components: {
+                  Button: {
+                    linkHoverBg: token.colorBgTextHover,
+                    colorLinkHover: token.colorLink,
+                  },
+                },
+              }}
+            >
+              {/* search results - friend list */}
+              <div
+                style={{
+                  paddingInline: token.paddingLG,
+                  backgroundColor: token.colorBgElevated,
+                  borderRadius: token.borderRadiusLG,
+                }}
+                className="mt-4"
+              >
+                <List
+                  footer={
+                    friendList && friendList.length > 0 ? (
+                      <div className="text-center">
+                        <Button block type="link">
+                          See all
+                        </Button>
+                      </div>
+                    ) : null
+                  }
+                  header={
+                    <Space className="py-3">
+                      <span
+                        aria-label="friend icon"
+                        role="img"
+                        className="rounded-lg p-2 text-base bg-[#e6d8ff]"
+                      >
+                        🙏
+                      </span>
+                      <Typography.Title
+                        level={4}
+                        style={{
+                          margin: 0,
+                        }}
+                      >
+                        Your friends
+                      </Typography.Title>
+                    </Space>
+                  }
+                  dataSource={friendList}
+                  renderItem={(item) => (
+                    <SearchResultCard
+                      onClick={() => {
+                        setUserProfileToView(item);
+                      }}
+                      name={item.name}
+                      avatar={item.avatar ?? ''}
+                      key={item.name}
+                      bio={item.bio ?? ''}
+                      isFriend={item.isFriend}
+                    />
+                  )}
                 />
-              )}
-            />
-          </div>
+              </div>
+
+              {/* search results - stranger list */}
+              <div
+                style={{
+                  paddingInline: token.paddingLG,
+                  backgroundColor: token.colorBgElevated,
+                  borderRadius: token.borderRadiusLG,
+                }}
+                className="mt-4"
+              >
+                <List
+                  header={
+                    <Space className="py-3">
+                      <span
+                        aria-label="friend icon"
+                        role="img"
+                        className="rounded-lg p-2 text-base bg-[#86b27b]"
+                      >
+                        🤷
+                      </span>
+                      <Typography.Title
+                        level={4}
+                        style={{
+                          margin: 0,
+                        }}
+                      >
+                        People
+                      </Typography.Title>
+                    </Space>
+                  }
+                  dataSource={people}
+                  renderItem={(item) => (
+                    <SearchResultCard
+                      onClick={() => {
+                        setUserProfileToView(item);
+                      }}
+                      name={item.name}
+                      avatar={item.avatar ?? ''}
+                      key={item.name}
+                      bio={item.bio ?? ''}
+                      isFriend={item.isFriend}
+                    />
+                  )}
+                />
+              </div>
+            </ConfigProvider>
+          ) : null}
         </div>
       </Layout.Content>
 
       <SearchResultModal
-        name="Naruto"
-        bio="@naruto so strong! 👀💪✈️"
+        name={userProfileToView?.name ?? ''}
+        bio={userProfileToView?.bio ?? ''}
+        avatar={userProfileToView?.avatar ?? ''}
         isFriend
         modalProps={{
           open: shouldOpenProfileViewModal,
-          onCancel: () => setUserProfileToView(null),
+          onCancel: () => setUserProfileToView(undefined),
         }}
       />
     </Layout>

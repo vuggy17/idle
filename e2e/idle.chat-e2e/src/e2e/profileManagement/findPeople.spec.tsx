@@ -26,7 +26,9 @@ test.describe('Find people', () => {
     test.describe('when being trigged by search input', () => {
       test('should open on input typing', async ({ page }) => {
         await typeIntoSearchInput(page);
-        await expect(page.getByTestId('find-people-suggestion-popup')).toBeVisible();
+        await expect(
+          page.getByTestId('find-people-suggestion-popup'),
+        ).toBeVisible();
       });
 
       test('should not open on input focus if user has not type anything', async ({
@@ -76,6 +78,15 @@ test.describe('Find people', () => {
         await suggestionItem.first().click();
         const searchPopup = page.getByTestId('find-people-suggestion-popup');
 
+        await expect(searchPopup).toBeHidden();
+      });
+      test('should close when user clear their query', async ({ page }) => {
+        await typeIntoSearchInput(page);
+
+        const searchInput = page.getByTestId('search-people-input');
+        await searchInput.clear();
+
+        const searchPopup = page.getByTestId('find-people-suggestion-popup');
         await expect(searchPopup).toBeHidden();
       });
     });
