@@ -56,6 +56,9 @@ dependencies:
   react-router-dom:
     specifier: ^6.18.0
     version: 6.18.0(react-dom@18.2.0)(react@18.2.0)
+  react-router-typesafe:
+    specifier: ^1.4.4
+    version: 1.4.4(react-router-dom@6.18.0)(react@18.2.0)(typescript@5.1.6)
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.13
@@ -11795,6 +11798,18 @@ packages:
       react-router: 6.18.0(react@18.2.0)
     dev: false
 
+  /react-router-typesafe@1.4.4(react-router-dom@6.18.0)(react@18.2.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-XYYwRabe7UoEBZ229Jeg2U4dfU3XvUToX9FTUkJjzDSN+2B4fAIeEKsr961PsA/xJ5bSCd7LwDf0A1deniAdRw==}
+    peerDependencies:
+      react: '>= 17'
+      react-router-dom: '>= 6.4.0'
+      typescript: '>= 4.9'
+    dependencies:
+      react: 18.2.0
+      react-router-dom: 6.18.0(react-dom@18.2.0)(react@18.2.0)
+      typescript: 5.1.6
+    dev: false
+
   /react-router@6.18.0(react@18.2.0):
     resolution: {integrity: sha512-vk2y7Dsy8wI02eRRaRmOs9g2o+aE72YCx5q9VasT1N9v+lrdB79tIqrjMfByHiY5+6aYkH2rUa5X839nwWGPDg==}
     engines: {node: '>=14.0.0'}
@@ -13293,7 +13308,6 @@ packages:
     resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
 
   /typescript@5.2.2:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}

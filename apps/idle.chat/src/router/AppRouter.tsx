@@ -43,7 +43,10 @@ const router = createBrowserRouter([
           },
           {
             path: AppSubPages.discover_request,
-            element: 'requests',
+            lazy: () =>
+              import(
+                'features/profileManagement/ui/components/FriendInvitation'
+              ),
           },
         ],
       },
