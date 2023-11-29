@@ -25,6 +25,10 @@ export default class SocialService implements SocialRepository {
       avatar: user.images.jpg.small_image_url,
       bio: user.background,
       isFriend: user.title.length % 2 === 0,
+      hasPendingRequest:
+        user.title.length % 2 === 0
+          ? false
+          : user.images.jpg.small_image_url.length % 2 === 0,
     }));
   }
 }

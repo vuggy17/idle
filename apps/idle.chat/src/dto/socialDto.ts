@@ -7,7 +7,8 @@ export type FindUserByNameResponseDTO = FindUserSingleResponseDTO[];
 export type FindUserSingleResponseDTO = {
   id: string;
   name: string;
-  avatar?: string;
   bio: string;
   isFriend: boolean;
+  avatar?: string;
+  hasPendingRequest?: boolean;
 };

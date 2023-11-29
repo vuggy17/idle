@@ -4,7 +4,10 @@ import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
 import path = require('path');
 
-export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
+export const STORAGE_STATE = path.join(
+  __dirname,
+  'src/.cache/storage/user.json',
+);
 // For CI, you may want to set BASE_URL to the deployed application.
 const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 
@@ -38,8 +41,18 @@ export default defineConfig({
       testMatch: /global.setup\.ts/,
     },
     {
-      name: 'discover',
+      name: 'profileManagement',
       testDir: 'src/e2e/profileManagement',
+      // enable this line when login toke expire
+      // dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Edge'],
+        storageState: STORAGE_STATE,
+      },
+    },
+    {
+      name: 'app',
+      testDir: 'src/e2e/app',
       // enable this line when login toke expire
       // dependencies: ['setup'],
       use: {

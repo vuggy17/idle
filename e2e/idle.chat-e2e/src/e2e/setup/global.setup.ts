@@ -1,7 +1,7 @@
 import { test as setup, expect } from '@playwright/test';
-import { STORAGE_STATE } from '../../playwright.config';
+import { STORAGE_STATE } from '../../../playwright.config';
 
-import user from '../fixtures/user.json';
+import user from '../../fixtures/user.json';
 
 setup('do login', async ({ page }) => {
   await page.goto('/');

@@ -1,5 +1,6 @@
-import { Avatar, Button, List, Typography } from 'antd';
-import { useMemo } from 'react';
+import { Avatar, Button, List, Tooltip } from 'antd';
+import { Check, UserPlus } from 'iconoir-react';
+import { useMemo, MouseEvent, useState } from 'react';
 
 type ListItemProps = (typeof List)['Item']['defaultProps'];
 
@@ -8,8 +9,24 @@ export function SearchResultCard({
   avatar,
   bio,
   isFriend = false,
+  hasPendingRequest = false,
   ...listItemProps
 }: SearchResultCardProps) {
+  const [doesFriendRequestSent, setDoesFriendRequestSent] =
+    useState(hasPendingRequest);
+
+  const onCancelFriendRequest = (e: MouseEvent<HTMLButtonElement>) => {
+    setDoesFriendRequestSent(false);
+    // cancel friend request
+    e.stopPropagation();
+  };
+
+  const onAddFriend = (e: MouseEvent<HTMLButtonElement>) => {
+    setDoesFriendRequestSent(true);
+    // send friend request
+    e.stopPropagation();
+  };
+
   const userDescription = useMemo(() => {
     const sections: string[] = [];
     if (isFriend) {
@@ -32,10 +49,52 @@ export function SearchResultCard({
 
   const resultAction = useMemo(() => {
     if (isFriend) {
-      return <Button>Message</Button>;
+      return (
+        <Button data-testid="find-people-result-action-btn">Message</Button>
+      );
     }
-    return <Button>Add friend</Button>;
-  }, [isFriend]);
+    if (doesFriendRequestSent) {
+      return (
+        <Tooltip title="Press again to cancel">
+          <Button
+            data-testid="find-people-result-action-btn"
+            type="link"
+            onClick={onCancelFriendRequest}
+            icon={
+              <Check
+                height={18}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  verticalAlign: '-.2em',
+                }}
+              />
+            }
+          >
+            Invitation sent
+          </Button>
+        </Tooltip>
+      );
+    }
+    return (
+      <Button
+        data-testid="find-people-result-action-btn"
+        onClick={onAddFriend}
+        icon={
+          <UserPlus
+            height={18}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              verticalAlign: '-.2em',
+            }}
+          />
+        }
+      >
+        Add friend
+      </Button>
+    );
+  }, [isFriend, doesFriendRequestSent]);
 
   return (
     <List.Item actions={[resultAction]} {...listItemProps}>
@@ -50,6 +109,7 @@ export function SearchResultCard({
 export type SearchResultCardProps = {
   name: string;
   avatar: string;
-  isFriend?: boolean;
   bio: string;
+  isFriend?: boolean;
+  hasPendingRequest?: boolean;
 } & ListItemProps;

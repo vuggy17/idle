@@ -25,7 +25,6 @@ import React, {
 import { useDebounce } from 'use-debounce';
 import useClickOutsideListener from 'hooks/useClickOutsideListener';
 import { FindUserSingleResponseDTO } from 'dto/socialDto';
-import { UserCircle } from 'iconoir-react';
 import { SearchResultCard } from './SearchResult';
 import SearchResultModal from './SearchResultModal';
 
@@ -77,14 +76,18 @@ export function FindPeople() {
   );
 
   // when user press enter or press search button manually
-  const onSearch = (query: string) => {
+  const onSearch = async (query: string) => {
     setResultSuggestionOpen(false);
     // TODO:
     // search for user
     // return more detailed user information
 
     // fake feature with current search suggestions
-    setSearchResult(searchSuggestions);
+    await fetchUsersWithSimilarName(
+      query,
+      new AbortController().signal,
+      setSearchResult,
+    );
   };
 
   const onPressEnter = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -128,12 +131,15 @@ export function FindPeople() {
   const shouldOpenProfileViewModal = !!userProfileToView;
 
   // categorized search results
+  const FRIEND_LIST_MAX_LENGTH = 4;
+  const [friendListMaxItemsCount, setFriendListMaxItemsCount] = useState(
+    FRIEND_LIST_MAX_LENGTH,
+  );
   const friendList = useMemo(() => {
-    const listMaxLength = 4;
     const friends = searchResult.filter(({ isFriend }) => isFriend);
 
-    return friends.slice(0, Math.min(listMaxLength, friends.length));
-  }, [searchResult]);
+    return friends.slice(0, Math.min(friendListMaxItemsCount, friends.length));
+  }, [searchResult, friendListMaxItemsCount]);
 
   const people = useMemo(
     () => searchResult.filter(({ isFriend }) => !isFriend),
@@ -257,10 +263,16 @@ export function FindPeople() {
                 className="mt-4"
               >
                 <List
+                  data-testid="find-people-friend-list"
                   footer={
-                    friendList && friendList.length > 0 ? (
+                    friendList &&
+                    friendList.length <= FRIEND_LIST_MAX_LENGTH ? (
                       <div className="text-center">
-                        <Button block type="link">
+                        <Button
+                          block
+                          type="link"
+                          onClick={() => setFriendListMaxItemsCount(999)}
+                        >
                           See all
                         </Button>
                       </div>
@@ -311,6 +323,7 @@ export function FindPeople() {
                 className="mt-4"
               >
                 <List
+                  data-testid="find-people-people-list"
                   header={
                     <Space className="py-3">
                       <span
@@ -341,6 +354,7 @@ export function FindPeople() {
                       key={item.name}
                       bio={item.bio ?? ''}
                       isFriend={item.isFriend}
+                      hasPendingRequest={item.hasPendingRequest}
                     />
                   )}
                 />

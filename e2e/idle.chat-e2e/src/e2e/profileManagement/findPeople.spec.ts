@@ -1,4 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
+import exp from 'constants';
 
 async function typeIntoSearchInput(page: Page) {
   const searchInput = page.getByTestId('search-people-input');
@@ -16,7 +17,7 @@ async function blockImageRequest(page: Page) {
 test.describe('Find people', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:4200/discover');
-    await page.routeFromHAR('./networksCache/findPeople.har', {
+    await page.routeFromHAR('./src/.cache/network/findPeople.har', {
       url: '**/anime?*',
       update: false,
     });
@@ -107,6 +108,65 @@ test.describe('Find people', () => {
         );
         await profileViewPopup.waitFor({ state: 'attached' });
         await expect(profileViewPopup).toBeVisible();
+      });
+    });
+  });
+
+  test.describe('Search result list', () => {
+    test.describe('when user hit enter on search input', () => {
+      test('should display', async ({ page }) => {
+        await typeIntoSearchInput(page);
+        await page.getByTestId('search-people-input').press('Enter');
+
+        await expect(page.getByTestId('find-people-friend-list')).toBeVisible();
+      });
+    });
+    test.describe('when press see all button', () => {
+      test('should expand', async ({ page }) => {
+        await typeIntoSearchInput(page);
+        await page.getByTestId('search-people-input').press('Enter');
+
+        const friendList = page.getByTestId('find-people-friend-list');
+        const before = await friendList.locator('li').count();
+        await page.getByText('see all').click();
+
+        await expect(page.getByText('see all')).toBeHidden();
+        const after = await friendList.locator('li').count();
+        expect(after).toBeGreaterThan(before);
+      });
+    });
+
+    // THIS TEST SUITE RELY ON API RESULT, IT WOULD BREAK IF API RESULT HAS CHANGED
+    test.describe('when click on add friend button', () => {
+      test('should change to invitation sent button', async ({ page }) => {
+        await typeIntoSearchInput(page);
+        await page.getByTestId('search-people-input').press('Enter');
+        const friendList = page.getByTestId('find-people-people-list');
+        await expect(friendList).toBeVisible();
+
+        const firstLi = friendList
+          .locator('li')
+          .first()
+          .getByTestId('find-people-result-action-btn');
+        expect(await firstLi.innerText()).toContain('Add friend');
+        await firstLi.click();
+
+        expect(await firstLi.innerText()).toContain('Invitation sent');
+      });
+      test('should change to add friend button', async ({ page }) => {
+        await typeIntoSearchInput(page);
+        await page.getByTestId('search-people-input').press('Enter');
+        const friendList = page.getByTestId('find-people-people-list');
+        await expect(friendList).toBeVisible();
+
+        const lastItem = friendList
+          .locator('li')
+          .last()
+          .getByTestId('find-people-result-action-btn');
+        expect(await lastItem.innerText()).toContain('Invitation sent');
+        await lastItem.click();
+
+        expect(await lastItem.innerText()).toContain('Add friend');
       });
     });
   });
