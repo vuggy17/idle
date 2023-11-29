@@ -55,6 +55,7 @@ function getAppNavigateMenu(
         {menuItem.label}
       </Link>
     ),
+    'data-testid': `gnb-${menuItem.key}`,
   }));
 }
 

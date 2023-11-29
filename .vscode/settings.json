@@ -4,6 +4,7 @@
     "chatapi",
     "Ilde",
     "nestjs",
+    "testid",
     "typecheck"
   ],
   "files.exclude": {

@@ -14,6 +14,7 @@ type PartialAvatarProps = PartialBy<AvatarProps, 'src'>;
 export default function PartialAvatar({ ...props }: PartialAvatarProps) {
   const { alt, src, ...avatarProps } = props;
   const user = useAtomValue(currentUserAtom);
+  // const user = {};
   const userName = user.name ?? 'Guest';
 
   return src ? (

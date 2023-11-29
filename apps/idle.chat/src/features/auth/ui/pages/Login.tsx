@@ -25,7 +25,7 @@ function Login() {
 
     try {
       await login(formValues.email, formValues.password);
-      navigate(AppRoutes.home.key);
+      navigate(`/${AppRoutes.home.key}`);
     } catch (error) {
       onLoginFailed(error, form);
     } finally {

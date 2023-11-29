@@ -1,4 +1,5 @@
 export type RouteKey = 'home' | 'dm' | 'activity' | 'discover';
+export type SubRouteKey = '.' | 'friend_requests';
 
 /**
  * @property key: route pathname
@@ -35,4 +36,14 @@ export const AppPages: Record<RouteKey, RouteKey> = {
   dm: 'dm',
   activity: 'activity',
   discover: 'discover',
+} as const;
+
+/**
+ *  `.` means it's a index route of parent route,
+ *
+ * @example ```people``` is index route of `discover` route in {@linkcode AppSubPages.discover_people}
+ */
+export const AppSubPages = {
+  discover_people: '.',
+  discover_request: 'friend_requests',
 } as const;

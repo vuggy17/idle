@@ -138,11 +138,13 @@ export default function UserProfilePopupContent({ user }: { user: User }) {
             style={{
               border: 'none',
             }}
-          >
-            <Menu.Item key="user_card">
-              <UserCard userName={user.email} name={user.name} />
-            </Menu.Item>
-          </Menu>
+            items={[
+              {
+                key: 'user_card',
+                label: <UserCard userName={user.email} name={user.name} />,
+              },
+            ]}
+          />
         </ConfigProvider>
         <Divider />
 
