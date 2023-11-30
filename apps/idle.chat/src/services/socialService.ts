@@ -37,31 +37,25 @@ export default class SocialService implements SocialRepository {
   }
 
   async getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO> {
-    return this.httpGateway.getPendingFriendRequests<GetPendingFriendRequestResponseDTO>();
+    return this.httpGateway.getPendingFriendRequests();
   }
 
   async getFriendRequestStatus(
     friendId: string,
   ): Promise<GetFriendRequestStatusResponseDTO> {
-    return this.httpGateway.getFriendRequestStatus<GetFriendRequestStatusResponseDTO>(
-      friendId,
-    );
+    return this.httpGateway.getFriendRequestStatus(friendId);
   }
 
   async acceptFriendRequest(
     requestId: string,
   ): Promise<AcceptFriendRequestResponseDTO> {
-    return this.httpGateway.acceptFriendRequest<AcceptFriendRequestResponseDTO>(
-      requestId,
-    );
+    return this.httpGateway.acceptFriendRequest(requestId);
   }
 
   async declineFriendRequest(
     requestId: string,
   ): Promise<DeclineFriendRequestResponseDTO> {
-    return this.httpGateway.acceptFriendRequest<DeclineFriendRequestResponseDTO>(
-      requestId,
-    );
+    return this.httpGateway.declineFriendRequest(requestId);
   }
 }
 

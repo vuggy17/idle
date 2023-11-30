@@ -1,4 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
+import {
+  DeclineFriendRequestResponseDTO,
+  AcceptFriendRequestResponseDTO,
+  GetFriendRequestStatusResponseDTO,
+  GetPendingFriendRequestResponseDTO,
+} from 'dto/socialDto';
 import { mockRequestList } from './mock';
 
 const API_PREFIX = '/api/';
@@ -34,44 +40,43 @@ export class HttpClient {
     );
   }
 
-  // TODO: implement
-  // eslint-disable-next-line class-methods-use-this
-  async getPendingFriendRequests<Response>() {
-    return new Promise<Response>((resolve) => {
-      setTimeout(() => {
-        resolve(mockRequestList as unknown as Response);
-      }, 2000);
-    });
+  async getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO> {
+    const result =
+      await this.client.get<GetPendingFriendRequestResponseDTO>(`invitation`);
+
+    return result.data;
   }
 
-  // TODO: implement
-  // eslint-disable-next-line class-methods-use-this
-  async getFriendRequestStatus<Response>(requestId: string) {
-    return new Promise<Response>((resolve) => {
-      setTimeout(() => {
-        resolve({ isValid: false } as unknown as Response);
-      });
-    });
+  async getFriendRequestStatus(
+    requestId: string,
+  ): Promise<GetFriendRequestStatusResponseDTO> {
+    const query = new URLSearchParams({ id: requestId }).toString();
+    const result = await this.client.get<GetFriendRequestStatusResponseDTO>(
+      `invitation?${query}`,
+    );
+    return result.data;
   }
 
-  // TODO: implement
-  // eslint-disable-next-line class-methods-use-this
-  async acceptFriendRequest<Response>(requestId: string) {
-    return new Promise<Response>((resolve) => {
-      setTimeout(() => {
-        resolve(null as unknown as Response);
-      });
-    });
+  async acceptFriendRequest(requestId: string) {
+    const result = await this.client.post<AcceptFriendRequestResponseDTO>(
+      'invitation',
+      {
+        action: 'accept',
+        requestId,
+      },
+    );
+    return result.data;
   }
 
-  // TODO: implement
-  // eslint-disable-next-line class-methods-use-this
-  async declineFriendRequest<Response>(requestId: string) {
-    return new Promise<Response>((resolve) => {
-      setTimeout(() => {
-        resolve(null as unknown as Response);
-      });
-    });
+  async declineFriendRequest(requestId: string) {
+    const result = await this.client.post<DeclineFriendRequestResponseDTO>(
+      'invitation',
+      {
+        action: 'decline',
+        requestId,
+      },
+    );
+    return result.data;
   }
 }
 

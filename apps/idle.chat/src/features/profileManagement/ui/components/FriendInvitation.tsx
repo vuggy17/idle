@@ -7,6 +7,7 @@ import {
   Flex,
   Layout,
   List,
+  Result,
   Typography,
   theme,
 } from 'antd';
@@ -259,10 +260,24 @@ function FriendInvitation() {
             <Suspense fallback={<InvitationListFallback />}>
               <Await
                 resolve={data.requests}
-                errorElement={<p>Error loading package location!</p>}
+                errorElement={
+                  <div data-testid="friend-invitation_error">
+                    <Result
+                      status="500"
+                      title="500"
+                      subTitle="Sorry, something went wrong."
+                      extra={
+                        <Button type="primary" onClick={() => navigate(0)}>
+                          Try again
+                        </Button>
+                      }
+                    />
+                  </div>
+                }
               >
                 {(requests) => (
                   <List<FriendRequest>
+                    data-testid="friend-invitation_list"
                     loading={
                       shouldDisableRequestList
                         ? {
@@ -350,23 +365,42 @@ function FriendRequestCard({
     switch (status) {
       case 'accepted':
         return (
-          <Button type="text" block disabled>
+          <Button
+            type="text"
+            block
+            disabled
+            data-testid="friend-invitation__accept--accepted"
+          >
             Accepted friend request
           </Button>
         );
       case 'deleted':
         return (
-          <Button type="text" block disabled>
+          <Button
+            type="text"
+            block
+            disabled
+            data-testid="friend-invitation__delete--deleted"
+          >
             Deleted
           </Button>
         );
       default:
         return (
           <Flex className="w-full" gap={8}>
-            <Button type="primary" block onClick={onAcceptClick}>
+            <Button
+              type="primary"
+              block
+              onClick={onAcceptClick}
+              data-testid="friend-invitation__accept"
+            >
               Accept
             </Button>
-            <Button block onClick={onDeleteClick}>
+            <Button
+              block
+              onClick={onDeleteClick}
+              data-testid="friend-invitation__delete"
+            >
               Delete
             </Button>
           </Flex>
