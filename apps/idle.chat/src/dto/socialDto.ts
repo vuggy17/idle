@@ -1,3 +1,5 @@
+import { UserDTO } from './authDto';
+
 export type FindUserByNameRequestDTO = {
   q: string;
   abortSignal: AbortSignal;
@@ -12,3 +14,16 @@ export type FindUserSingleResponseDTO = {
   avatar?: string;
   hasPendingRequest?: boolean;
 };
+
+export type GetPendingFriendRequestResponseDTO = {
+  id: string;
+  name: string;
+  avatar: string;
+  createdAt: number;
+};
+
+// A request is valid when it is not accepted or deleted
+export type GetFriendRequestStatusResponseDTO = { isValid: boolean };
+export type AcceptFriendRequestResponseDTO = UserDTO;
+export type DeclineFriendRequestResponseDTO =
+  GetPendingFriendRequestResponseDTO;

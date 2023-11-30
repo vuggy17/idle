@@ -1,4 +1,5 @@
 import {
+  Alert,
   Avatar,
   Button,
   Card,
@@ -7,14 +8,19 @@ import {
   Layout,
   List,
   Typography,
+  theme,
 } from 'antd';
 import { MouseEvent, Suspense, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Await, LoaderFunction } from 'react-router-dom';
+import { Await, LoaderFunction, useNavigate } from 'react-router-dom';
 import { useLoaderData, defer } from 'react-router-typesafe';
+import GetPendingFriendRequestUseCase from 'features/profileManagement/useCases/getPendingFriendRequests';
+import ModifyFriendRequestUseCase from 'features/profileManagement/useCases/modifyFriendRequest';
+import { Refresh } from 'iconoir-react';
 
 dayjs.extend(relativeTime);
+
 type FriendRequest = {
   id: string;
   name: string;
@@ -189,7 +195,24 @@ const mockRequestList: FriendRequest[] = [
 
 function FriendInvitation() {
   const data = useLoaderData<typeof Loader>();
+  const navigate = useNavigate();
 
+  const [errorMsg, setErrorMsg] = useState('');
+  const acceptFriendRequest = async (requestId: string) => {
+    const executor = new ModifyFriendRequestUseCase();
+    await executor.execute({ requestId, action: 'accept' });
+  };
+
+  const deleteFriendRequest = async (requestId: string) => {
+    const executor = new ModifyFriendRequestUseCase();
+    await executor.execute({ requestId, action: 'decline' });
+  };
+
+  const onAcceptOrDeclineError = (error: unknown) => {
+    setErrorMsg((error as Error).message);
+  };
+
+  const shouldDisableRequestList = !!errorMsg;
   return (
     <Layout>
       <ConfigProvider
@@ -206,13 +229,48 @@ function FriendInvitation() {
             <Typography.Title level={4}>
               Your pending invitations
             </Typography.Title>
-            <Suspense fallback="loading">
+            {errorMsg && (
+              <Alert
+                type="error"
+                message={errorMsg}
+                banner
+                className="mb-2"
+                action={
+                  <Button
+                    onClick={() => navigate(0)}
+                    size="small"
+                    type="link"
+                    icon={
+                      <Refresh
+                        height={14}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          verticalAlign: '-.2em',
+                        }}
+                      />
+                    }
+                  >
+                    refresh page
+                  </Button>
+                }
+              />
+            )}
+            <Suspense fallback={<InvitationListFallback />}>
               <Await
                 resolve={data.requests}
                 errorElement={<p>Error loading package location!</p>}
               >
                 {(requests) => (
                   <List<FriendRequest>
+                    loading={
+                      shouldDisableRequestList
+                        ? {
+                            indicator: <span />,
+                            spinning: true,
+                          }
+                        : false
+                    }
                     grid={{
                       gutter: 16,
                       xs: 1,
@@ -226,6 +284,9 @@ function FriendInvitation() {
                         title={item.name}
                         avatar={item.avatar}
                         description={dayjs.unix(item.createdAt).fromNow()}
+                        onAccept={() => acceptFriendRequest(item.id)}
+                        onDelete={() => deleteFriendRequest(item.id)}
+                        onError={onAcceptOrDeclineError}
                       />
                     )}
                   />
@@ -238,30 +299,51 @@ function FriendInvitation() {
     </Layout>
   );
 }
+
+const { useToken } = theme;
 function FriendRequestCard({
   title,
   description,
   avatar,
   onAccept,
   onDelete,
+  loading = false,
+  onError,
 }: {
   title: string;
   description?: string;
   avatar?: string;
-  onAccept?: (e: MouseEvent<HTMLButtonElement>) => void;
-  onDelete?: (e: MouseEvent<HTMLButtonElement>) => void;
+  loading?: boolean;
+  onAccept?: (e: MouseEvent<HTMLButtonElement>) => Promise<void>;
+  onDelete?: (e: MouseEvent<HTMLButtonElement>) => Promise<void>;
+  onError?: (error: unknown) => void;
 }) {
+  const { token } = useToken();
+
   const [status, setStatus] = useState<'accepted' | 'deleted' | 'unset'>(
     'unset',
   );
+  const [hasError, setHasError] = useState(false);
 
-  const onAcceptClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setStatus('accepted');
-    onAccept?.(e);
+  const onAcceptClick = async (e: MouseEvent<HTMLButtonElement>) => {
+    try {
+      setStatus('accepted');
+      await onAccept?.(e);
+    } catch (error) {
+      setStatus('unset');
+      setHasError(true);
+      onError?.(error);
+    }
   };
   const onDeleteClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setStatus('deleted');
-    onDelete?.(e);
+    try {
+      setStatus('deleted');
+      onDelete?.(e);
+    } catch (error) {
+      setStatus('unset');
+      setHasError(true);
+      onError?.(error);
+    }
   };
 
   const footer = useMemo(() => {
@@ -293,9 +375,12 @@ function FriendRequestCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
+  const errorStyle: React.CSSProperties = {
+    borderColor: token.colorError,
+  };
   return (
     <List.Item>
-      <Card>
+      <Card loading={loading} style={hasError ? errorStyle : undefined}>
         <Flex gap={12} vertical className="w-full">
           <Flex gap={16} align="center">
             <Avatar
@@ -321,28 +406,38 @@ function FriendRequestCard({
   );
 }
 
-// react-router dom convention
+function InvitationListFallback() {
+  const requests = mockRequestList;
+  return (
+    <List<FriendRequest>
+      grid={{
+        gutter: 16,
+        xs: 1,
+        xl: 2,
+        xxl: 3,
+      }}
+      dataSource={requests}
+      itemLayout="horizontal"
+      renderItem={(item) => (
+        <FriendRequestCard
+          loading
+          title={item.name}
+          avatar={item.avatar}
+          description={dayjs.unix(item.createdAt).fromNow()}
+        />
+      )}
+    />
+  );
+}
+
+// eslint-disable-next-line import/prefer-default-export
 export function Component() {
   return <FriendInvitation />;
 }
 
-// export const loader = (async () => {
-//   return { requests: mockRequestList };
-// }) satisfies LoaderFunction;
-
 export const Loader = (async () => {
+  const executor = new GetPendingFriendRequestUseCase();
   return defer({
-    requests: new Promise<FriendRequest[]>((resolve) => {
-      setTimeout(() => {
-        resolve(mockRequestList);
-      }, 2000);
-    }),
+    requests: executor.execute(),
   });
 }) satisfies LoaderFunction;
-
-// const requests = await new Promise<FriendRequest[]>((resolve) => {
-//   setTimeout(() => {
-//     resolve(mockRequestList);
-//   }, 2000);
-// });
-// return { requests };

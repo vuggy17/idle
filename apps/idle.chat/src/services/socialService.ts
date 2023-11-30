@@ -1,7 +1,11 @@
 import axios from 'axios';
 import {
+  AcceptFriendRequestResponseDTO,
+  DeclineFriendRequestResponseDTO,
   FindUserByNameRequestDTO,
   FindUserByNameResponseDTO,
+  GetFriendRequestStatusResponseDTO,
+  GetPendingFriendRequestResponseDTO,
 } from 'dto/socialDto';
 import { SocialRepository } from 'features/profileManagement/repositories/socialRepository';
 import { HttpClient } from 'providers/http';
@@ -30,6 +34,34 @@ export default class SocialService implements SocialRepository {
           ? false
           : user.images.jpg.small_image_url.length % 2 === 0,
     }));
+  }
+
+  async getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO> {
+    return this.httpGateway.getPendingFriendRequests<GetPendingFriendRequestResponseDTO>();
+  }
+
+  async getFriendRequestStatus(
+    friendId: string,
+  ): Promise<GetFriendRequestStatusResponseDTO> {
+    return this.httpGateway.getFriendRequestStatus<GetFriendRequestStatusResponseDTO>(
+      friendId,
+    );
+  }
+
+  async acceptFriendRequest(
+    requestId: string,
+  ): Promise<AcceptFriendRequestResponseDTO> {
+    return this.httpGateway.acceptFriendRequest<AcceptFriendRequestResponseDTO>(
+      requestId,
+    );
+  }
+
+  async declineFriendRequest(
+    requestId: string,
+  ): Promise<DeclineFriendRequestResponseDTO> {
+    return this.httpGateway.acceptFriendRequest<DeclineFriendRequestResponseDTO>(
+      requestId,
+    );
   }
 }
 

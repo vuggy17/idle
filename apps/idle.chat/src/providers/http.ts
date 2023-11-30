@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { mockRequestList } from './mock';
 
 const API_PREFIX = '/api/';
 const axiosClient = axios.create({
@@ -31,6 +32,46 @@ export class HttpClient {
         signal: abortSignal,
       },
     );
+  }
+
+  // TODO: implement
+  // eslint-disable-next-line class-methods-use-this
+  async getPendingFriendRequests<Response>() {
+    return new Promise<Response>((resolve) => {
+      setTimeout(() => {
+        resolve(mockRequestList as unknown as Response);
+      }, 2000);
+    });
+  }
+
+  // TODO: implement
+  // eslint-disable-next-line class-methods-use-this
+  async getFriendRequestStatus<Response>(requestId: string) {
+    return new Promise<Response>((resolve) => {
+      setTimeout(() => {
+        resolve({ isValid: false } as unknown as Response);
+      });
+    });
+  }
+
+  // TODO: implement
+  // eslint-disable-next-line class-methods-use-this
+  async acceptFriendRequest<Response>(requestId: string) {
+    return new Promise<Response>((resolve) => {
+      setTimeout(() => {
+        resolve(null as unknown as Response);
+      });
+    });
+  }
+
+  // TODO: implement
+  // eslint-disable-next-line class-methods-use-this
+  async declineFriendRequest<Response>(requestId: string) {
+    return new Promise<Response>((resolve) => {
+      setTimeout(() => {
+        resolve(null as unknown as Response);
+      });
+    });
   }
 }
 
