@@ -3,7 +3,7 @@ import { Card, Layout } from 'antd';
 import Typography from 'antd/es/typography/Typography';
 import NxWelcome from 'app/nx-welcome';
 import { useAtomValue } from 'jotai';
-import { wrapErrorBoundary } from 'router/AppRouter';
+import { wrapErrorBoundary } from 'router/wrapErrorBoundary';
 import { currentUserAtom } from 'store/user';
 
 export default function Welcome() {

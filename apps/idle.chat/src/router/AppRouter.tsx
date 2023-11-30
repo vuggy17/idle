@@ -3,17 +3,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-import { ReactNode } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import ErrorFallback from '../main';
 import { AppRoutes, AppSubPages } from './routes';
-import NoMatch from './NoMatch';
-
-export function wrapErrorBoundary(component: ReactNode) {
-  return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>{component}</ErrorBoundary>
-  );
-}
 
 const router = createBrowserRouter([
   {
@@ -46,7 +36,10 @@ const router = createBrowserRouter([
             lazy: () =>
               import(
                 'features/profileManagement/ui/components/FriendInvitation'
-              ),
+              ).then((res) => ({
+                Component: res.Component,
+                loader: res.Loader,
+              })),
           },
         ],
       },
@@ -66,7 +59,6 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <NoMatch />,
     lazy: () => import('./NoMatch'),
   },
 ]);

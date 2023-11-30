@@ -1,5 +1,5 @@
 import { ConfigProvider, Layout, Menu, Space, Typography } from 'antd';
-import { wrapErrorBoundary } from 'router/AppRouter';
+import { wrapErrorBoundary } from 'router/wrapErrorBoundary';
 import type { MenuProps } from 'antd/es/menu';
 import { useMemo, useState } from 'react';
 import UnderConstruction from 'components/UnderConstruction';

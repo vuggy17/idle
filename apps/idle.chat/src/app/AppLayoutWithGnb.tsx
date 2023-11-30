@@ -2,7 +2,7 @@ import { Layout, ConfigProvider, theme } from 'antd';
 
 import GlobalNavbar from 'components/GlobalNavbar/GlobalNavbar';
 import { Outlet } from 'react-router-dom';
-import { wrapErrorBoundary } from 'router/AppRouter';
+import { wrapErrorBoundary } from 'router/wrapErrorBoundary';
 import ProtectedRoute from 'router/ProtectedRoute';
 
 const { useToken } = theme;

@@ -1,16 +1,9 @@
 import type { createStore } from 'jotai';
-import { PropsWithChildren, createContext, useContext, useMemo } from 'react';
+import { PropsWithChildren, createContext, useMemo } from 'react';
 import { Provider } from 'jotai';
-import { ConfigProvider, ThemeConfig, theme } from 'antd';
+import { ConfigProvider } from 'antd';
 import getCurrentStore from 'store/atom';
-import { Modify } from 'utils/typing';
-
-export type SerializableThemeConfig = Modify<
-  ThemeConfig,
-  {
-    algorithm?: 'dark' | 'default' | 'compact';
-  }
->;
+import { readThemeConfig, SerializableThemeConfig } from './readThemeConfig';
 
 export type IldeContextProps = {
   store: ReturnType<typeof createStore> | undefined;
@@ -19,26 +12,11 @@ export type IldeContextProps = {
 };
 export type IdleContextProviderProps = PropsWithChildren<IldeContextProps>;
 
-const IdleContext = createContext<IldeContextProps>({
+export const IdleContext = createContext<IldeContextProps>({
   store: getCurrentStore(),
   overrideThemeConfig: () => {},
   themeConfig: {},
 });
-
-export function readThemeConfig(config: SerializableThemeConfig): ThemeConfig {
-  const algorithmMapping = {
-    default: theme.defaultAlgorithm,
-    dark: theme.darkAlgorithm,
-    compact: theme.compactAlgorithm,
-  };
-
-  const algorithm = algorithmMapping[config.algorithm ?? 'default'];
-
-  return {
-    ...config,
-    algorithm,
-  };
-}
 
 export function IdleContextProvider({
   children,
@@ -65,10 +43,3 @@ export function IdleContextProvider({
     </Provider>
   );
 }
-
-/**
- * follow https://ant.design/docs/react/customize-theme
- *
- * see {@linkcode ThemeConfig}
- */
-export const useIdleContext = () => useContext(IdleContext);

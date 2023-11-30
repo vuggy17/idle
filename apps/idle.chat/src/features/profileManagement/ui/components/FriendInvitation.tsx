@@ -187,8 +187,8 @@ const mockRequestList: FriendRequest[] = [
   // },
 ];
 
-export function FriendInvitation() {
-  const data = useLoaderData<typeof loader>();
+function FriendInvitation() {
+  const data = useLoaderData<typeof Loader>();
 
   return (
     <Layout>
@@ -330,12 +330,19 @@ export function Component() {
 //   return { requests: mockRequestList };
 // }) satisfies LoaderFunction;
 
-export const loader = (async () => {
+export const Loader = (async () => {
   return defer({
-    requests: new Promise((resolve) => {
+    requests: new Promise<FriendRequest[]>((resolve) => {
       setTimeout(() => {
         resolve(mockRequestList);
-      }, 300);
+      }, 2000);
     }),
   });
 }) satisfies LoaderFunction;
+
+// const requests = await new Promise<FriendRequest[]>((resolve) => {
+//   setTimeout(() => {
+//     resolve(mockRequestList);
+//   }, 2000);
+// });
+// return { requests };

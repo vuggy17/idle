@@ -38,7 +38,7 @@ function getSettingMenu(
   } as MenuItem;
 }
 
-export const UserAction = {
+const UserAction = {
   openAccountSetting: 'open_setting_action',
   updateStatus: 'open_status_modal_action',
   logoutConfirm: 'logout_confirm_action',

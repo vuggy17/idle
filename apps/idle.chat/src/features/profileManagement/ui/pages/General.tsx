@@ -11,7 +11,8 @@ import {
   Typography,
 } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import { SerializableThemeConfig, useIdleContext } from 'components/context';
+import { SerializableThemeConfig } from 'components/context/readThemeConfig';
+import { useIdleContext } from 'components/context/useIdleContext';
 import ThemeSelect from '../components/ThemeSelect';
 import { PreferenceSubPages, SubPages } from './availablePages';
 

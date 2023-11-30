@@ -1,7 +1,5 @@
-import {
-  IdleContextProvider,
-  SerializableThemeConfig,
-} from 'components/context';
+import { IdleContextProvider } from 'components/context';
+import { SerializableThemeConfig } from 'components/context/readThemeConfig';
 import getCurrentStore from 'store/atom';
 import { App as AntdApp } from 'antd';
 import useLocalStorageState from 'use-local-storage-state';
