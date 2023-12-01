@@ -1,9 +1,9 @@
-import { SocialServiceImpl } from 'services/socialService';
+import { SocialServiceImpl } from '@idle/chat/services/socialService';
 import {
   AcceptFriendRequestResponseDTO,
   DeclineFriendRequestResponseDTO,
-} from 'dto/socialDto';
-import { UseCase } from 'type';
+} from '@idle/chat/dto/socialDto';
+import { UseCase } from '@idle/chat/type';
 import { SocialRepository } from '../repositories/socialRepository';
 
 type Input = {

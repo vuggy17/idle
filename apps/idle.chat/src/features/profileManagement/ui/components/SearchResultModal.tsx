@@ -7,7 +7,8 @@ import {
   Space,
   Typography,
 } from 'antd';
-import PartialAvatar from 'components/UserCard/PartialAvatar';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
 import { ChatBubble } from 'iconoir-react';
 
 type SearchResult = {

@@ -1,8 +1,8 @@
 import {
   FindUserByNameRequestDTO,
   FindUserByNameResponseDTO,
-} from 'dto/socialDto';
-import { SocialServiceImpl } from 'services/socialService';
+} from '@idle/chat/dto/socialDto';
+import { SocialServiceImpl } from '@idle/chat/services/socialService';
 import { UseCase } from '../../../type';
 import { SocialRepository } from '../repositories/socialRepository';
 

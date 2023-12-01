@@ -3,9 +3,9 @@ import { Card, Form, FormInstance, Layout, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
-import { wrapErrorBoundary } from 'router/wrapErrorBoundary';
-import useAuth from 'hooks/useAuth';
-import { AppRoutes } from 'router/routes';
+import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
+import useAuth from '@idle/chat/hooks/useAuth';
+import { AppRoutes } from '@idle/chat/router/routes';
 import LoginForm, { LoginFormData } from '../components/LoginForm';
 
 // test user

@@ -1,10 +1,10 @@
 import { Card, Layout } from 'antd';
 
 import Typography from 'antd/es/typography/Typography';
-import NxWelcome from 'app/nx-welcome';
+import NxWelcome from '@idle/chat/app/nx-welcome';
 import { useAtomValue } from 'jotai';
-import { wrapErrorBoundary } from 'router/wrapErrorBoundary';
-import { currentUserAtom } from 'store/user';
+import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
+import { currentUserAtom } from '@idle/chat/store/user';
 
 export default function Welcome() {
   const userInfo = useAtomValue(currentUserAtom);

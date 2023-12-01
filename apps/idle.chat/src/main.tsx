@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
-import getCurrentStore from 'store/atom';
+import getCurrentStore from './store/atom';
 import './styles.css';
 
 export default function ErrorFallback({
@@ -29,7 +29,7 @@ function AppFallback() {
   );
 }
 
-const App = lazy(() => import('app/app'));
+const App = lazy(() => import('./app/app'));
 
 async function main() {
   const setup = (await import('./bootstrap/setup')).default;

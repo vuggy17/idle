@@ -1,6 +1,6 @@
 import { Avatar, AvatarProps } from 'antd';
 import { useAtomValue } from 'jotai';
-import { currentUserAtom } from 'store/user';
+import { currentUserAtom } from '@idle/chat/store/user';
 import stc from 'string-to-color';
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

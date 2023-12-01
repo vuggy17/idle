@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
-import useAuth from 'hooks/useAuth';
+import useAuth from '@idle/chat/hooks/useAuth';
 
 export default function ProtectedRoute({ children }: PropsWithChildren) {
   const { isAuthenticated } = useAuth();

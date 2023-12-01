@@ -11,8 +11,8 @@ import {
   Typography,
   theme,
 } from 'antd';
-import UserCard from 'components/UserCard';
-import FindUserByNameUseCase from 'features/profileManagement/useCases/findUserByName';
+import UserCard from '@idle/chat/components/UserCard';
+import FindUserByNameUseCase from '@idle/chat/features/profileManagement/useCases/findUserByName';
 import React, {
   KeyboardEvent,
   cloneElement,
@@ -23,8 +23,8 @@ import React, {
   useMemo,
 } from 'react';
 import { useDebounce } from 'use-debounce';
-import useClickOutsideListener from 'hooks/useClickOutsideListener';
-import { FindUserSingleResponseDTO } from 'dto/socialDto';
+import useClickOutsideListener from '@idle/chat/hooks/useClickOutsideListener';
+import { FindUserSingleResponseDTO } from '@idle/chat/dto/socialDto';
 import { SearchResultCard } from './SearchResult';
 import SearchResultModal from './SearchResultModal';
 

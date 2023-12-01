@@ -7,12 +7,12 @@ import {
   Tooltip,
   theme,
 } from 'antd';
-import PartialAvatar from 'components/UserCard/PartialAvatar';
+import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
 import { useAtomValue } from 'jotai';
-import { currentUserAtom } from 'store/user';
+import { currentUserAtom } from '@idle/chat/store/user';
 import { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { AppPages, RouteKey } from 'router/routes';
+import { AppPages, RouteKey } from '@idle/chat/router/routes';
 import UserProfilePopupContent from './UserProfilePopupContent';
 import NavIcon from './NavIcon';
 

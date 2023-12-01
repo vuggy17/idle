@@ -25,11 +25,15 @@ export default defineConfig({
   //  plugins: [ nxViteTsPaths() ],
   // },
 
-  // resolve: {
-  //   alias: {
-  //     environments: path.resolve(__dirname, '../../environments/src/index.ts'),
-  //   },
-  // },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext',
+    },
+    include: ['@idle/model'],
+  },
+  build: {
+    target: 'esnext',
+  },
   test: {
     globals: true,
     cache: {

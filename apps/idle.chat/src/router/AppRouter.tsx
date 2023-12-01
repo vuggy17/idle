@@ -7,11 +7,11 @@ import { AppRoutes, AppSubPages } from './routes';
 
 const router = createBrowserRouter([
   {
-    lazy: () => import('app/AppLayoutWithGnb'),
+    lazy: () => import('@idle/chat/app/AppLayoutWithGnb'),
     children: [
       {
         path: AppRoutes.home.key,
-        lazy: () => import('features/chat/pages/index'),
+        lazy: () => import('@idle/chat/features/chat/pages/index'),
       },
       {
         path: AppRoutes.dm.key,
@@ -24,18 +24,22 @@ const router = createBrowserRouter([
       {
         path: AppRoutes.discover.key,
         lazy: () =>
-          import('features/profileManagement/ui/pages/DiscoverLayout'),
+          import(
+            '@idle/chat/features/profileManagement/ui/pages/DiscoverLayout'
+          ),
         children: [
           {
             index: true,
             lazy: () =>
-              import('features/profileManagement/ui/components/FindPeople'),
+              import(
+                '@idle/chat/features/profileManagement/ui/components/FindPeople'
+              ),
           },
           {
             path: AppSubPages.discover_request,
             lazy: () =>
               import(
-                'features/profileManagement/ui/components/FriendInvitation'
+                '@idle/chat/features/profileManagement/ui/components/FriendInvitation'
               ).then((res) => ({
                 Component: res.Component,
                 loader: res.Loader,
@@ -47,7 +51,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    lazy: () => import('features/auth/ui/pages/Login'),
+    lazy: () => import('@idle/chat/features/auth/ui/pages/Login'),
   },
   {
     path: '/',
@@ -55,7 +59,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'register',
-    lazy: () => import('features/auth/ui/pages/Register'),
+    lazy: () => import('@idle/chat/features/auth/ui/pages/Register'),
   },
   {
     path: '*',

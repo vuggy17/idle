@@ -12,11 +12,11 @@ import {
   theme,
 } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import PartialAvatar from 'components/UserCard/PartialAvatar';
-import { User } from 'features/auth/entities/user';
+import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
+import { User } from '@idle/chat/features/auth/entities/user';
 import { NavArrowRight } from 'iconoir-react';
 import { useSetAtom } from 'jotai';
-import { currentUserAtom } from 'store/user';
+import { currentUserAtom } from '@idle/chat/store/user';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChangePasswordModal from '../components/ChangePasswordModal';

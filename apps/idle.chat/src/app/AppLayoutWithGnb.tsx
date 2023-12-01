@@ -1,9 +1,9 @@
 import { Layout, ConfigProvider, theme } from 'antd';
 
-import GlobalNavbar from 'components/GlobalNavbar/GlobalNavbar';
+import GlobalNavbar from '@idle/chat/components/GlobalNavbar/GlobalNavbar';
 import { Outlet } from 'react-router-dom';
-import { wrapErrorBoundary } from 'router/wrapErrorBoundary';
-import ProtectedRoute from 'router/ProtectedRoute';
+import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
+import ProtectedRoute from '@idle/chat/router/ProtectedRoute';
 
 const { useToken } = theme;
 

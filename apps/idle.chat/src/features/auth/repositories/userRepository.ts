@@ -4,7 +4,7 @@ import {
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
   UserDTO,
-} from 'dto/authDto';
+} from '@idle/chat/dto/authDto';
 
 export interface UserRepository {
   register(userData: RegisterUserRequestDTO): Promise<RegisterUserResponseDTO>;

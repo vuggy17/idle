@@ -1,9 +1,9 @@
-import { UseCase } from 'type';
+import { UseCase } from '@idle/chat/type';
 import {
   DeactivateAccountRequestDTO,
   DeactivateAccountResponseDTO,
-} from 'dto/authDto';
-import { AuthServiceImpl } from 'services/authService';
+} from '@idle/chat/dto/authDto';
+import { AuthServiceImpl } from '@idle/chat/services/authService';
 import { UserRepository } from '../repositories/userRepository';
 
 export default class DeactivateAccountUseCase

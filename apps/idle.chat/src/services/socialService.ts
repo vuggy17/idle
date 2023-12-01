@@ -6,9 +6,9 @@ import {
   FindUserByNameResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
-} from 'dto/socialDto';
-import { SocialRepository } from 'features/profileManagement/repositories/socialRepository';
-import { HttpClient } from 'providers/http';
+} from '@idle/chat/dto/socialDto';
+import { SocialRepository } from '@idle/chat/features/profileManagement/repositories/socialRepository';
+import { HttpClient } from '@idle/chat/providers/http';
 
 export default class SocialService implements SocialRepository {
   constructor(private httpGateway: HttpClient) {}

@@ -1,5 +1,5 @@
 import { Client } from 'appwrite';
-import resolveEnv from 'utils/envResolver';
+import resolveEnv from '@idle/chat/utils/envResolver';
 
 const endpoint = resolveEnv('APPWRITE_PROJECT_HOST');
 const projectId = resolveEnv('APPWRITE_PROJECT_ID');

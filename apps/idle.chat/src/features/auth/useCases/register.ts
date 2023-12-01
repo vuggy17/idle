@@ -1,6 +1,9 @@
-import { UseCase } from 'type';
-import { RegisterUserRequestDTO, RegisterUserResponseDTO } from 'dto/authDto';
-import { AuthServiceImpl } from 'services/authService';
+import { UseCase } from '@idle/chat/type';
+import {
+  RegisterUserRequestDTO,
+  RegisterUserResponseDTO,
+} from '@idle/chat/dto/authDto';
+import { AuthServiceImpl } from '@idle/chat/services/authService';
 import { UserRepository } from '../repositories/userRepository';
 
 export default class RegisterUseCase

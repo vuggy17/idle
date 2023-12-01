@@ -16,8 +16,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Await, LoaderFunction, useNavigate } from 'react-router-dom';
 import { useLoaderData, defer } from 'react-router-typesafe';
-import GetPendingFriendRequestUseCase from 'features/profileManagement/useCases/getPendingFriendRequests';
-import ModifyFriendRequestUseCase from 'features/profileManagement/useCases/modifyFriendRequest';
+import GetPendingFriendRequestUseCase from '@idle/chat/features/profileManagement/useCases/getPendingFriendRequests';
+import ModifyFriendRequestUseCase from '@idle/chat/features/profileManagement/useCases/modifyFriendRequest';
 import { Refresh } from 'iconoir-react';
 
 dayjs.extend(relativeTime);

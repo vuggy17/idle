@@ -4,10 +4,10 @@ import {
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
   UserDTO,
-} from 'dto/authDto';
-import { UserRepository } from 'features/auth/repositories/userRepository';
-import { AppWriteProvider } from 'providers/appwrite';
-import HttpProvider, { HttpClient } from 'providers/http';
+} from '@idle/chat/dto/authDto';
+import { UserRepository } from '@idle/chat/features/auth/repositories/userRepository';
+import { AppWriteProvider } from '@idle/chat/providers/appwrite';
+import HttpProvider, { HttpClient } from '@idle/chat/providers/http';
 
 export default class AuthService implements UserRepository {
   constructor(

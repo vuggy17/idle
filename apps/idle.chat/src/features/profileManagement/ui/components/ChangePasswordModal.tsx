@@ -10,12 +10,10 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { Account, AppwriteException } from 'appwrite';
-import ChangePasswordUseCase from 'features/auth/useCases/changePassword';
+import { AppwriteException } from 'appwrite';
+import ChangePasswordUseCase from '@idle/chat/features/auth/useCases/changePassword';
 import { PasswordCursor } from 'iconoir-react';
-import { AppWriteProvider } from 'providers/appwrite';
 import { useState } from 'react';
-import AuthService from 'services/authService';
 
 type ChangePasswordForm = {
   password: string;

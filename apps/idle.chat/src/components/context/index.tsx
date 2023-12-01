@@ -2,7 +2,7 @@ import type { createStore } from 'jotai';
 import { PropsWithChildren, createContext, useMemo } from 'react';
 import { Provider } from 'jotai';
 import { ConfigProvider } from 'antd';
-import getCurrentStore from 'store/atom';
+import getCurrentStore from '@idle/chat/store/atom';
 import { readThemeConfig, SerializableThemeConfig } from './readThemeConfig';
 
 export type IldeContextProps = {

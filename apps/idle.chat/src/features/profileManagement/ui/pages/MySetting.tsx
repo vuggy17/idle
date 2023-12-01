@@ -1,6 +1,6 @@
 import { Layout, ConfigProvider, Space, Typography, Divider } from 'antd';
-import { Content } from 'antd/es/layout/layout';
-import UnderConstruction from 'components/UnderConstruction';
+
+import UnderConstruction from '@idle/chat/components/UnderConstruction';
 
 export default function MySetting() {
   return (
@@ -18,7 +18,7 @@ export default function MySetting() {
           },
         }}
       >
-        <Content className="pt-[5px]">
+        <Layout.Content className="pt-[5px]">
           <Space direction="vertical" className="w-full" size="large">
             <section>
               <Typography.Title level={4}>Appearance</Typography.Title>
@@ -26,7 +26,7 @@ export default function MySetting() {
               <UnderConstruction />
             </section>
           </Space>
-        </Content>
+        </Layout.Content>
       </ConfigProvider>
     </Layout>
   );

@@ -1,11 +1,11 @@
 import axios, { AxiosInstance } from 'axios';
+
 import {
   DeclineFriendRequestResponseDTO,
   AcceptFriendRequestResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
-} from 'dto/socialDto';
-import { mockRequestList } from './mock';
+} from '@idle/chat/dto/socialDto';
 
 const API_PREFIX = '/api/';
 const axiosClient = axios.create({

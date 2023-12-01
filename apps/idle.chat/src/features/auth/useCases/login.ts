@@ -1,6 +1,9 @@
-import { UseCase } from 'type';
-import { LoginUserRequestDTO, LoginUserResponseDTO } from 'dto/authDto';
-import { AuthServiceImpl } from 'services/authService';
+import { UseCase } from '@idle/chat/type';
+import {
+  LoginUserRequestDTO,
+  LoginUserResponseDTO,
+} from '@idle/chat/dto/authDto';
+import { AuthServiceImpl } from '@idle/chat/services/authService';
 import { UserRepository } from '../repositories/userRepository';
 
 export default class LoginUseCase

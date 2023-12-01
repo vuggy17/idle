@@ -11,15 +11,15 @@ import {
   Typography,
   theme,
 } from 'antd';
-import ModalFallback from 'components/Fallbacks/ModalFallback';
-import UserCard from 'components/UserCard';
-import { User } from 'features/auth/entities/user';
-import useAuth from 'hooks/useAuth';
+import ModalFallback from '@idle/chat/components/Fallbacks/ModalFallback';
+import UserCard from '@idle/chat/components/UserCard';
+import { User } from '@idle/chat/features/auth/entities/user';
+import useAuth from '@idle/chat/hooks/useAuth';
 import { lazy, useState, Suspense } from 'react';
 import SetsStatusModal from './SetStatusModal';
 
 const PreferencePage = lazy(
-  () => import('features/profileManagement/ui/pages/Preference'),
+  () => import('@idle/chat/features/profileManagement/ui/pages/Preference'),
 );
 
 type MenuItem = Required<MenuProps>['items'][number];
