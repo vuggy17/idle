@@ -7,6 +7,7 @@ import {
   GetPendingFriendRequestResponseDTO,
   DeactivateAccountRequestDTO,
   DeactivateAccountResponseDTO,
+  GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
 
 const API_PREFIX = '/api/';
@@ -32,13 +33,19 @@ export class HttpClient {
     return this.client.post<DeactivateAccountResponseDTO>('auth/disable', body);
   }
 
-  async findUserByName<Response>(query: string, abortSignal: AbortSignal) {
-    return this.client.get<Response>(
-      `https://api.jikan.moe/v4/anime?${query}`,
+  async getUserSearchSuggestions(
+    query: string,
+    abortSignal: AbortSignal,
+  ): Promise<GetUserSearchSuggestionResponseDTO> {
+    const apiQuery = new URLSearchParams({ query }).toString();
+
+    const result = await this.client.get<GetUserSearchSuggestionResponseDTO>(
+      `users/search-suggestions?${apiQuery}`,
       {
         signal: abortSignal,
       },
     );
+    return result.data;
   }
 
   async getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO> {

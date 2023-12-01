@@ -1,21 +1,25 @@
 import {
-  FindUserByNameRequestDTO,
-  FindUserByNameResponseDTO,
+  GetUserSearchSuggestionRequestDTO,
+  GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
 import { SocialServiceImpl } from '@idle/chat/services/socialService';
 import { UseCase } from '../../../type';
 import { SocialRepository } from '../repositories/socialRepository';
 
 export default class FindUserByNameUseCase
-  implements UseCase<FindUserByNameRequestDTO, FindUserByNameResponseDTO>
+  implements
+    UseCase<
+      GetUserSearchSuggestionRequestDTO,
+      GetUserSearchSuggestionResponseDTO
+    >
 {
   constructor(
     private readonly socialRepository: SocialRepository = SocialServiceImpl,
   ) {}
 
   execute(
-    useCaseInput: FindUserByNameRequestDTO,
-  ): Promise<FindUserByNameResponseDTO> {
-    return this.socialRepository.findUserByName(useCaseInput);
+    useCaseInput: GetUserSearchSuggestionRequestDTO,
+  ): Promise<GetUserSearchSuggestionResponseDTO> {
+    return this.socialRepository.getUserSearchSuggestions(useCaseInput);
   }
 }

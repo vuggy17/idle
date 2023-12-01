@@ -1,17 +1,26 @@
 import { UserDTO } from './authDto';
 
-export type FindUserByNameRequestDTO = {
+export type GetUserSearchSuggestionRequestDTO = {
   q: string;
   abortSignal: AbortSignal;
 };
+export type GetUserSearchSuggestionResponseDTO = {
+  id: string;
+  name: string;
+  avatar: string;
+  bio: string;
+  isFriend: boolean;
+  hasPendingRequest: boolean;
+}[];
+
 export type FindUserByNameResponseDTO = FindUserSingleResponseDTO[];
 
 export type FindUserSingleResponseDTO = {
   id: string;
   name: string;
+  avatar?: string;
   bio: string;
   isFriend: boolean;
-  avatar?: string;
   hasPendingRequest?: boolean;
 };
 

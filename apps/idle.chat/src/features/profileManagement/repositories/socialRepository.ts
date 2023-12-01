@@ -1,16 +1,16 @@
 import {
-  FindUserByNameResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
-  FindUserByNameRequestDTO,
   DeclineFriendRequestResponseDTO,
   AcceptFriendRequestResponseDTO,
+  GetUserSearchSuggestionRequestDTO,
+  GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
 
 export interface SocialRepository {
-  findUserByName(
-    data: FindUserByNameRequestDTO,
-  ): Promise<FindUserByNameResponseDTO>;
+  getUserSearchSuggestions(
+    data: GetUserSearchSuggestionRequestDTO,
+  ): Promise<GetUserSearchSuggestionResponseDTO>;
 
   getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO>;
 
