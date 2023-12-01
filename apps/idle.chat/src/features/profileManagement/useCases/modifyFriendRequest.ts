@@ -2,7 +2,7 @@ import { SocialServiceImpl } from '@idle/chat/services/socialService';
 import {
   AcceptFriendRequestResponseDTO,
   DeclineFriendRequestResponseDTO,
-} from '@idle/chat/dto/socialDto';
+} from '@idle/model';
 import { UseCase } from '@idle/chat/type';
 import { SocialRepository } from '../repositories/socialRepository';
 

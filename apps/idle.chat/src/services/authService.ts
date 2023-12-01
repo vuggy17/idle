@@ -1,5 +1,6 @@
 import { Account, ID } from 'appwrite';
 import {
+  DeactivateAccountResponseDTO,
   LoginUserResponseDTO,
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
@@ -54,8 +55,8 @@ export default class AuthService implements UserRepository {
     return this.accountGateway.updatePassword(newPass, currentPass);
   }
 
-  async disableAccount(accId: string): Promise<UserDTO> {
-    const result = await this.httpGateway.disableAccount<UserDTO>({
+  async disableAccount(accId: string): Promise<DeactivateAccountResponseDTO> {
+    const result = await this.httpGateway.disableAccount({
       id: accId,
     });
     return result.data;

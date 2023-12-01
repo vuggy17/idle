@@ -5,7 +5,9 @@ import {
   AcceptFriendRequestResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
-} from '@idle/chat/dto/socialDto';
+  DeactivateAccountRequestDTO,
+  DeactivateAccountResponseDTO,
+} from '@idle/model';
 
 const API_PREFIX = '/api/';
 const axiosClient = axios.create({
@@ -26,9 +28,8 @@ export class HttpClient {
    */
   constructor(private readonly client: AxiosInstance = axiosClient) {}
 
-  // TODO: add dto
-  async disableAccount<Response>(body: { id: string }) {
-    return this.client.post<Response>('auth/disable', body);
+  async disableAccount(body: DeactivateAccountRequestDTO) {
+    return this.client.post<DeactivateAccountResponseDTO>('auth/disable', body);
   }
 
   async findUserByName<Response>(query: string, abortSignal: AbortSignal) {

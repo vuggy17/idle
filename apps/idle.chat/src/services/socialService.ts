@@ -6,7 +6,7 @@ import {
   FindUserByNameResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
-} from '@idle/chat/dto/socialDto';
+} from '@idle/model';
 import { SocialRepository } from '@idle/chat/features/profileManagement/repositories/socialRepository';
 import { HttpClient } from '@idle/chat/providers/http';
 

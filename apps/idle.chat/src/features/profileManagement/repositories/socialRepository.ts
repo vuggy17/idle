@@ -5,7 +5,7 @@ import {
   FindUserByNameRequestDTO,
   DeclineFriendRequestResponseDTO,
   AcceptFriendRequestResponseDTO,
-} from '@idle/chat/dto/socialDto';
+} from '@idle/model';
 
 export interface SocialRepository {
   findUserByName(

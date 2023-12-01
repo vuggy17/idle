@@ -24,7 +24,7 @@ import React, {
 } from 'react';
 import { useDebounce } from 'use-debounce';
 import useClickOutsideListener from '@idle/chat/hooks/useClickOutsideListener';
-import { FindUserSingleResponseDTO } from '@idle/chat/dto/socialDto';
+import { FindUserSingleResponseDTO } from '@idle/model';
 import { SearchResultCard } from './SearchResult';
 import SearchResultModal from './SearchResultModal';
 
