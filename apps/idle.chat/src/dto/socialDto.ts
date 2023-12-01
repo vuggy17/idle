@@ -1,4 +1,4 @@
-import { UserDTO } from './authDto';
+import { UserDTO } from '../../../../libs/model/src/authDto';
 
 export type FindUserByNameRequestDTO = {
   q: string;

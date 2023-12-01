@@ -1,8 +1,5 @@
 import { UseCase } from '@idle/chat/type';
-import {
-  RegisterUserRequestDTO,
-  RegisterUserResponseDTO,
-} from '@idle/chat/dto/authDto';
+import { RegisterUserRequestDTO, RegisterUserResponseDTO } from '@idle/model';
 import { AuthServiceImpl } from '@idle/chat/services/authService';
 import { UserRepository } from '../repositories/userRepository';
 

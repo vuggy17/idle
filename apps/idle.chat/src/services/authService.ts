@@ -4,7 +4,7 @@ import {
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
   UserDTO,
-} from '@idle/chat/dto/authDto';
+} from '@idle/model';
 import { UserRepository } from '@idle/chat/features/auth/repositories/userRepository';
 import { AppWriteProvider } from '@idle/chat/providers/appwrite';
 import HttpProvider, { HttpClient } from '@idle/chat/providers/http';

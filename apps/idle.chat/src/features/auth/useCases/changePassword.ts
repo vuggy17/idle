@@ -2,7 +2,7 @@ import { UseCase } from '@idle/chat/type';
 import {
   ChangePasswordRequestDTO,
   ChangePasswordResponseDTO,
-} from '@idle/chat/dto/authDto';
+} from '@idle/model';
 import { AuthServiceImpl } from '@idle/chat/services/authService';
 import { UserRepository } from '../repositories/userRepository';
 
