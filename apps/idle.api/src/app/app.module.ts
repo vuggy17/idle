@@ -4,8 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import envSchema from '../config/schema';
-import { AuthModule } from 'features/auth/auth.module';
-import { AppWriteModule } from 'gateways/appwite.module';
+import { AuthModule } from '../features/auth/auth.module';
+import { AppWriteModule } from '../gateways/appwite.module';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import appwriteSDK from 'node-appwrite';
-import { IdleConfigSchema, IdleConfigService } from 'config/type';
+import { IdleConfigSchema } from '../config/type';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
