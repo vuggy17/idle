@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { AppWriteProvider } from '../../gateways/appwrite.provider';
+import { AppWriteProvider } from '../appwrite/appwrite.provider';
 import {
   DeactivateAccountRequestDTO,
   DeactivateAccountResponseDTO,
