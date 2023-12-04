@@ -2,9 +2,17 @@ import { UserDTO } from './authDto';
 
 export type GetUserSearchSuggestionRequestDTO = {
   q: string;
-  abortSignal: AbortSignal;
 };
 export type GetUserSearchSuggestionResponseDTO = {
+  id: string;
+  name: string;
+  avatar: string;
+}[];
+
+export type GetUserSearchResultRequestDTO = {
+  q: string;
+};
+export type GetUserSearchResultResponseDTO = {
   id: string;
   name: string;
   avatar: string;
@@ -12,17 +20,6 @@ export type GetUserSearchSuggestionResponseDTO = {
   isFriend: boolean;
   hasPendingRequest: boolean;
 }[];
-
-export type FindUserByNameResponseDTO = FindUserSingleResponseDTO[];
-
-export type FindUserSingleResponseDTO = {
-  id: string;
-  name: string;
-  avatar?: string;
-  bio: string;
-  isFriend: boolean;
-  hasPendingRequest?: boolean;
-};
 
 export type GetPendingFriendRequestResponseDTO = {
   id: string;
