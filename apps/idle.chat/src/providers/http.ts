@@ -8,6 +8,7 @@ import {
   DeactivateAccountRequestDTO,
   DeactivateAccountResponseDTO,
   GetUserSearchSuggestionResponseDTO,
+  GetUserSearchResultResponseDTO,
 } from '@idle/model';
 
 const API_PREFIX = '/api/';
@@ -45,6 +46,33 @@ export class HttpClient {
         signal: abortSignal,
       },
     );
+    return result.data;
+  }
+
+  async getUserSearchResults(
+    query: string,
+    abortSignal: AbortSignal,
+  ): Promise<GetUserSearchResultResponseDTO> {
+    const apiQuery = new URLSearchParams({ query }).toString();
+
+    const result = await this.client.get<GetUserSearchResultResponseDTO>(
+      `users/search-result?${apiQuery}`,
+      {
+        signal: abortSignal,
+      },
+    );
+    return result.data;
+  }
+
+  async getSearchResultDetail(
+    userId: string,
+    abortSignal: AbortSignal,
+  ): Promise<GetUserSearchResultResponseDTO[number]> {
+    const result = await this.client.get<
+      GetUserSearchResultResponseDTO[number]
+    >(`users/search-result/${userId}`, {
+      signal: abortSignal,
+    });
     return result.data;
   }
 

@@ -1,9 +1,10 @@
 import {
   AcceptFriendRequestResponseDTO,
   DeclineFriendRequestResponseDTO,
-  FindUserByNameResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
+  GetUserSearchResultRequestDTO,
+  GetUserSearchResultResponseDTO,
   GetUserSearchSuggestionRequestDTO,
   GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
@@ -15,8 +16,16 @@ export default class SocialService implements SocialRepository {
 
   async getUserSearchSuggestions(
     data: GetUserSearchSuggestionRequestDTO,
+    abortSignal: AbortSignal,
   ): Promise<GetUserSearchSuggestionResponseDTO> {
-    return this.httpGateway.getUserSearchSuggestions(data.q, data.abortSignal);
+    return this.httpGateway.getUserSearchSuggestions(data.q, abortSignal);
+  }
+
+  async getUserSearchResult(
+    data: GetUserSearchResultRequestDTO,
+    abortSignal: AbortSignal,
+  ): Promise<GetUserSearchResultResponseDTO> {
+    return this.httpGateway.getUserSearchResults(data.q, abortSignal);
   }
 
   async getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO> {
