@@ -1,2 +1,4 @@
 export * from './authDto';
-export * from './socialDto';
+export * from './userDto';
+export * from './friendDto';
+export * from './common';

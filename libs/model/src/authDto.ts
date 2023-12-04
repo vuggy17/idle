@@ -1,4 +1,5 @@
 import { Models } from 'appwrite';
+import { ID } from './common';
 
 export type UserDTO = Models.User<Models.Preferences> & { avatar?: string };
 
@@ -19,4 +20,4 @@ export type ChangePasswordResponseDTO = UserDTO;
 export type ChangePasswordRequestDTO = { currentPass: string; newPass: string };
 
 export type DeactivateAccountResponseDTO = UserDTO;
-export type DeactivateAccountRequestDTO = { id: string };
+export type DeactivateAccountRequestDTO = { id: ID };
