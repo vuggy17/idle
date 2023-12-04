@@ -1,5 +1,4 @@
 import { test, expect, Page } from '@playwright/test';
-import exp from 'constants';
 
 async function typeIntoSearchInput(page: Page) {
   const searchInput = page.getByTestId('search-people-input');
@@ -17,8 +16,19 @@ async function blockImageRequest(page: Page) {
 test.describe('Find people', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:4200/discover');
-    await page.routeFromHAR('./src/.cache/network/findPeople.har', {
-      url: '**/anime?*',
+    await page.routeFromHAR('./src/.cache/network/search-suggestions', {
+      url: '**/search-suggestions?*',
+      update: false,
+    });
+    await page.routeFromHAR(
+      './src/.cache/network/search-result-with-query.har',
+      {
+        url: '**/search-result?*',
+        update: false,
+      },
+    );
+    await page.routeFromHAR('./src/.cache/network/search-result-detail.har', {
+      url: '**/search-result/*',
       update: false,
     });
     await blockImageRequest(page);
