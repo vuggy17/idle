@@ -7,16 +7,21 @@ import envSchema from '../../config/schema';
 import { AuthModule } from '../auth/auth.module';
 import { AppWriteModule } from '../appwrite/appwrite.module';
 import { UserModule } from '../user/user.module';
+import { FirebaseModule } from '../firebase/firebase.module';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [envSchema],
+      cache: true,
     }),
     AppWriteModule,
+    FirebaseModule,
     AuthModule,
     UserModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
