@@ -4,11 +4,21 @@ import GlobalNavbar from '@idle/chat/components/GlobalNavbar/GlobalNavbar';
 import { Outlet } from 'react-router-dom';
 import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
 import ProtectedRoute from '@idle/chat/router/ProtectedRoute';
+import { FireBaseInstance } from '../Firebase';
+import { useEffect } from 'react';
 
 const { useToken } = theme;
 
 export default function AppLayoutWithGnb() {
   const { token } = useToken();
+
+  // save FCM token to server if user has loggedIn
+  useEffect(() => {
+    (async () => {
+      FireBaseInstance.start();
+      console.log('FCM token', token);
+    })();
+  }, []);
 
   return (
     <ConfigProvider

@@ -1,43 +1,63 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
-import { getMessaging, Messaging, getToken } from 'firebase/messaging';
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
+import {
+  MessagePayload,
+  getMessaging,
+  getToken,
+  onMessage,
+} from 'firebase/messaging';
 
-const config = {};
+const config = {
+  apiKey: 'AIzaSyDRx3ePwCOMuWeVGeY9PbtRr8pbL1E1l14',
+  authDomain: 'idle-1f400.firebaseapp.com',
+  projectId: 'idle-1f400',
+  storageBucket: 'idle-1f400.appspot.com',
+  messagingSenderId: '221108427627',
+  appId: '1:221108427627:web:b78ea8ec4fe9a347a34a2e',
+  measurementId: 'G-RS9WTK4CRE',
+};
 
 //https://stackoverflow.com/questions/63937976/how-to-get-fcm-token
 //https://stackoverflow.com/questions/75432399/messaging-failed-service-worker-registration
 //https://firebase.google.com/docs/cloud-messaging/js/client#generate_a_new_key_pair
 export class Firebase {
+  readonly app: FirebaseApp;
+
   constructor() {
-    if (getApps().length) return;
-    const app = initializeApp(config);
-    // navigator.serviceWorker.getRegistrations().then((registrations) => {
-    //   if (registrations.length) {
-    //     [this.registration] = registrations;
-    //     return;
-    //   }
-    //   navigator.serviceWorker
-    //     .register('/firebase-message-sw.js')
-    //     .then((registration) => {
-    //       this.registration = registration;
-    //     });
-    // });
+    if (getApps().length) {
+      this.app = getApps()[0];
+    }
+    this.app = initializeApp(config);
+    // getAnalytics(this.app);
   }
 
-  private get messaging(): Messaging {
-    return getMessaging(getApp());
+  get messaging() {
+    return getMessaging(this.app);
   }
 
-  async askNotificationPermission() {
+  /**
+   * The `onReceiveMessage` function sets up a callback to be executed when a message is received.
+   * @param cb - A callback function that takes a payload of type MessagePayload as its parameter.
+   * @returns A callback to stop listen to stop listening for messages.
+   */
+  onReceiveMessage(cb: (payload: MessagePayload) => void) {
+    return onMessage(this.messaging, (payload) => {
+      cb(payload);
+    });
+  }
+
+  start() {
+    return this;
+  }
+
+  async getFCMToken() {
     try {
-      // const token = await this.messaging.getToken({
-      //   serviceWorkerRegistration: this.registration,
-      // });
-      const token = await getToken(this.messaging, {
-        vapidKey: 'OmibYwWW1UIqdMqqoxRaMgxYulyzV5orRegaWo7My2g',
-      });
+      const app = this.app;
+      const messaging = getMessaging(app);
 
-      console.log(token);
+      const token = await getToken(messaging, {
+        vapidKey:
+          'BL1qwacwhyOJKaPlhJ5uWHs519lhrR_O9fS2eL311sMLvYgE9pbBcuJbSgnNpHNTid10_WWN-7MQU693UqJhtl0',
+      });
       return token;
     } catch (error) {
       console.error('[FIREBASE ERROR]: ', error);
@@ -45,15 +65,10 @@ export class Firebase {
     }
   }
 
-  async requestPermission(): Promise<boolean> {
-    return new Promise((resolve) => {
-      console.log('Requesting permission...');
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          console.log('Notification permission granted.');
-          return resolve(true);
-        } else return resolve(false);
-      });
-    });
+  async askNotificationPermission(): Promise<boolean> {
+    const notificationPermission = await Notification.requestPermission();
+    return notificationPermission === 'granted';
   }
 }
+
+export const FireBaseInstance = new Firebase();

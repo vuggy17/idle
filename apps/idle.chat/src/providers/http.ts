@@ -9,7 +9,11 @@ import {
   DeactivateAccountResponseDTO,
   GetUserSearchSuggestionResponseDTO,
   GetUserSearchResultResponseDTO,
+  SaveFCMTokenRequestDTO,
+  GetUserSearchSuggestionRequestDTO,
+  GetUserSearchResultRequestDTO,
 } from '@idle/model';
+import { WithAbortSignal } from '../type';
 
 const API_PREFIX = '/api/';
 const axiosClient = axios.create({
@@ -34,11 +38,11 @@ export class HttpClient {
     return this.client.post<DeactivateAccountResponseDTO>('auth/disable', body);
   }
 
-  async getUserSearchSuggestions(
-    query: string,
-    abortSignal: AbortSignal,
-  ): Promise<GetUserSearchSuggestionResponseDTO> {
-    const apiQuery = new URLSearchParams({ query }).toString();
+  async getUserSearchSuggestions({
+    q,
+    abortSignal,
+  }: WithAbortSignal<GetUserSearchSuggestionRequestDTO>): Promise<GetUserSearchSuggestionResponseDTO> {
+    const apiQuery = new URLSearchParams({ q }).toString();
 
     const result = await this.client.get<GetUserSearchSuggestionResponseDTO>(
       `users/search-suggestions?${apiQuery}`,
@@ -49,11 +53,11 @@ export class HttpClient {
     return result.data;
   }
 
-  async getUserSearchResults(
-    query: string,
-    abortSignal: AbortSignal,
-  ): Promise<GetUserSearchResultResponseDTO> {
-    const apiQuery = new URLSearchParams({ query }).toString();
+  async getUserSearchResults({
+    q,
+    abortSignal,
+  }: WithAbortSignal<GetUserSearchResultRequestDTO>): Promise<GetUserSearchResultResponseDTO> {
+    const apiQuery = new URLSearchParams({ q }).toString();
 
     const result = await this.client.get<GetUserSearchResultResponseDTO>(
       `users/search-result?${apiQuery}`,
@@ -113,6 +117,12 @@ export class HttpClient {
       },
     );
     return result.data;
+  }
+
+  async saveFCMToken(body: SaveFCMTokenRequestDTO) {
+    return this.client.post<unknown>('notification/fcm', {
+      body,
+    });
   }
 }
 

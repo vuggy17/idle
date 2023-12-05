@@ -19,7 +19,8 @@ const router = createBrowserRouter([
       },
       {
         path: AppRoutes.activity.key,
-        element: 'activity',
+        lazy: () =>
+          import('@idle/chat/features/notifications/ui/NotificationCenter'),
       },
       {
         path: AppRoutes.discover.key,

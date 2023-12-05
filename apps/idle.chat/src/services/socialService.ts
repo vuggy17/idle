@@ -18,14 +18,17 @@ export default class SocialService implements SocialRepository {
     data: GetUserSearchSuggestionRequestDTO,
     abortSignal: AbortSignal,
   ): Promise<GetUserSearchSuggestionResponseDTO> {
-    return this.httpGateway.getUserSearchSuggestions(data.q, abortSignal);
+    return this.httpGateway.getUserSearchSuggestions({
+      q: data.q,
+      abortSignal,
+    });
   }
 
   async getUserSearchResult(
     data: GetUserSearchResultRequestDTO,
     abortSignal: AbortSignal,
   ): Promise<GetUserSearchResultResponseDTO> {
-    return this.httpGateway.getUserSearchResults(data.q, abortSignal);
+    return this.httpGateway.getUserSearchResults({ q: data.q, abortSignal });
   }
 
   async getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO> {

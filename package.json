@@ -23,6 +23,7 @@
     "axios": "^1.6.0",
     "dayjs": "^1.11.10",
     "firebase": "^10.7.0",
+    "firebase-admin": "^11.11.1",
     "iconoir-react": "^7.0.2",
     "jotai": "^2.5.0",
     "node-appwrite": "^11.0.0",

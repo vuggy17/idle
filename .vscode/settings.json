@@ -15,7 +15,7 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/node_modules": true,
-    ".husky":true,
+    // ".husky":true,
     "dist":true
   },
   "explorer.excludeGitIgnore": false,

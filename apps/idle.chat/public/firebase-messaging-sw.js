@@ -1,12 +1,3 @@
-// Import and configure the Firebase SDK
-// These scripts are made available when the app is served or deployed on Firebase Hosting
-// If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup
-// importScripts('/__/firebase/9.2.0/firebase-app-compat.js');
-// importScripts('/__/firebase/9.2.0/firebase-messaging-compat.js');
-// importScripts('/__/firebase/init.js');
-
-// const messaging = firebase.messaging();
-
 /**
  * Here is is the code snippet to initialize Firebase Messaging in the Service
  * Worker when your app is not hosted on Firebase Hosting.
@@ -25,13 +16,13 @@ importScripts(
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
 firebase.initializeApp({
-  apiKey: 'AIzaSyAVGQCE016rDKuyfZS7OQrL5gFm2o_zu4c',
-  authDomain: 'idle-notification.firebaseapp.com',
-  projectId: 'idle-notification',
-  storageBucket: 'idle-notification.appspot.com',
-  messagingSenderId: '608944995064',
-  appId: '1:608944995064:web:6fa6b31347d7b91f62590d',
-  measurementId: 'G-BLFV1V1EXD',
+  apiKey: 'AIzaSyDRx3ePwCOMuWeVGeY9PbtRr8pbL1E1l14',
+  authDomain: 'idle-1f400.firebaseapp.com',
+  projectId: 'idle-1f400',
+  storageBucket: 'idle-1f400.appspot.com',
+  messagingSenderId: '221108427627',
+  appId: '1:221108427627:web:b78ea8ec4fe9a347a34a2e',
+  measurementId: 'G-RS9WTK4CRE',
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
@@ -54,21 +45,11 @@ messaging.onBackgroundMessage(function (payload) {
   const notificationTitle = 'Background Message Title';
   const notificationOptions = {
     body: 'Background Message body.',
-    icon: '/firebase-logo.png',
+    // icon: '/firebase-logo.png',
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  return self.registration.showNotification(
+    notificationTitle,
+    notificationOptions,
+  );
 });
-
-async function getFCMToken() {
-  try {
-    const token = await messaging.getToken({
-      serviceWorkerRegistration: self.registration,
-    });
-    return token;
-  } catch (error) {
-    console.error('[FIREBASE ERROR]: ', error);
-    return null;
-  }
-}
-getFCMToken();

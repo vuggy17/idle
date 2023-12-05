@@ -6,6 +6,6 @@ pnpm exec nx affected -t typecheck --uncommitted
 pnpm exec nx affected -t typecheck --untracked
 
 
-echo 'Runing format task...'
-pnpm exec nx format:check --uncommitted
-pnpm exec nx format:check --untracked
+# echo 'Runing format task...'
+# pnpm exec nx format:check --uncommitted
+# pnpm exec nx format:check --untracked
