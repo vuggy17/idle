@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { IdleConfigSchema } from '../../config/type';
 import * as admin from 'firebase-admin';
-import 'firebase/firestore';
 
 @Injectable()
 export class FirebaseProvider {

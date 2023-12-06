@@ -1,8 +1,7 @@
-import { FirebaseModule } from '../firebase/firebase.module';
+import { FirebaseModule } from '../../infra/firebase';
 import { FCMTokenRepositoryImpl } from './FCMToken.repository';
 import { NotificationController } from './notification.controller';
 import { RealTimeNotificationService } from './notification.service';
-import { NotificationService } from './type';
 import { Module, Provider } from '@nestjs/common';
 
 const providers: Provider[] = [
@@ -11,7 +10,6 @@ const providers: Provider[] = [
     provide: FCMTokenRepositoryImpl.name,
     useClass: FCMTokenRepositoryImpl,
   },
-  FCMTokenRepositoryImpl,
 ];
 
 @Module({

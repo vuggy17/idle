@@ -4,12 +4,14 @@
  */
 
 import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { ContextIdFactory, NestFactory } from '@nestjs/core';
 
-import { AppModule } from './modules/app/app.module';
+import { AppModule } from './modules/app';
+import { AggregateByTenantContextIdStrategy } from './config/ContextIdStrategy';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  ContextIdFactory.apply(new AggregateByTenantContextIdStrategy());
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3000;

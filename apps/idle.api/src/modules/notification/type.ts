@@ -1,4 +1,4 @@
-import { ID } from '@idle/model';
+import { ID, TIME } from '@idle/model';
 
 export interface Notification {
   id: string;
@@ -8,6 +8,11 @@ export interface Notification {
   sentBy: ID;
   sentTo: ID;
 }
+
+export type FCMToken = {
+  token: string;
+  lastAccess: TIME;
+};
 
 export interface NotificationService {
   sendFriendRequestNotification(

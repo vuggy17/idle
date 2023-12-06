@@ -2,9 +2,8 @@ import {
   CreateFriendRequestRequestDTO,
   CreateFriendRequestResponseDTO,
 } from '@idle/model';
-import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { RealTimeNotificationService } from '../notification/notification.service';
-import { NotificationService } from '../notification/type';
+import { Body, Controller, Post } from '@nestjs/common';
+import { RealTimeNotificationService } from '../notification';
 import { FriendService } from './friend.service';
 
 @Controller('friend-request')

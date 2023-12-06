@@ -26,15 +26,7 @@ export class UserController {
 
   @Get('search-result/:id')
   async getSearchResultDetail(@Param('id') userId: string) {
-    console.log(
-      '🚀 ~ file: user.controller.ts:29 ~ UserController ~ getSearchResultDetail ~ userId:',
-      userId,
-    );
     const a = await this.userService.getProfile(userId);
-    console.log(
-      '🚀 ~ file: user.controller.ts:34 ~ UserController ~ getSearchResultDetail ~ a:',
-      a,
-    );
     return a;
   }
 }

@@ -1,37 +1,48 @@
-import { FirebaseProvider } from '../firebase/firebase.provider';
 import { FCMTokenRepository } from '../../config/repository';
 import { Injectable } from '@nestjs/common';
-
+import { FCMToken } from './type';
+import { Timestamp } from 'firebase-admin/firestore';
+import { FirebaseProvider } from '../../infra/firebase';
 @Injectable()
 export class FCMTokenRepositoryImpl implements FCMTokenRepository {
   constructor(private readonly firebase: FirebaseProvider) {}
-  save(
+  async save(
     token: string,
     userId: string,
-  ): Promise<{ token: string[]; userId: string }> {
-    throw new Error('Method not implemented.');
-  }
-
-  saveMany(
-    tokens: string[],
-    userId: string,
-  ): Promise<{ token: string[]; userId: string }> {
-    throw new Error('Method not implemented.');
-  }
-
-  async get(userId: string): Promise<{ token: string[]; userId: string }> {
-    const collection = this.firebase.db.collection('user-fcm');
-    const snapshot = await collection.where('id', '==', 'admin').get();
-    if (snapshot.empty) {
-      console.log('No matching documents.');
-      return;
-    }
-    const result = snapshot.docs.map((doc) => doc.data().tokens);
+    lastAccess: number,
+  ): Promise<{ userId: string } & FCMToken> {
+    const fcmToken = {
+      token,
+      lastAccess: Timestamp.fromMillis(lastAccess),
+    };
+    const userTokenRef = this.firebase.db.collection('user-fcm').doc(userId);
+    const result = await userTokenRef.update({
+      [token]: fcmToken,
+    });
     console.log(
-      '🚀 ~ file: FCMToken.repository.ts:31 ~ FCMTokenRepositoryImpl ~ get ~ result:',
+      '🚀 ~ file: FCMToken.repository.ts:23 ~ FCMTokenRepositoryImpl ~ result:',
       result,
     );
 
-    return { token: [], userId };
+    return { token, lastAccess, userId };
+  }
+  saveMany(
+    tokens: { token: string; lastAccess: number },
+    userId: string,
+  ): Promise<{ tokens: FCMToken[]; userId: string }> {
+    throw new Error('Method not implemented.');
+  }
+  async get(userId: string): Promise<{ tokens: FCMToken[]; userId: string }> {
+    const userTokenRef = this.firebase.db.collection('user-fcm').doc(userId);
+    const tokensRef = await userTokenRef.get();
+    if (!tokensRef.exists) {
+      return { tokens: [], userId };
+    }
+
+    const tokens = Object.values(tokensRef.data()).map((token) => ({
+      ...token,
+      lastAccess: (token.lastAccess as Timestamp).toMillis(),
+    }));
+    return { tokens, userId };
   }
 }

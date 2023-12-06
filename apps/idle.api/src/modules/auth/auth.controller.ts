@@ -1,9 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { AppWriteProvider } from '../appwrite/appwrite.provider';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import {
   DeactivateAccountRequestDTO,
   DeactivateAccountResponseDTO,
 } from '@idle/model';
+import {
+  PersistentAppWriteProvider,
+  AppWriteProvider,
+} from '../../infra/appwrite';
 
 const UserStatus = {
   disabled: false,
@@ -12,7 +15,10 @@ const UserStatus = {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly sdk: AppWriteProvider) {}
+  constructor(
+    @Inject(PersistentAppWriteProvider)
+    private readonly sdk: AppWriteProvider,
+  ) {}
 
   @Post('disable')
   async disableUser(
