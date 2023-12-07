@@ -22,29 +22,20 @@ export default async ({ req, res, log, error }) => {
       name,
       email,
       phone,
-      meta: name + email + phone,
+      meta: [name, email, phone].join(' '),
       avatar: '',
       authId: userID,
     };
 
     if (documents.total === 0) {
-      const createdDoc = await database.createDocument(
-        dbId,
-        collectionId,
-        ID.unique(),
-        user,
-      );
-      log('created doc');
-      log(createdDoc);
+      await database.createDocument(dbId, collectionId, ID.unique(), user);
     } else {
-      const savedDoc = await database.updateDocument(
+      await database.updateDocument(
         dbId,
         collectionId,
         documents.documents[0].$id,
         user,
       );
-      log('saved doc');
-      log(savedDoc);
     }
   } catch (err) {
     error(err);
