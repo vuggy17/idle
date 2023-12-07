@@ -37,7 +37,7 @@ export default async ({ req, res, log, error }) => {
       log('created doc');
       log(createdDoc);
     } else {
-      await database.updateDocument(
+      const savedDoc = await database.updateDocument(
         dbId,
         collectionId,
         documents.documents[0].$id,
