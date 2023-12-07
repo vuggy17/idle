@@ -1,34 +1,27 @@
 import { Client, Databases, ID, Query } from 'node-appwrite';
 
-// This is your Appwrite function
-// It's executed each time we get a request
 export default async ({ req, res, log, error }) => {
-  // Why not try the Appwrite SDK?
-  //
+  try {
+    const { name, email, phone, $id } = req.body;
+    const userID = $id;
 
-  log(req);
+    const client = new Client()
+      .setEndpoint('https://cloud.appwrite.io/v1')
+      .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
+      .setKey(process.env.APPWRITE_API_KEY);
 
-  const { name, email, phone, $id } = req.body;
-  const userID = $id;
+    const database = new Databases(client);
+    const dbId = '656af2faa9d4d3352a34';
+    const collectionId = 'users';
 
-  const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-    .setKey(process.env.APPWRITE_API_KEY);
+    const documents = await database.listDocuments(dbId, collectionId, [
+      Query.equal('authId', userID),
+    ]);
 
-  const database = new Databases(client);
-  const dbId = '656af2faa9d4d3352a34';
-  const collectionId = 'users';
+    log('documents');
+    log(documents);
 
-  const documents = await database.listDocuments(dbId, collectionId, [
-    Query.equal('authId', userID),
-  ]);
-  log('documents');
-  log(documents);
-
-  if (documents.total === 0) {
-    log('new user');
-    const newUser = {
+    const user = {
       name,
       email,
       phone,
@@ -37,35 +30,37 @@ export default async ({ req, res, log, error }) => {
       authId: userID,
     };
 
-    const savedDoc = await database.createDocument(
-      dbId,
-      collectionId,
-      ID.unique(),
-      newUser,
-    );
-    log(newUser);
+    if (documents.total === 0) {
+      log('new user');
+      log(user);
 
-    log('saved doc');
-    log(savedDoc);
-  } else {
-    // await database.updateDocument(dbId, collectionId, )
-    log('update user');
+      const savedDoc = await database.createDocument(
+        dbId,
+        collectionId,
+        ID.unique(),
+        user,
+      );
+
+      log('saved doc');
+      log(savedDoc);
+    } else {
+      await database.updateDocument(
+        dbId,
+        collectionId,
+        documents.documents[0].$id,
+        user,
+      );
+      log('update user');
+    }
+  } catch (error) {
+    error(error);
+    return res.json({
+      message: 'Error while executing function',
+      error: error.message,
+    });
   }
-
-  // If something goes wrong, log an error
-  error('Hello, Errors!');
-  // The `req` object contains the request data
-  if (req.method === 'GET') {
-    // Send a response with the res object helpers
-    // `res.send()` dispatches a string back to the client
-    return res.send('Hello, World!');
-  }
-
-  // `res.json()` is a handy helper for sending JSON
   return res.json({
-    motto: 'Build like a team of hundreds_',
-    learn: 'https://appwrite.io/docs',
-    connect: 'https://appwrite.io/discord',
-    getInspired: 'https://builtwith.appwrite.io',
+    message: 'Success',
+    error: null,
   });
 };
