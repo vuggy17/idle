@@ -8,8 +8,8 @@ export default async ({ req, res, log, error }) => {
 
   log(req);
 
-  const userID = req.headers['x-appwrite-user-id'];
-  const { name, email, phone } = req.body;
+  const { name, email, phone, $id } = req.body;
+  const userID = $id;
 
   const client = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1')
@@ -23,7 +23,8 @@ export default async ({ req, res, log, error }) => {
   const documents = await database.listDocuments(dbId, collectionId, [
     Query.equal('authId', userID),
   ]);
-  log('documents', documents);
+  log('documents');
+  log(documents);
 
   if (!documents) {
     const newUser = {
