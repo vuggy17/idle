@@ -27,6 +27,8 @@ export default async ({ req, res, log, error }) => {
   log(documents);
 
   if (documents.total === 0) {
+    log('new user');
+    log(newUser);
     const newUser = {
       name,
       email,
@@ -36,7 +38,14 @@ export default async ({ req, res, log, error }) => {
       authId: userID,
     };
 
-    await database.createDocument(dbId, collectionId, ID.unique(), newUser);
+    const savedDoc = await database.createDocument(
+      dbId,
+      collectionId,
+      ID.unique(),
+      newUser,
+    );
+    log('saved doc');
+    log(savedDoc);
   } else {
     // await database.updateDocument(dbId, collectionId, )
     log('update user');
