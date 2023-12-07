@@ -1,15 +1,8 @@
 import { Client } from 'node-appwrite';
 
-type Context = {
-  req: any;
-  res: any;
-  log: (msg: any) => void;
-  error: (msg: any) => void;
-};
-
 // This is your Appwrite function
 // It's executed each time we get a request
-export default async ({ req, res, log, error }: Context) => {
+export default async ({ req, res, log, error }) => {
   // Why not try the Appwrite SDK?
   //
   // const client = new Client()
@@ -22,7 +15,7 @@ export default async ({ req, res, log, error }: Context) => {
 
   // If something goes wrong, log an error
   error('Hello, Errors!');
-
+  log(req);
   // The `req` object contains the request data
   if (req.method === 'GET') {
     // Send a response with the res object helpers
