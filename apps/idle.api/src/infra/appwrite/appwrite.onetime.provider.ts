@@ -11,9 +11,9 @@ export const disposableAppwriteClientProvider: FactoryProvider<AppWriteProvider>
   {
     provide: DisposableAppWriteClient,
     scope: Scope.REQUEST,
-    durable: true, // Makes this provider durable
+    durable: true,
     useFactory: (
-      ctxPayload: ContextPayload,
+      ctxPayload: ContextPayload, // {jwt: string} provided by contextIdStrategy
       configService: ConfigService<IdleConfigSchema>,
     ) => {
       return new AppWriteProvider(configService).setJWT(ctxPayload.jwt);

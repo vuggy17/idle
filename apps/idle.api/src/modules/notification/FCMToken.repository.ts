@@ -19,11 +19,6 @@ export class FCMTokenRepositoryImpl implements FCMTokenRepository {
     const result = await userTokenRef.update({
       [token]: fcmToken,
     });
-    console.log(
-      '🚀 ~ file: FCMToken.repository.ts:23 ~ FCMTokenRepositoryImpl ~ result:',
-      result,
-    );
-
     return { token, lastAccess, userId };
   }
   saveMany(

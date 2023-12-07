@@ -17,8 +17,11 @@ export class AppWriteProvider {
   }
 
   setJWT(token: string) {
-    console.log('setjwt called');
-
+    if (!token) {
+      throw new Error(
+        'jwt token must be provided when using DisposableAppwriteClient',
+      );
+    }
     this._instance.setJWT(token);
     return this;
   }
