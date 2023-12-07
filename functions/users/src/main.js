@@ -18,9 +18,6 @@ export default async ({ req, res, log, error }) => {
       Query.equal('authId', userID),
     ]);
 
-    log('documents');
-    log(documents);
-
     const user = {
       name,
       email,
@@ -31,18 +28,14 @@ export default async ({ req, res, log, error }) => {
     };
 
     if (documents.total === 0) {
-      log('new user');
-      log(user);
-
-      const savedDoc = await database.createDocument(
+      const createdDoc = await database.createDocument(
         dbId,
         collectionId,
         ID.unique(),
         user,
       );
-
-      log('saved doc');
-      log(savedDoc);
+      log('created doc');
+      log(createdDoc);
     } else {
       await database.updateDocument(
         dbId,
@@ -50,13 +43,14 @@ export default async ({ req, res, log, error }) => {
         documents.documents[0].$id,
         user,
       );
-      log('update user');
+      log('saved doc');
+      log(savedDoc);
     }
-  } catch (error) {
-    error(error);
+  } catch (err) {
+    error(err);
     return res.json({
       message: 'Error while executing function',
-      error: error.message,
+      error: err.message,
     });
   }
   return res.json({
