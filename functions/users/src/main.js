@@ -26,22 +26,34 @@ export default async ({ req, res, log, error }) => {
       avatar: '',
       authId: userID,
     };
+    log(req);
+    log(user);
 
     if (documents.total === 0) {
-      await database.createDocument(dbId, collectionId, ID.unique(), user);
+      const createdDoc = await database.createDocument(
+        dbId,
+        collectionId,
+        ID.unique(),
+        user,
+      );
+      log('createddoc');
+      log(createdDoc);
     } else {
-      await database.updateDocument(
+      const savedDoc = await database.updateDocument(
         dbId,
         collectionId,
         documents.documents[0].$id,
         user,
       );
+      log('saveddoc');
+      log(savedDoc);
     }
   } catch (err) {
     error(err);
     return res.json({
       message: 'Error while executing function',
       error: err.message,
+      rawError: JSON.stringify(err),
     });
   }
   return res.json({
