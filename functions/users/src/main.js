@@ -28,7 +28,6 @@ export default async ({ req, res, log, error }) => {
 
   if (documents.total === 0) {
     log('new user');
-    log(newUser);
     const newUser = {
       name,
       email,
@@ -44,6 +43,8 @@ export default async ({ req, res, log, error }) => {
       ID.unique(),
       newUser,
     );
+    log(newUser);
+
     log('saved doc');
     log(savedDoc);
   } else {
