@@ -30,7 +30,6 @@ export class AggregateByTenantContextIdStrategy implements ContextIdStrategy {
     if (!jwtToken) {
       throw new UnauthorizedException('Missing Bearer token');
     }
-
     const tenantId = userId;
     let tenantSubTreeId: ContextId;
 

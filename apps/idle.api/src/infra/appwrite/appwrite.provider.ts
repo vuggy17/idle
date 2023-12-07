@@ -8,6 +8,14 @@ export class AppWriteProvider {
   protected _instance: appwriteSDK.Client;
   protected _userSDK: appwriteSDK.Users;
   protected _accountSDK: appwriteSDK.Account;
+  protected _databaseSDK: appwriteSDK.Databases;
+
+  static defaultDatabaseId = '656af2faa9d4d3352a34';
+  static projectDbCollections = {
+    chat: {
+      friendInvitation: 'friend-invitation',
+    },
+  };
 
   constructor(protected readonly _config: ConfigService<IdleConfigSchema>) {
     this._instance = new appwriteSDK.Client();
@@ -43,5 +51,13 @@ export class AppWriteProvider {
       this._accountSDK = new appwriteSDK.Account(this._instance);
     }
     return this._accountSDK;
+  }
+
+  get database() {
+    if (!this._databaseSDK) {
+      this._databaseSDK = new appwriteSDK.Databases(this._instance);
+    }
+
+    return this._databaseSDK;
   }
 }

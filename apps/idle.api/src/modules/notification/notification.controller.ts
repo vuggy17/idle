@@ -3,9 +3,11 @@ import { SaveFCMTokenRequestDTO } from '@idle/model';
 import { FCMTokenRepository } from '../../config/repository';
 import { FCMTokenRepositoryImpl } from './FCMToken.repository';
 import { AuthGuard } from '../../config/guards/auth.guard';
-import { AuthUser } from '../../config/decorators/authUser.decorator';
+import { AuthUser } from '../../config/decorators/authUser';
 import { UserEntity } from '../user';
+import { Auth } from '../../config/decorators/auth';
 
+@Auth()
 @Controller('notifications')
 export class NotificationController {
   constructor(
@@ -13,7 +15,6 @@ export class NotificationController {
     private FCMTokenRepo: FCMTokenRepository,
   ) {}
 
-  @UseGuards(AuthGuard)
   @Post('fcm')
   async saveFirebaseCloudMessageToken(@Body() body: SaveFCMTokenRequestDTO) {
     const { token } = body;
@@ -21,7 +22,6 @@ export class NotificationController {
     return this.FCMTokenRepo.save(token, '654b5ff6a20b3ba2f183', Date.now());
   }
 
-  @UseGuards(AuthGuard)
   @Get('fcm')
   async get(@AuthUser() user: UserEntity) {
     console.log('auth user', user);

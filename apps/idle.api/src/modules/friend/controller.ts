@@ -3,33 +3,28 @@ import {
   CreateFriendRequestResponseDTO,
 } from '@idle/model';
 import { Body, Controller, Post } from '@nestjs/common';
-import { RealTimeNotificationService } from '../notification';
-import { FriendService } from './friend.service';
+import { FriendService } from './service';
+import { Auth } from '../../config/decorators/auth';
+import { AuthUser } from '../../config/decorators/authUser';
+import { UserEntity } from '../user';
 
-@Controller('friend-request')
+@Auth()
+@Controller('friends')
 export class FriendController {
-  constructor(
-    private readonly rtNoti: RealTimeNotificationService,
-    private readonly friendService: FriendService,
-  ) {}
+  constructor(private readonly friendService: FriendService) {}
 
-  @Post()
+  @Post('invitation')
   async handleSendingFriendRequest(
+    @AuthUser() user: UserEntity,
     @Body() body: CreateFriendRequestRequestDTO,
   ): Promise<CreateFriendRequestResponseDTO> {
+    console.log('first');
     const receiver = body.sentTo;
-    const user: { id: string } = { id: 'userid' };
+    const sender = user.$id;
     const request = await this.friendService.createFriendRequest(
-      user.id,
+      sender,
       receiver,
     );
-
-    const noti = await this.rtNoti.sendFriendRequestNotification(
-      user.id,
-      receiver,
-    );
-    // cache noti incase sent failed
-
     return request as unknown as CreateFriendRequestResponseDTO;
   }
 }
