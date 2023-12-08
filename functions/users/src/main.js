@@ -1,38 +1,47 @@
 import { Client, Databases, ID, Query } from 'node-appwrite';
 
 export default async ({ req, res, log, error }) => {
+  log('Processing with: ');
+  log(req);
+
+  const { name, email, phone, $id } = req.body;
+  const userID = $id;
+
+  const client = new Client()
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
+    .setKey(process.env.APPWRITE_API_KEY);
+
+  const database = new Databases(client);
+  const dbId = '656af2faa9d4d3352a34';
+  const collectionId = 'users';
+  const user = {
+    name,
+    email,
+    phone,
+    meta: [name, email, phone].join(' '),
+    avatar: '',
+  };
+
   try {
-    log('Processing with: ');
-    log(req);
-
-    const { name, email, phone, $id } = req.body;
-    const userID = $id;
-
-    const client = new Client()
-      .setEndpoint('https://cloud.appwrite.io/v1')
-      .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-      .setKey(process.env.APPWRITE_API_KEY);
-
-    const database = new Databases(client);
-    const dbId = '656af2faa9d4d3352a34';
-    const collectionId = 'users';
-
     log('checking if user exists');
     log(`userId, ${userID}`);
-    const document = database.getDocument(dbId, collectionId, userID);
+    const document = await database.getDocument(dbId, collectionId, userID);
     log('result: ');
-    log(document);
+    log(JSON.stringify(document, null, 4));
 
-    const user = {
-      name,
-      email,
-      phone,
-      meta: [name, email, phone].join(' '),
-      avatar: '',
-    };
-
-    if (!document) {
-      log('user not existed!, creating new one..');
+    log('user existed, updating..');
+    const updatedDoc = await database.updateDocument(
+      dbId,
+      collectionId,
+      userID,
+      user,
+    );
+    log('updated doc');
+    log(JSON.stringify(updatedDoc, null, 4));
+  } catch (err) {
+    if (err.type == 'document_not_found' && err.code == 404) {
+      log('user not exist!, creating new one..');
       const createdDoc = await database.createDocument(
         dbId,
         collectionId,
@@ -40,25 +49,16 @@ export default async ({ req, res, log, error }) => {
         user,
       );
       log('created doc: ');
-      log(createdDoc);
+      log(JSON.stringify(createdDoc, null, 4));
     } else {
-      log('user existed, updating..');
-      const updatedDoc = await database.updateDocument(
-        dbId,
-        collectionId,
-        user,
-      );
-      log('updated doc');
-      log(updatedDoc);
+      error('an error encountered: ');
+      error(JSON.stringify(err, null, 4));
+      return res.json({
+        message: 'Error while executing function',
+        error: err.message,
+        rawError: JSON.stringify(err),
+      });
     }
-  } catch (err) {
-    error('an error encountered: ');
-    error(JSON.stringify(err, null, 4));
-    return res.json({
-      message: 'Error while executing function',
-      error: err.message,
-      rawError: JSON.stringify(err),
-    });
   }
   log('function executed without any error, exiting..');
   return res.json({
