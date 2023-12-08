@@ -14,37 +14,31 @@ export default async ({ req, res, log, error }) => {
     const dbId = '656af2faa9d4d3352a34';
     const collectionId = 'users';
 
-    const documents = await database.listDocuments(dbId, collectionId, [
-      Query.equal('authId', userID),
-    ]);
-
+    // check if user is existed
+    const document = database.getDocument(dbId, collectionId, userID);
+    log('document');
+    log(document);
     const user = {
       name,
       email,
       phone,
       meta: [name, email, phone].join(' '),
       avatar: '',
-      authId: userID,
     };
     log(req);
     log(user);
 
-    if (documents.total === 0) {
+    if (document) {
       const createdDoc = await database.createDocument(
         dbId,
         collectionId,
-        ID.unique(),
+        userID,
         user,
       );
       log('createddoc');
       log(createdDoc);
     } else {
-      const savedDoc = await database.updateDocument(
-        dbId,
-        collectionId,
-        documents.documents[0].$id,
-        user,
-      );
+      const savedDoc = await database.updateDocument(dbId, collectionId, user);
       log('saveddoc');
       log(savedDoc);
     }
