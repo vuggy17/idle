@@ -31,8 +31,8 @@ type FriendRequestStatus = 'pending' | 'accepted' | 'declined' | 'cancelled';
 export type CreateFriendRequestResponseDTO = {
   id: ID;
   status: FriendRequestStatus;
-  sentBy: ID;
-  sentTo: ID;
+  sender: UserDTO;
+  receiver: UserDTO;
   createdAt: TIME;
   updatedAt: TIME;
 };

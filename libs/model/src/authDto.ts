@@ -1,7 +1,7 @@
 import { Models } from 'appwrite';
 import { ID } from './common';
 
-export type UserDTO = Models.User<Models.Preferences> & { avatar?: string };
+export type UserDTO = Models.User<Models.Preferences> & { avatar: string };
 
 export type RegisterUserResponseDTO = UserDTO;
 export type RegisterUserRequestDTO = {
