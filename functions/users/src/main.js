@@ -28,7 +28,7 @@ export default async ({ req, res, log, error }) => {
     log(req);
     log(user);
 
-    if (document) {
+    if (!document) {
       const createdDoc = await database.createDocument(
         dbId,
         collectionId,
