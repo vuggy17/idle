@@ -6,6 +6,8 @@ import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
 import ProtectedRoute from '@idle/chat/router/ProtectedRoute';
 import { FireBaseInstance } from '../Firebase';
 import { useEffect } from 'react';
+import { Account } from 'appwrite';
+import { AppWriteProvider } from '../providers/appwrite';
 
 const { useToken } = theme;
 
@@ -35,6 +37,16 @@ export default function AppLayoutWithGnb() {
           <GlobalNavbar />
         </aside>
         <Layout.Content>
+          <button
+            type="button"
+            onClick={async () => {
+              const token = await new Account(AppWriteProvider).createJWT();
+              await navigator.clipboard.writeText(token.jwt);
+              console.log('Token copied to clipboard: ', token.jwt);
+            }}
+          >
+            issue token
+          </button>
           <Outlet />
         </Layout.Content>
       </Layout>
