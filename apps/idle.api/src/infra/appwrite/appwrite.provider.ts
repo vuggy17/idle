@@ -14,6 +14,7 @@ export class AppWriteProvider {
   static projectDbCollections = {
     chat: {
       friendInvitation: 'friend-invitation',
+      user: 'users',
     },
   };
 

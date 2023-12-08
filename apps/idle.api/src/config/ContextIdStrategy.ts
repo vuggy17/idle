@@ -8,6 +8,7 @@ import {
 } from '@nestjs/core';
 import { Request } from 'express';
 import { disposableAppwriteClientProvider } from '../infra/appwrite';
+import { HeaderGetter } from '../utils/headerGetter';
 
 const tenants = new Map<string, ContextId>();
 
@@ -21,9 +22,13 @@ export type ContextPayload = {
  *
  */
 export class AggregateByTenantContextIdStrategy implements ContextIdStrategy {
+  static removeTenant(tenantID: string) {
+    tenants.delete(tenantID);
+  }
+
   attach(contextId: ContextId, request: Request) {
-    const userId = request.headers['x-user-id'] as string;
-    const jwtToken = this.extractTokenFromHeader(request);
+    const userId = HeaderGetter.getUserId(request);
+    const jwtToken = HeaderGetter.getBearerToken(request);
     if (!userId) {
       throw new UnauthorizedException('Missing x-user-id in header');
     }
@@ -46,10 +51,5 @@ export class AggregateByTenantContextIdStrategy implements ContextIdStrategy {
       payload: { tenantId, jwt: jwtToken },
     };
     return resolver;
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
   }
 }

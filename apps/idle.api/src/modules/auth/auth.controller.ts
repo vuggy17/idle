@@ -24,6 +24,7 @@ export class AuthController {
   async disableUser(
     @Body() user: DeactivateAccountRequestDTO,
   ): Promise<DeactivateAccountResponseDTO> {
-    return this.sdk.users.updateStatus(user.id, UserStatus.disabled);
+    // TODO: add repository
+    return this.sdk.users.updateStatus(user.id, UserStatus.disabled) as any;
   }
 }

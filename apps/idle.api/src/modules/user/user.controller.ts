@@ -5,18 +5,23 @@ import {
   GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
 import UserService from './user.service';
+import { UserEntity } from './entities';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  /**
+   *
+   * @param param0
+   * @returns {Promise<GetUserSearchSuggestionResponseDTO>} result
+   */
   @Get('search-suggestions')
   async getUserSearchSuggestions(
     @Query() { q }: GetUserSearchSuggestionRequestDTO,
-  ): Promise<GetUserSearchSuggestionResponseDTO> {
-    const result = await this.userService.getSearchSuggestions(q);
-
-    return result;
+  ) {
+    const results = await this.userService.getSearchSuggestions(q);
+    return results.map((user) => new UserEntity(user));
   }
 
   @Get('search-result')

@@ -1,4 +1,7 @@
-import { FriendRepository, FriendRepositoryImpl } from './repository';
+import {
+  FriendRequestRepository,
+  FriendRequestRepositoryImpl,
+} from './repository';
 import { Module, Provider } from '@nestjs/common';
 import { FriendController } from './controller';
 import { FriendService } from './service';
@@ -8,8 +11,8 @@ const providers: Provider[] = [
   RealTimeNotificationService,
   FriendService,
   {
-    provide: FriendRepository,
-    useClass: FriendRepositoryImpl,
+    provide: FriendRequestRepository,
+    useClass: FriendRequestRepositoryImpl,
   },
 ];
 /**

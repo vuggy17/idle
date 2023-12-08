@@ -1,0 +1,7 @@
+{
+  "messages": {
+    "friendRequest": {
+      "sameUser": "Sender and receiver cannot be the same"
+    }
+  }
+}
