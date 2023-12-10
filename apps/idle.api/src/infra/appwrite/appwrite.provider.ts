@@ -15,6 +15,7 @@ export class AppWriteProvider {
     chat: {
       friendInvitation: 'friend-invitation',
       user: 'users',
+      friend: 'user-friends',
     },
   };
 

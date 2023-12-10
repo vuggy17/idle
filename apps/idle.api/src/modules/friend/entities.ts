@@ -25,3 +25,14 @@ export class FriendRequestEntity extends AppwriteEntity {
     Object.assign(this, partial);
   }
 }
+
+//============================================
+export class FriendEntity extends AppwriteEntity {
+  user: UserEntity;
+  friends: UserEntity[];
+
+  constructor(partial: Partial<FriendEntity>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+}

@@ -6,7 +6,10 @@ import {
 } from '@idle/model';
 import UserService from './user.service';
 import { UserEntity } from './entities';
+import { AuthUser } from '../../config/decorators/authUser';
+import { Auth } from '../../config/decorators/auth';
 
+@Auth()
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -25,8 +28,11 @@ export class UserController {
   }
 
   @Get('search-result')
-  async getUserSearchResult(@Query() { q }: GetUserSearchResultRequestDTO) {
-    return this.userService.getSearchResult(q);
+  async getUserSearchResult(
+    @Query() { q }: GetUserSearchResultRequestDTO,
+    @AuthUser() user: UserEntity,
+  ) {
+    return this.userService.getSearchResult(q, user.$id);
   }
 
   @Get('search-result/:id')

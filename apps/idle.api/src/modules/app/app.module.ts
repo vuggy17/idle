@@ -20,12 +20,12 @@ import { FriendModule } from '../friend/module';
     }),
     // infra
     AppWriteModule,
-    FirebaseModule,
+    // FirebaseModule,
 
     // functional
     AuthModule,
     UserModule,
-    NotificationModule,
+    // NotificationModule,
     FriendModule,
   ],
   controllers: [AppController],

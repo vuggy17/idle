@@ -2,6 +2,7 @@ import { Module, Provider } from '@nestjs/common';
 import { UserController } from './user.controller';
 import UserService from './user.service';
 import { UserRepository, UserRepositoryImpl } from './repository';
+import { FriendModule } from '../friend/module';
 
 const providers: Provider[] = [
   {
@@ -12,8 +13,8 @@ const providers: Provider[] = [
 ];
 
 @Module({
-  imports: [],
+  imports: [FriendModule],
   controllers: [UserController],
-  providers,
+  providers: [...providers],
 })
 export class UserModule {}

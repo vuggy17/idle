@@ -34,7 +34,6 @@ function AppFallback() {
 const App = lazy(() => import('./app/app'));
 
 async function main() {
-
   const setup = (await import('./bootstrap/setup')).default;
   const rootStore = getCurrentStore();
   await setup(rootStore);

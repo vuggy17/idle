@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ID } from '@idle/model';
 import { RealTimeNotificationService } from '../notification';
-import { FriendRequestRepository } from './repository';
+import { FriendRepository } from './repository';
 import { FriendRequestEntity, FriendRequestStatus } from './entities';
 import { messages } from '../../assets/errorMessages.json';
 @Injectable()
 export class FriendService {
   constructor(
     private readonly _notificationService: RealTimeNotificationService,
-    private readonly _friendRequestRepository: FriendRequestRepository,
+    private readonly _friendRequestRepository: FriendRepository,
   ) {}
 
   async createFriendRequest(
@@ -21,14 +21,14 @@ export class FriendService {
     }
 
     // Find existing friend request
-    const existedRequest = await this._friendRequestRepository.findExisted(
+    const existedRequest = await this._friendRequestRepository.getFriendRequest(
       sender,
       receiver,
     );
 
     // If request exists, update it, otherwise create a new one
     const request = existedRequest
-      ? await this.updateFriendRequest(existedRequest)
+      ? await this.updateFriendRequest(existedRequest.$id)
       : await this.createNewFriendRequest(sender, receiver);
 
     return request;
@@ -36,9 +36,12 @@ export class FriendService {
 
   // Extracted method to update an existing friend request
   async updateFriendRequest(existedRequest: ID): Promise<FriendRequestEntity> {
-    const doc = await this._friendRequestRepository.update(existedRequest, {
-      status: FriendRequestStatus.pending,
-    });
+    const doc = await this._friendRequestRepository.updateFriendRequestStatus(
+      existedRequest,
+      {
+        status: FriendRequestStatus.pending,
+      },
+    );
     return doc;
   }
 
@@ -47,7 +50,7 @@ export class FriendService {
     sender: ID,
     receiver: ID,
   ): Promise<FriendRequestEntity> {
-    const request = await this._friendRequestRepository.create(
+    const request = await this._friendRequestRepository.createFriendRequest(
       sender,
       receiver,
     );
