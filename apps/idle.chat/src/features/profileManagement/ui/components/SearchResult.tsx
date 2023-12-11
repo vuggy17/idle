@@ -113,3 +113,5 @@ export type SearchResultCardProps = {
   isFriend?: boolean;
   hasPendingRequest?: boolean;
 } & ListItemProps;
+
+

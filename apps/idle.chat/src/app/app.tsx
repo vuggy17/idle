@@ -1,8 +1,6 @@
-import {
-  IdleContextProvider,
-  SerializableThemeConfig,
-} from 'components/context';
-import getCurrentStore from 'store/atom';
+import { IdleContextProvider } from '@idle/chat/components/context';
+import { SerializableThemeConfig } from '@idle/chat/components/context/readThemeConfig';
+import getCurrentStore from '@idle/chat/store/atom';
 import { App as AntdApp } from 'antd';
 import useLocalStorageState from 'use-local-storage-state';
 import AppRouter from '../router/AppRouter';

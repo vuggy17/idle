@@ -11,8 +11,8 @@ import {
   Typography,
   theme,
 } from 'antd';
-import UserCard from 'components/UserCard';
-import FindUserByNameUseCase from 'features/profileManagement/useCases/findUserByName';
+import UserCard from '@idle/chat/components/UserCard';
+import GetUserSearchSuggestionUseCase from '@idle/chat/features/profileManagement/useCases/getUserSearchSuggestion';
 import React, {
   KeyboardEvent,
   cloneElement,
@@ -21,21 +21,27 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
+  lazy,
+  Suspense,
 } from 'react';
 import { useDebounce } from 'use-debounce';
-import useClickOutsideListener from 'hooks/useClickOutsideListener';
-import { FindUserSingleResponseDTO } from 'dto/socialDto';
+import useClickOutsideListener from '@idle/chat/hooks/useClickOutsideListener';
 import { SearchResultCard } from './SearchResult';
 import SearchResultModal from './SearchResultModal';
+import {
+  GetUserSearchResultResponseDTO,
+  GetUserSearchSuggestionResponseDTO,
+} from '@idle/model';
+import GetUserSearchResultUseCase from '../../useCases/getUserSearchResult';
+import { PartialBy } from '@idle/chat/type';
 
 const { useToken } = theme;
-
-async function fetchUsersWithSimilarName(
+async function getSearchSuggestions(
   query: string,
   cancelSignal: AbortSignal,
-  resolve: (result: SearchUserResult[]) => void,
+  resolve: (result: GetUserSearchSuggestionResponseDTO) => void,
 ) {
-  const usecase = new FindUserByNameUseCase();
+  const usecase = new GetUserSearchSuggestionUseCase();
   const result = await usecase.execute({
     q: query,
     abortSignal: cancelSignal,
@@ -44,7 +50,19 @@ async function fetchUsersWithSimilarName(
   resolve(result);
 }
 
-type SearchUserResult = FindUserSingleResponseDTO;
+async function getSearchResult(
+  query: string,
+  cancelSignal: AbortSignal,
+  resolve: (result: GetUserSearchResultResponseDTO) => void,
+) {
+  const usecase = new GetUserSearchResultUseCase();
+  const result = await usecase.execute({
+    q: query,
+    abortSignal: cancelSignal,
+  });
+
+  resolve(result);
+}
 
 export function FindPeople() {
   const { token } = useToken();
@@ -55,15 +73,19 @@ export function FindPeople() {
 
   // search suggestions state
   const [resultSuggestionOpen, setResultSuggestionOpen] = useState(false);
-  const [searchSuggestions, setSearchSuggestions] = useState<
-    SearchUserResult[]
-  >([]);
+  const [searchSuggestions, setSearchSuggestions] =
+    useState<GetUserSearchSuggestionResponseDTO>([]);
 
   // search results
-  const [searchResult, setSearchResult] = useState<SearchUserResult[]>([]);
+  const [searchResult, setSearchResult] =
+    useState<GetUserSearchResultResponseDTO>([]);
   // selected user to view profile
   const [userProfileToView, setUserProfileToView] = useState<
-    SearchUserResult | undefined
+    | PartialBy<
+        GetUserSearchResultResponseDTO[number],
+        'isFriend' | 'hasPendingRequest' | 'bio'
+      >
+    | undefined
   >();
 
   // reference to suggestion popup
@@ -83,11 +105,7 @@ export function FindPeople() {
     // return more detailed user information
 
     // fake feature with current search suggestions
-    await fetchUsersWithSimilarName(
-      query,
-      new AbortController().signal,
-      setSearchResult,
-    );
+    await getSearchResult(query, new AbortController().signal, setSearchResult);
   };
 
   const onPressEnter = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -97,13 +115,18 @@ export function FindPeople() {
     onSearch(searchText);
   };
 
+  const onCloseProfileDetailView = useCallback(
+    () => setUserProfileToView(undefined),
+    [],
+  );
+
   // get search suggestions after user typed 300ms
   useEffect(() => {
     const abortSignal = new AbortController();
     if (delayedQuery && delayedQuery.trim().length > 0) {
       setSearching(true);
 
-      fetchUsersWithSimilarName(
+      getSearchSuggestions(
         delayedQuery ?? '',
         abortSignal.signal,
         setSearchSuggestions,
@@ -182,6 +205,10 @@ export function FindPeople() {
                     (suggestion) => suggestion.name === key,
                   );
                   setUserProfileToView(profileToView);
+                  console.log(
+                    '🚀 ~ file: FindPeople.tsx:203 ~ FindPeople ~ profileToView:',
+                    profileToView,
+                  );
                   setResultSuggestionOpen(false);
                 },
               }}
@@ -300,9 +327,6 @@ export function FindPeople() {
                   dataSource={friendList}
                   renderItem={(item) => (
                     <SearchResultCard
-                      onClick={() => {
-                        setUserProfileToView(item);
-                      }}
                       name={item.name}
                       avatar={item.avatar ?? ''}
                       key={item.name}
@@ -346,9 +370,6 @@ export function FindPeople() {
                   dataSource={people}
                   renderItem={(item) => (
                     <SearchResultCard
-                      onClick={() => {
-                        setUserProfileToView(item);
-                      }}
                       name={item.name}
                       avatar={item.avatar ?? ''}
                       key={item.name}
@@ -364,16 +385,21 @@ export function FindPeople() {
         </div>
       </Layout.Content>
 
-      <SearchResultModal
-        name={userProfileToView?.name ?? ''}
-        bio={userProfileToView?.bio ?? ''}
-        avatar={userProfileToView?.avatar ?? ''}
-        isFriend
-        modalProps={{
-          open: shouldOpenProfileViewModal,
-          onCancel: () => setUserProfileToView(undefined),
-        }}
-      />
+      {userProfileToView && (
+        <SearchResultModal
+          key={userProfileToView.id}
+          id={userProfileToView.id}
+          name={userProfileToView.name ?? ''}
+          bio={userProfileToView.bio ?? ''}
+          avatar={userProfileToView.avatar ?? ''}
+          isFriend={userProfileToView.isFriend}
+          modalProps={{
+            open: shouldOpenProfileViewModal,
+            onCancel: onCloseProfileDetailView,
+            destroyOnClose: true,
+          }}
+        />
+      )}
     </Layout>
   );
 }

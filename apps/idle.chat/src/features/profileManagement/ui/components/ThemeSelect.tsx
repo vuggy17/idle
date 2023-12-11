@@ -1,7 +1,10 @@
 import { Card, ConfigProvider, Layout, Radio, theme } from 'antd';
 import './styles.css';
 import { ReactNode } from 'react';
-import { SerializableThemeConfig, readThemeConfig } from 'components/context';
+import {
+  SerializableThemeConfig,
+  readThemeConfig,
+} from '@idle/chat/components/context/readThemeConfig';
 
 const wrapThemeConfig = (
   preset: SerializableThemeConfig,

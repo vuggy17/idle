@@ -1,8 +1,8 @@
 import { Divider, Layout, Menu, MenuProps, Typography } from 'antd';
 import { Suspense, useMemo } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { wrapErrorBoundary } from 'router/AppRouter';
-import { AppSubPages } from 'router/routes';
+import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
+import { AppSubPages } from '@idle/chat/router/routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
 

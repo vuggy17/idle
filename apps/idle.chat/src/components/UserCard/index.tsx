@@ -1,5 +1,5 @@
 import { Flex, Space, Typography } from 'antd';
-import PartialAvatar from 'components/UserCard/PartialAvatar';
+import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
 
 type UserCardProps = {
   name: string;

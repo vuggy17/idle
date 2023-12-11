@@ -17,7 +17,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@idle/model": [
+        "libs/model/src/index.ts"
+      ],
+      "@idle/chat/*": [
+        "apps/idle.chat/src/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules",

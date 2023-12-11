@@ -1,8 +1,9 @@
 import { Button } from 'antd';
 import './nomatch.css';
-import { LoaderFunction, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-export default function Component() {
+// eslint-disable-next-line import/prefer-default-export
+export function Component() {
   const navigate = useNavigate();
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -32,5 +33,3 @@ export default function Component() {
     </div>
   );
 }
-
-export const loader: LoaderFunction = async ({ params }) => null;

@@ -1,8 +1,8 @@
-import LoginUseCase from 'features/auth/useCases/login';
+import LoginUseCase from '@idle/chat/features/auth/useCases/login';
 import { useAtom } from 'jotai';
 import { useCallback, useMemo } from 'react';
-import { AuthServiceImpl } from 'services/authService';
-import { currentUserAtom } from 'store/user';
+import { AuthServiceImpl } from '@idle/chat/services/authService';
+import { currentUserAtom } from '@idle/chat/store/user';
 
 const guest = {
   $id: '',

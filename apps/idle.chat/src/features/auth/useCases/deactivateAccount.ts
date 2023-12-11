@@ -1,19 +1,17 @@
-import { UseCase } from 'type';
-import {
-  DeactivateAccountRequestDTO,
-  DeactivateAccountResponseDTO,
-} from 'dto/authDto';
-import { AuthServiceImpl } from 'services/authService';
+import { UseCase } from '@idle/chat/type';
+import { DeactivateAccountResponseDTO } from '@idle/model';
+import { AuthServiceImpl } from '@idle/chat/services/authService';
 import { UserRepository } from '../repositories/userRepository';
 
+type Input = { email: string; password: string };
+type Output = DeactivateAccountResponseDTO;
+
 export default class DeactivateAccountUseCase
-  implements UseCase<DeactivateAccountRequestDTO, DeactivateAccountResponseDTO>
+  implements UseCase<Input, Output>
 {
   constructor(private userRepository: UserRepository = AuthServiceImpl) {}
 
-  async execute(
-    data: DeactivateAccountRequestDTO,
-  ): Promise<DeactivateAccountResponseDTO> {
+  async execute(data: Input): Promise<Output> {
     // loginCheck
     await this.userRepository.login(data.email, data.password);
 

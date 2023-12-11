@@ -1,13 +1,14 @@
 import { Account, ID } from 'appwrite';
 import {
+  DeactivateAccountResponseDTO,
   LoginUserResponseDTO,
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
   UserDTO,
-} from 'dto/authDto';
-import { UserRepository } from 'features/auth/repositories/userRepository';
-import { AppWriteProvider } from 'providers/appwrite';
-import HttpProvider, { HttpClient } from 'providers/http';
+} from '@idle/model';
+import { UserRepository } from '@idle/chat/features/auth/repositories/userRepository';
+import { AppWriteProvider } from '@idle/chat/providers/appwrite';
+import HttpProvider, { HttpClient } from '@idle/chat/providers/http';
 
 export default class AuthService implements UserRepository {
   constructor(
@@ -54,8 +55,8 @@ export default class AuthService implements UserRepository {
     return this.accountGateway.updatePassword(newPass, currentPass);
   }
 
-  async disableAccount(accId: string): Promise<UserDTO> {
-    const result = await this.httpGateway.disableAccount<UserDTO>({
+  async disableAccount(accId: string): Promise<DeactivateAccountResponseDTO> {
+    const result = await this.httpGateway.disableAccount({
       id: accId,
     });
     return result.data;

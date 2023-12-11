@@ -1,11 +1,11 @@
 import { Card, Form, FormInstance, Layout, Space, Typography } from 'antd';
 
-import { LoaderFunction, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
-import { wrapErrorBoundary } from 'router/AppRouter';
-import useAuth from 'hooks/useAuth';
-import { AppRoutes } from 'router/routes';
+import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
+import useAuth from '@idle/chat/hooks/useAuth';
+import { AppRoutes } from '@idle/chat/router/routes';
 import LoginForm, { LoginFormData } from '../components/LoginForm';
 
 // test user
@@ -116,8 +116,5 @@ function Login() {
   );
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export const Component = () => wrapErrorBoundary(<Login />);
-
-Component.displayName = 'Register page';
-
-export const loader: LoaderFunction = async ({ params }) => null;

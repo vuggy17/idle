@@ -25,11 +25,15 @@ export default defineConfig({
   //  plugins: [ nxViteTsPaths() ],
   // },
 
-  // resolve: {
-  //   alias: {
-  //     environments: path.resolve(__dirname, '../../environments/src/index.ts'),
-  //   },
-  // },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext',
+    },
+    include: ['@idle/model'],
+  },
+  build: {
+    target: 'esnext',
+  },
   test: {
     globals: true,
     cache: {
@@ -37,8 +41,5 @@ export default defineConfig({
     },
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-  },
-  optimizeDeps: {
-    include: ['antd, iconoir'],
   },
 });

@@ -1,18 +1,31 @@
 {
-  "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
+  "extends": [
+    "../../.eslintrc.json"
+  ],
+  "parserOptions": {
+    "project": [
+      "apps/idle.api/tsconfig.eslint.json"
+    ]
+  },
+  "ignorePatterns": [
+    "!**/*", "jest.config.ts"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "files": [
+        "*.ts"
+      ],
+      "rules": {
+        "import/prefer-default-export": [
+          "off"
+        ],
+        "no-underscore-dangle": [
+          "error",
+          {
+            "allowAfterThis": true
+          }
+        ]
+      }
     }
   ]
 }

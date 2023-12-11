@@ -1,11 +1,11 @@
 import { ConfigProvider, Layout, Menu, Space, Typography } from 'antd';
-import { wrapErrorBoundary } from 'router/AppRouter';
+import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
 import type { MenuProps } from 'antd/es/menu';
 import { useMemo, useState } from 'react';
-import UnderConstruction from 'components/UnderConstruction';
+import UnderConstruction from '@idle/chat/components/UnderConstruction';
 import { useAtomValue } from 'jotai';
-import { currentUserAtom } from 'store/user';
-import UserCard from 'components/UserCard';
+import { currentUserAtom } from '@idle/chat/store/user';
+import UserCard from '@idle/chat/components/UserCard';
 import { Bell, LayoutRight, PeopleTag, Settings } from 'iconoir-react';
 import MyAccount from './MyAccount';
 import MyNotification from './MyNotification';

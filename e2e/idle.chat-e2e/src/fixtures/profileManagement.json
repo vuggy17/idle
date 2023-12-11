@@ -1,0 +1,53 @@
+{
+  "friendRequests": [
+    {
+      "id": "01HGD4JGY8992WDQRV6S1RJD8Q",
+      "name": "Bert Gallacher",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "isAccepted": true,
+      "createdAt": 1676155770
+    },
+    {
+      "id": "01HGD4JGY9842H30NZ5MXZH43Z",
+      "name": "Evvie Hoofe",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "isAccepted": false,
+      "createdAt": 1675518787
+    },
+    {
+      "id": "01HGD4JGYAMZ3T2CHZH6E7185J",
+      "name": "Romola Walesa",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "isAccepted": true,
+      "createdAt": 1683131758
+    },
+    {
+      "id": "01HGD4JGYCG72XYPMVA2058H39",
+      "name": "Lynnet McGuiney",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "isAccepted": false,
+      "createdAt": 1695450104
+    },
+    {
+      "id": "01HGD4JGYD94XZBCH259XC6D9A",
+      "name": "Karlee Allmond",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "isAccepted": false,
+      "createdAt": 1687655918
+    },
+    {
+      "id": "01HGD4JGYEGDRA30XM8T81SJVJ",
+      "name": "Dulcine Lavington",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "isAccepted": true,
+      "createdAt": 1677327436
+    },
+    {
+      "id": "01HGD4JGYFPN5RAMPK0N7SYQDT",
+      "name": "Lynnette Rainsbury",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+      "isAccepted": true,
+      "createdAt": 1692382620
+    }
+  ]
+}
