@@ -7,7 +7,6 @@ import {
   ContextIdResolver,
 } from '@nestjs/core';
 import { Request } from 'express';
-import { disposableAppwriteClientProvider } from '../infra/appwrite';
 import { HeaderGetter } from '../utils/headerGetter';
 
 const tenants = new Map<string, ContextId>();
@@ -26,6 +25,7 @@ export class AggregateByTenantContextIdStrategy implements ContextIdStrategy {
     tenants.delete(tenantID);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   attach(contextId: ContextId, request: Request) {
     const userId = HeaderGetter.getUserId(request);
     const jwtToken = HeaderGetter.getBearerToken(request);

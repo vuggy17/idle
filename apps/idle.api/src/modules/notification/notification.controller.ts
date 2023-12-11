@@ -1,10 +1,9 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { SaveFCMTokenRequestDTO } from '@idle/model';
 import { FCMTokenRepository } from '../../config/repository';
 import { FCMTokenRepositoryImpl } from './FCMToken.repository';
-import { AuthGuard } from '../../config/guards/auth.guard';
 import { AuthUser } from '../../config/decorators/authUser';
-import { UserEntity } from '../user';
+import { UserEntity } from '../common/user.entity';
 import { Auth } from '../../config/decorators/auth';
 
 @Auth()

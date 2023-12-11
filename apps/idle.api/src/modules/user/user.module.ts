@@ -1,6 +1,6 @@
 import { Module, Provider } from '@nestjs/common';
 import { UserController } from './user.controller';
-import UserService from './user.service';
+import { UserService } from './user.service';
 import { UserRepository, UserRepositoryImpl } from './repository';
 import { FriendModule } from '../friend/module';
 

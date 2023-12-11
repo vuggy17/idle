@@ -1,15 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ID } from '@idle/model';
-import { RealTimeNotificationService } from '../notification';
 import { FriendRepository } from './repository';
-import { FriendRequestEntity, FriendRequestStatus } from './entities';
+import { FriendRequestStatus } from './entities';
+import { FriendRequestEntity } from '../common/friend.entity';
 import { messages } from '../../assets/errorMessages.json';
+
 @Injectable()
 export class FriendService {
-  constructor(
-    private readonly _notificationService: RealTimeNotificationService,
-    private readonly _friendRequestRepository: FriendRepository,
-  ) {}
+  constructor(private readonly _friendRequestRepository: FriendRepository) {}
 
   async createFriendRequest(
     sender: ID,

@@ -1,11 +1,13 @@
 import { Exclude } from 'class-transformer';
 import { AppwriteEntity } from '../../config/baseEntity';
-import { FriendRequestEntity } from '../friend/entities';
 
 export class UserEntity extends AppwriteEntity {
   name: string;
+
   email: string;
+
   avatar: string;
+
   phone: string;
 
   @Exclude()
@@ -24,9 +26,4 @@ export class UserEntity extends AppwriteEntity {
     super(partial);
     Object.assign(this, partial);
   }
-}
-
-export class UserWithFriendRequestEntity extends UserEntity {
-  hasPendingFriendRequest: boolean;
-  pendingFriendRequest: FriendRequestEntity;
 }

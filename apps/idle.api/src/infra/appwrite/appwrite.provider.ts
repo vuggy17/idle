@@ -1,16 +1,20 @@
-import { Global, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import appwriteSDK from 'node-appwrite';
-import { IdleConfigSchema } from '../../config/type';
 import { ConfigService } from '@nestjs/config';
+import { IdleConfigSchema } from '../../config/type';
 
 @Injectable()
 export class AppWriteProvider {
   protected _instance: appwriteSDK.Client;
+
   protected _userSDK: appwriteSDK.Users;
+
   protected _accountSDK: appwriteSDK.Account;
+
   protected _databaseSDK: appwriteSDK.Databases;
 
   static defaultDatabaseId = '656af2faa9d4d3352a34';
+
   static projectDbCollections = {
     chat: {
       friendInvitation: 'friend-invitation',

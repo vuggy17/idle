@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@nestjs/common';
-import { IdleConfigSchema } from '../../config/type';
 import { ConfigService } from '@nestjs/config';
+import { IdleConfigSchema } from '../../config/type';
 import { AppWriteProvider } from './appwrite.provider';
 
 export const PersistentAppWriteProvider = 'PersistentAppWriteProvider';

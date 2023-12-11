@@ -4,7 +4,7 @@ export function resolveEnv(name: string) {
 
   const value = process.env[`${prefix}${name}`];
   if (value === undefined || value == null)
-    throw new Error('Variable not defined ' + name);
+    throw new Error(`Variable not defined ${name}`);
 
   return value;
 }

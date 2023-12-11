@@ -5,7 +5,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
 import {
   AppWriteProvider,
   DisposableAppWriteClient,
@@ -28,7 +27,7 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = await this.appwrite.account.get();
-      request['user'] = payload;
+      request.user = payload;
     } catch (error) {
       if ('type' in error && error.type === 'user_jwt_invalid') {
         const userId = HeaderGetter.getUserId(request);

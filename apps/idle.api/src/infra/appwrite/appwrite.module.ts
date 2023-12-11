@@ -1,4 +1,4 @@
-import { FactoryProvider, Global, Module, Scope } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import {
   PersistentAppWriteProvider,
   persistentAppwriteClientProvider,
@@ -7,6 +7,7 @@ import {
   DisposableAppWriteClient,
   disposableAppwriteClientProvider,
 } from './appwrite.onetime.provider';
+
 import { AppWriteProvider } from './appwrite.provider';
 
 @Global()
@@ -18,4 +19,4 @@ import { AppWriteProvider } from './appwrite.provider';
   ],
   exports: [PersistentAppWriteProvider, DisposableAppWriteClient],
 })
-export class AppWriteModule {}
+export default class AppWriteModule {}

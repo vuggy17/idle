@@ -1,6 +1,6 @@
 import { Type, Expose, Transform, Exclude } from 'class-transformer';
-import { dayjs } from '../utils/dayjs';
 import { ID } from '@idle/model';
+import { dayjs } from '../utils/dayjs';
 
 export class AppwriteEntity {
   @Expose({

@@ -2,10 +2,9 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   GetUserSearchResultRequestDTO,
   GetUserSearchSuggestionRequestDTO,
-  GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
-import UserService from './user.service';
-import { UserEntity } from './entities';
+import { UserService } from './user.service';
+import { UserEntity } from '../common/user.entity';
 import { AuthUser } from '../../config/decorators/authUser';
 import { Auth } from '../../config/decorators/auth';
 
@@ -30,7 +29,7 @@ export class UserController {
   @Get('search-result')
   async getUserSearchResult(
     @Query() { q }: GetUserSearchResultRequestDTO,
-    @AuthUser() user: UserEntity,
+    @AuthUser() user,
   ) {
     return this.userService.getSearchResult(q, user.$id);
   }

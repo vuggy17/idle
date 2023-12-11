@@ -1,16 +1,14 @@
+/* eslint-disable max-classes-per-file */
 import { ID } from '@idle/model';
-import {
-  FriendEntity,
-  FriendRequestEntity,
-  FriendRequestStatusType,
-} from './entities';
 import { Inject } from '@nestjs/common';
+import { ID as AppwriteID, Query } from 'node-appwrite';
+import { FriendEntity, FriendRequestStatusType } from './entities';
+import { FriendRequestEntity } from '../common/friend.entity';
 import {
   AppWriteProvider,
   DisposableAppWriteClient,
   PersistentAppWriteProvider,
 } from '../../infra/appwrite';
-import { ID as AppwriteID, Query } from 'node-appwrite';
 
 // Interface isn't a injection token in runtime,
 // https://stackoverflow.com/a/74561702/14668586
@@ -46,12 +44,16 @@ export class FriendRepositoryImpl implements FriendRepository {
   ) {}
 
   // friend
+  // eslint-disable-next-line class-methods-use-this
   addFriend(requester: ID, recipient: ID): Promise<FriendEntity> {
     throw new Error('Method not implemented.');
   }
+
+  // eslint-disable-next-line class-methods-use-this
   removeFriend(requester: ID, recipient: ID): Promise<FriendEntity> {
     throw new Error('Method not implemented.');
   }
+
   async getFriends(userIds: ID[]): Promise<FriendEntity[]> {
     const { total, documents } =
       await this._appwriteAdmin.database.listDocuments<FriendEntity>(
@@ -95,9 +97,8 @@ export class FriendRepositoryImpl implements FriendRepository {
 
     if (total === 0) {
       return [];
-    } else {
-      return documents;
     }
+    return documents;
   }
 
   async updateFriendRequestStatus(
@@ -127,8 +128,7 @@ export class FriendRepositoryImpl implements FriendRepository {
 
     if (total === 0) {
       return null;
-    } else {
-      return documents[0];
     }
+    return documents[0];
   }
 }

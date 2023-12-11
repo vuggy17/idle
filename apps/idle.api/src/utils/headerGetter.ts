@@ -1,5 +1,6 @@
 import { Request } from 'express';
 
+// eslint-disable-next-line import/prefer-default-export
 export const HeaderGetter = {
   getBearerToken: (request: Request): string | undefined => {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];

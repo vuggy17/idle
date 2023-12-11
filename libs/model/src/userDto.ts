@@ -1,5 +1,5 @@
-import { FriendRequestEntity } from './../../../apps/idle.api/src/modules/friend/entities';
 import { ID, TIME } from './common';
+import { CreateFriendRequestResponseDTO } from './friendDto';
 
 export type GetUserSearchSuggestionRequestDTO = {
   q: string;
@@ -27,5 +27,5 @@ export type GetUserSearchResultResponseDTO = {
    */
   hasPendingRequest: boolean;
 
-  pendingFriendRequest: FriendRequestEntity | null;
+  pendingFriendRequest: CreateFriendRequestResponseDTO | null;
 }[];

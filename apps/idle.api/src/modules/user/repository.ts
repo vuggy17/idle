@@ -1,10 +1,11 @@
+/* eslint-disable max-classes-per-file */
 import { Inject } from '@nestjs/common';
+import { Query } from 'node-appwrite';
 import {
   PersistentAppWriteProvider,
   AppWriteProvider,
 } from '../../infra/appwrite';
 import { UserEntity } from './entities';
-import { Query } from 'node-appwrite';
 
 export abstract class UserRepository {
   abstract findMany(query: string): Promise<UserEntity[]>;

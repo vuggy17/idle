@@ -1,13 +1,10 @@
-import {
-  CreateFriendRequestRequestDTO,
-  CreateFriendRequestResponseDTO,
-} from '@idle/model';
+import { CreateFriendRequestRequestDTO } from '@idle/model';
 import { Body, Controller, Post } from '@nestjs/common';
 import { FriendService } from './service';
 import { Auth } from '../../config/decorators/auth';
 import { AuthUser } from '../../config/decorators/authUser';
-import { UserEntity } from '../user';
-import { FriendRequestEntity } from './entities';
+import { UserEntity } from '../common/user.entity';
+import { FriendRequestEntity } from '../common/friend.entity';
 
 @Auth()
 @Controller('friends')

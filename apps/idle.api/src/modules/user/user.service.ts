@@ -1,11 +1,13 @@
+/* eslint-disable class-methods-use-this */
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from './repository';
-import { FriendRepository } from '../friend/repository';
+// import { UserRepository } from './repository';
 import { ID } from '@idle/model';
+import { FriendRepository } from '../friend/repository';
+
 @Injectable()
-export default class UserService {
+export class UserService {
   constructor(
-    private readonly _userRepository: UserRepository,
+    private readonly _userRepository: any,
     private readonly _friendRepository: FriendRepository,
   ) {}
 
@@ -52,18 +54,17 @@ export default class UserService {
           hasPendingRequest: false,
           pendingFriendRequest: null,
         };
-      } else {
-        const request = friendRequests.find(
-          (entity) =>
-            entity.sender.$id === user.$id &&
-            entity.receiver.$id === loggedInUserId,
-        );
-        return {
-          ...temp,
-          hasPendingRequest: Boolean(request),
-          pendingFriendRequest: request || null,
-        };
       }
+      const request = friendRequests.find(
+        (entity) =>
+          entity.sender.$id === user.$id &&
+          entity.receiver.$id === loggedInUserId,
+      );
+      return {
+        ...temp,
+        hasPendingRequest: Boolean(request),
+        pendingFriendRequest: request || null,
+      };
     });
 
     return results;

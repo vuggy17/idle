@@ -1,6 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import { Injectable } from '@nestjs/common';
-import { Notification, NotificationService } from './type';
 import { ID } from '@idle/model';
+import { Notification, NotificationService } from './type';
 
 @Injectable()
 export class RealTimeNotificationService implements NotificationService {
@@ -20,8 +21,8 @@ export class RealTimeNotificationService implements NotificationService {
     };
     this.notifications.push(notification);
     await this.sendRealTimeNotification(notification);
-    return;
   }
+
   sendNewMessageNotification(
     senderId: ID,
     receiverId: ID,
@@ -29,6 +30,7 @@ export class RealTimeNotificationService implements NotificationService {
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
   sendMentionNotification(
     userId: ID,
     mentionedBy: string,
@@ -36,6 +38,7 @@ export class RealTimeNotificationService implements NotificationService {
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
   getNotifications(userId: string): Promise<Notification[]> {
     // This mock implementation returns all notifications, but in a real implementation,
     // you would filter the notifications based on the userId.
