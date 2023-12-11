@@ -6,7 +6,6 @@ import { FriendEntity, FriendRequestStatusType } from './entities';
 import { FriendRequestEntity } from '../common/friend.entity';
 import {
   AppWriteProvider,
-  DisposableAppWriteClient,
   PersistentAppWriteProvider,
 } from '../../infra/appwrite';
 
@@ -34,6 +33,10 @@ export abstract class FriendRepository {
   // friend
   abstract addFriend(requester: ID, recipient: ID): Promise<FriendEntity>;
   abstract removeFriend(requester: ID, recipient: ID): Promise<FriendEntity>;
+  /**
+   * Get friends of multiple users:
+   * @return {Record<string, FriendEntity>}: [userId - their friends]
+   */
   abstract getFriends(userIds: ID[]): Promise<FriendEntity[]>;
 }
 
@@ -65,7 +68,7 @@ export class FriendRepositoryImpl implements FriendRepository {
     if (total === 0) {
       return [];
     }
-    return documents;
+    return documents.map((doc) => new FriendEntity(doc));
   }
 
   // friend request
@@ -81,7 +84,7 @@ export class FriendRepositoryImpl implements FriendRepository {
         { sender, receiver },
       );
 
-    return request;
+    return new FriendRequestEntity(request);
   }
 
   async getFriendRequestsBySender(
@@ -98,7 +101,7 @@ export class FriendRepositoryImpl implements FriendRepository {
     if (total === 0) {
       return [];
     }
-    return documents;
+    return documents.map((doc) => new FriendRequestEntity(doc));
   }
 
   async updateFriendRequestStatus(
@@ -112,13 +115,13 @@ export class FriendRepositoryImpl implements FriendRepository {
         docId,
         updates,
       );
-    return doc;
+    return new FriendRequestEntity(doc);
   }
 
   async getFriendRequest(
     sender: ID,
     receiver: ID,
-  ): Promise<FriendRequestEntity> {
+  ): Promise<FriendRequestEntity | null> {
     const { total, documents } =
       await this._appwriteAdmin.database.listDocuments<FriendRequestEntity>(
         AppWriteProvider.defaultDatabaseId,
@@ -129,6 +132,6 @@ export class FriendRepositoryImpl implements FriendRepository {
     if (total === 0) {
       return null;
     }
-    return documents[0];
+    return new FriendRequestEntity(documents[0]);
   }
 }

@@ -23,20 +23,23 @@ export class UserController {
     @Query() { q }: GetUserSearchSuggestionRequestDTO,
   ) {
     const results = await this.userService.getSearchSuggestions(q);
-    return results.map((user) => new UserEntity(user));
+    return results;
   }
 
   @Get('search-result')
   async getUserSearchResult(
     @Query() { q }: GetUserSearchResultRequestDTO,
-    @AuthUser() user,
+    @AuthUser() user: UserEntity,
   ) {
     return this.userService.getSearchResult(q, user.$id);
   }
 
   @Get('search-result/:id')
-  async getSearchResultDetail(@Param('id') userId: string) {
-    const a = await this.userService.getProfile(userId);
+  async getSearchResultDetail(
+    @Param('id') userId: string,
+    @AuthUser() user: UserEntity,
+  ) {
+    const a = await this.userService.getProfile(userId, user.$id);
     return a;
   }
 }

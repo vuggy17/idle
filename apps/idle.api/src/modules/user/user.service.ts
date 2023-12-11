@@ -1,13 +1,13 @@
-/* eslint-disable class-methods-use-this */
-import { Injectable } from '@nestjs/common';
-// import { UserRepository } from './repository';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ID } from '@idle/model';
+import { instanceToPlain } from 'class-transformer';
 import { FriendRepository } from '../friend/repository';
+import { UserRepository } from './repository';
 
 @Injectable()
 export class UserService {
   constructor(
-    private readonly _userRepository: any,
+    private readonly _userRepository: UserRepository,
     private readonly _friendRepository: FriendRepository,
   ) {}
 
@@ -15,7 +15,6 @@ export class UserService {
     return this._userRepository.findMany(q);
   }
 
-  // TODO: add pagination
   async getSearchResult(q: string, loggedInUserId: ID) {
     // get users and check if he/she a friend of current user
     const users = await this._userRepository.findMany(q);
@@ -43,7 +42,7 @@ export class UserService {
         (entity) => entity.user.$id === user.$id,
       );
 
-      const isFriend = currentUserFriendList.friends.some(
+      const isFriend = currentUserFriendList?.friends.some(
         (friend) => friend.$id === user.$id,
       );
 
@@ -68,27 +67,61 @@ export class UserService {
     });
 
     return results;
-
-    // return Promise.resolve(users.searchResults);
   }
 
-  async getProfile(userId: string) {
-    // get single user and check if he/she a friend of current user
-    // const profile = users.searchResults.find((result) => result.id == userId);
-    // return Promise.resolve(profile);
-    return {};
+  /**
+   * same logic with {@linkcode getSearchResult} but operate on single user
+   * @param id user to get profile
+   * @param loggedInUserId current user who want to get another profile
+   */
+  async getProfile(id: ID, loggedInUserId: ID) {
+    // get users and check if he/she a friend of current user
+    const user = await this._userRepository.getById(id);
+    if (!user) {
+      throw new BadRequestException(`Cannot find user with id: ${id}`);
+    }
+
+    const userId = user.$id;
+    const friends = await this._friendRepository.getFriends([userId]);
+
+    const isFriend = friends.find(
+      (record) =>
+        record.user.$id === userId &&
+        record.friends.some((friend) => friend.$id === loggedInUserId),
+    );
+
+    if (isFriend) {
+      return {
+        ...instanceToPlain(user),
+        isFriend: true,
+        hasPendingRequest: false,
+        pendingFriendRequest: null,
+      };
+    }
+
+    // find friend request if existed
+    const friendRequests =
+      await this._friendRepository.getFriendRequestsBySender(
+        [userId],
+        'pending',
+      );
+
+    const request = friendRequests.find(
+      (rq) => rq.receiver.$id === loggedInUserId,
+    );
+    if (request) {
+      return {
+        ...instanceToPlain(user),
+        isFriend: false,
+        hasPendingRequest: true,
+        pendingFriendRequest: instanceToPlain(request),
+      };
+    }
+    return {
+      ...instanceToPlain(user),
+      isFriend: false,
+      hasPendingRequest: false,
+      pendingFriendRequest: null,
+    };
   }
 }
-
-/**
- * Promise<{
-   id: ID;
-  name: string;
-  avatar: string;
-  bio: string;
-  isFriend: boolean;
-  hasPendingRequest: boolean;
-
-  pendingFriendRequest: FriendRequestEntity | null;
-}[]>
- */

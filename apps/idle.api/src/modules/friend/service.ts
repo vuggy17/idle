@@ -32,8 +32,9 @@ export class FriendService {
     return request;
   }
 
-  // Extracted method to update an existing friend request
-  async updateFriendRequest(existedRequest: ID): Promise<FriendRequestEntity> {
+  private async updateFriendRequest(
+    existedRequest: ID,
+  ): Promise<FriendRequestEntity> {
     const doc = await this._friendRequestRepository.updateFriendRequestStatus(
       existedRequest,
       {
@@ -43,8 +44,7 @@ export class FriendService {
     return doc;
   }
 
-  // Extracted method to create a new friend request
-  async createNewFriendRequest(
+  private async createNewFriendRequest(
     sender: ID,
     receiver: ID,
   ): Promise<FriendRequestEntity> {
