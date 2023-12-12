@@ -15,6 +15,7 @@ export default async ({ req, res, log, error }) => {
   const database = new Databases(client);
   const dbId = 'chat-1';
   const collectionId = 'users';
+  const userFriendCollectionID = 'user-friends';
   const user = {
     name,
     email,
@@ -49,6 +50,12 @@ export default async ({ req, res, log, error }) => {
         user,
       );
       log('created doc: ');
+
+      log('creating user-friend record');
+      await database.createDocument(dbId, userFriendCollectionID, userID, {
+        user: userID,
+        friends: [],
+      });
       log(JSON.stringify(createdDoc, null, 4));
     } else {
       error('an error encountered: ');
