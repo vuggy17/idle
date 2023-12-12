@@ -43,13 +43,14 @@ export class UserService {
       );
 
       const isFriend = currentUserFriendList?.friends.some(
-        (friend) => friend.$id === user.$id,
+        (friend) => friend.$id === loggedInUserId,
       );
 
       // neu da la friend roi thi khong can check friend request nua
       if (isFriend) {
         return {
           ...temp,
+          isFriend: true,
           hasPendingRequest: false,
           pendingFriendRequest: null,
         };
@@ -61,6 +62,7 @@ export class UserService {
       );
       return {
         ...temp,
+        isFriend: false,
         hasPendingRequest: Boolean(request),
         pendingFriendRequest: request || null,
       };

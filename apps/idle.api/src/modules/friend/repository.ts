@@ -3,7 +3,7 @@ import { ID } from '@idle/model';
 import { Inject } from '@nestjs/common';
 import { ID as AppwriteID, Query } from 'node-appwrite';
 import { FriendEntity, FriendRequestStatusType } from './entities';
-import { FriendRequestEntity } from '../common/friend.entity';
+import { FriendRequestEntity } from '../common/friendRequest.entity';
 import {
   AppWriteProvider,
   PersistentAppWriteProvider,

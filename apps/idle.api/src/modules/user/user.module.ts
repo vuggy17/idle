@@ -16,5 +16,11 @@ const providers: Provider[] = [
   imports: [FriendModule],
   controllers: [UserController],
   providers: [...providers],
+  exports: [
+    {
+      provide: UserRepository,
+      useClass: UserRepositoryImpl,
+    },
+  ],
 })
 export class UserModule {}

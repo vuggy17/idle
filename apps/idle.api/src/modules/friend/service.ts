@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ID } from '@idle/model';
 import { FriendRepository } from './repository';
 import { FriendRequestStatus } from './entities';
-import { FriendRequestEntity } from '../common/friend.entity';
+import { FriendRequestEntity } from '../common/friendRequest.entity';
 import { messages } from '../../assets/errorMessages.json';
 
 @Injectable()

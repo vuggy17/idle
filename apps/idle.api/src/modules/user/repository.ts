@@ -19,7 +19,7 @@ export class UserRepositoryImpl implements UserRepository {
     private readonly appwriteAdmin: AppWriteProvider,
   ) {}
 
-  async getById(id: string): Promise<UserEntity> {
+  async getById(id: ID): Promise<UserEntity> {
     const doc = await this.appwriteAdmin.database.getDocument<UserEntity>(
       AppWriteProvider.defaultDatabaseId,
       AppWriteProvider.projectDbCollections.chat.user,

@@ -11,6 +11,7 @@ import {
 } from '../../infra/appwrite';
 import { HeaderGetter } from '../../utils/headerGetter';
 import { AggregateByTenantContextIdStrategy } from '../ContextIdStrategy';
+import { AppWriteUserEntity } from '../../modules/common/user.entity';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -26,7 +27,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.appwrite.account.get();
+      const payload: AppWriteUserEntity = await this.appwrite.account.get();
       request.user = payload;
     } catch (error) {
       if ('type' in error && error.type === 'user_jwt_invalid') {

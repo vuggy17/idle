@@ -3,8 +3,8 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { FriendService } from './service';
 import { Auth } from '../../config/decorators/auth';
 import { AuthUser } from '../../config/decorators/authUser';
-import { UserEntity } from '../common/user.entity';
-import { FriendRequestEntity } from '../common/friend.entity';
+import { AppWriteUserEntity } from '../common/user.entity';
+import { FriendRequestEntity } from '../common/friendRequest.entity';
 
 @Auth()
 @Controller('friends')
@@ -19,7 +19,7 @@ export class FriendController {
    */
   @Post('invitation')
   async handleSendingFriendRequest(
-    @AuthUser() user: UserEntity,
+    @AuthUser() user: AppWriteUserEntity,
     @Body() body: CreateFriendRequestRequestDTO,
   ) {
     const receiver = body.sentTo;

@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import {
   DeactivateAccountRequestDTO,
   DeactivateAccountResponseDTO,
@@ -7,24 +7,34 @@ import {
   PersistentAppWriteProvider,
   AppWriteProvider,
 } from '../../infra/appwrite';
+import { Auth } from '../../config/decorators/auth';
+import { AppWriteUserEntity } from '../common/user.entity';
+import { AuthUser } from '../../config/decorators/authUser';
+import { UserRepository } from '../user/repository';
 
 const UserStatus = {
   disabled: false,
   active: true,
 } as const;
 
+@Auth()
 @Controller('auth')
 export class AuthController {
   constructor(
     @Inject(PersistentAppWriteProvider)
     private readonly sdk: AppWriteProvider,
+    private readonly _userRepository: UserRepository,
   ) {}
 
   @Post('disable')
   async disableUser(
     @Body() user: DeactivateAccountRequestDTO,
   ): Promise<DeactivateAccountResponseDTO> {
-    // TODO: add repository
-    return this.sdk.users.updateStatus(user.id, UserStatus.disabled) as any;
+    return this.sdk.users.updateStatus(user.id, UserStatus.disabled);
+  }
+
+  @Get('me')
+  async getMe(@AuthUser() user: AppWriteUserEntity) {
+    return this._userRepository.getById(user.$id);
   }
 }
