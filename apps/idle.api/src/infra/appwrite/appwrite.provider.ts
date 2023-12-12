@@ -13,11 +13,11 @@ export class AppWriteProvider {
 
   protected _databaseSDK: appwriteSDK.Databases;
 
-  static defaultDatabaseId = '656af2faa9d4d3352a34';
+  static defaultDatabaseId = 'chat-1';
 
   static projectDbCollections = {
     chat: {
-      friendInvitation: 'friend-invitation',
+      friendInvitation: 'friend-invitations',
       user: 'users',
       friend: 'user-friends',
     },

@@ -13,7 +13,7 @@ export default async ({ req, res, log, error }) => {
     .setKey(process.env.APPWRITE_API_KEY);
 
   const database = new Databases(client);
-  const dbId = '656af2faa9d4d3352a34';
+  const dbId = 'chat-1';
   const collectionId = 'users';
   const user = {
     name,
