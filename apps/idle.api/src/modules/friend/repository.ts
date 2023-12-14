@@ -12,7 +12,7 @@ import {
 // Interface isn't a injection token in runtime,
 // https://stackoverflow.com/a/74561702/14668586
 export abstract class FriendRepository {
-  // friend requests
+  // #region friend requests
   abstract createFriendRequest(
     sender: ID,
     receiver: ID,
@@ -25,12 +25,14 @@ export abstract class FriendRepository {
     senders: ID[],
     status: FriendRequestStatusType,
   ): Promise<FriendRequestEntity[]>;
-  abstract getFriendRequest(
+  abstract findFriendRequest(
     sender: ID,
     receiver: ID,
   ): Promise<FriendRequestEntity>;
+  abstract getFriendRequest(requestId: ID): Promise<FriendRequestEntity>;
+  // #endregion
 
-  // friend
+  // #region friend
   abstract addFriend(requester: ID, recipient: ID): Promise<FriendEntity>;
   abstract removeFriend(requester: ID, recipient: ID): Promise<FriendEntity>;
   /**
@@ -38,6 +40,7 @@ export abstract class FriendRepository {
    * @return {Record<string, FriendEntity>}: [userId - their friends]
    */
   abstract getFriends(userIds: ID[]): Promise<FriendEntity[]>;
+  // #endregion
 }
 
 export class FriendRepositoryImpl implements FriendRepository {
@@ -47,9 +50,21 @@ export class FriendRepositoryImpl implements FriendRepository {
   ) {}
 
   // friend
-  // eslint-disable-next-line class-methods-use-this
-  addFriend(requester: ID, recipient: ID): Promise<FriendEntity> {
-    throw new Error('Method not implemented.');
+  async addFriend(requester: ID, recipient: ID): Promise<FriendEntity> {
+    const doc = await this._appwriteAdmin.database.getDocument<FriendEntity>(
+      AppWriteProvider.defaultDatabaseId,
+      AppWriteProvider.projectDbCollections.chat.friend,
+      requester,
+    );
+    const result = this._appwriteAdmin.database.updateDocument<FriendEntity>(
+      AppWriteProvider.defaultDatabaseId,
+      AppWriteProvider.projectDbCollections.chat.friend,
+      requester,
+      {
+        friends: [...doc.friends.map((f) => f.$id), recipient],
+      },
+    );
+    return result;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -76,11 +91,12 @@ export class FriendRepositoryImpl implements FriendRepository {
     sender: string,
     receiver: string,
   ): Promise<FriendRequestEntity> {
+    const id = AppwriteID.unique();
     const request =
       await this._appwriteAdmin.database.createDocument<FriendRequestEntity>(
         AppWriteProvider.defaultDatabaseId,
         AppWriteProvider.projectDbCollections.chat.friendInvitation,
-        AppwriteID.unique(),
+        id,
         { sender, receiver },
       );
 
@@ -118,7 +134,7 @@ export class FriendRepositoryImpl implements FriendRepository {
     return new FriendRequestEntity(doc);
   }
 
-  async getFriendRequest(
+  async findFriendRequest(
     sender: ID,
     receiver: ID,
   ): Promise<FriendRequestEntity | null> {
@@ -133,5 +149,16 @@ export class FriendRepositoryImpl implements FriendRepository {
       return null;
     }
     return new FriendRequestEntity(documents[0]);
+  }
+
+  async getFriendRequest(requestId: string): Promise<FriendRequestEntity> {
+    const doc =
+      await this._appwriteAdmin.database.getDocument<FriendRequestEntity>(
+        AppWriteProvider.defaultDatabaseId,
+        AppWriteProvider.projectDbCollections.chat.friendInvitation,
+        requestId,
+      );
+
+    return new FriendRequestEntity(doc);
   }
 }

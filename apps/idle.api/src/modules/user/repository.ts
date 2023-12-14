@@ -11,6 +11,7 @@ import { UserEntity } from '../common/user.entity';
 export abstract class UserRepository {
   abstract findMany(query: string): Promise<UserEntity[]>;
   abstract getById(id: ID): Promise<UserEntity>;
+  abstract getAll(): Promise<UserEntity[]>;
 }
 
 export class UserRepositoryImpl implements UserRepository {
@@ -38,5 +39,14 @@ export class UserRepositoryImpl implements UserRepository {
       );
 
     return documents.map((doc) => new UserEntity(doc));
+  }
+
+  async getAll(): Promise<UserEntity[]> {
+    const doc = await this.appwriteAdmin.database.listDocuments<UserEntity>(
+      AppWriteProvider.defaultDatabaseId,
+      AppWriteProvider.projectDbCollections.chat.user,
+    );
+
+    return doc.documents.map((doc) => new UserEntity(doc));
   }
 }

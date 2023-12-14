@@ -1,6 +1,3 @@
-/* eslint-disable max-classes-per-file */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CreateFriendRequestResponseDTO } from '@idle/model';
 import { ValueOf } from '@idle/typing';
 import { UserEntity } from '../common/user.entity';
 import { AppwriteEntity } from '../../config/baseEntity';
@@ -14,7 +11,6 @@ export const FriendRequestStatus = {
 
 export type FriendRequestStatusType = ValueOf<typeof FriendRequestStatus>;
 
-//= ===========================================
 export class FriendEntity extends AppwriteEntity {
   user: UserEntity;
 

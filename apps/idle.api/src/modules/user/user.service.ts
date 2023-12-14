@@ -3,6 +3,7 @@ import { ID } from '@idle/model';
 import { instanceToPlain } from 'class-transformer';
 import { FriendRepository } from '../friend/repository';
 import { UserRepository } from './repository';
+import { UserEntity } from '../common/user.entity';
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,16 @@ export class UserService {
 
   async getSearchResult(q: string, loggedInUserId: ID) {
     // get users and check if he/she a friend of current user
-    const users = await this._userRepository.findMany(q);
+    let users: UserEntity[];
+    if (q.length === 0) {
+      users = await this._userRepository.getAll();
+    } else {
+      users = await this._userRepository.findMany(q);
+    }
+
+    // exclude self
+    users = users.filter((user) => user.$id !== loggedInUserId);
+
     if (users.length === 0) {
       return [];
     }
@@ -26,7 +36,7 @@ export class UserService {
     const friends = await this._friendRepository.getFriends(userIds);
     const friendRequests =
       await this._friendRepository.getFriendRequestsBySender(
-        userIds,
+        [...userIds, loggedInUserId],
         'pending',
       );
 
@@ -55,10 +65,13 @@ export class UserService {
           pendingFriendRequest: null,
         };
       }
+      // neu khong phai friend thi tim xem co friend request dang pending khong
       const request = friendRequests.find(
         (entity) =>
-          entity.sender.$id === user.$id &&
-          entity.receiver.$id === loggedInUserId,
+          (entity.sender.$id === user.$id &&
+            entity.receiver.$id === loggedInUserId) ||
+          (entity.sender.$id === loggedInUserId &&
+            entity.receiver.$id === user.$id),
       );
       return {
         ...temp,
