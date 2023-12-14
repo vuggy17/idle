@@ -1,8 +1,10 @@
 import { Exclude } from 'class-transformer';
-import { Models } from 'node-appwrite';
-import { AppwriteEntity } from '../../config/baseEntity';
+import {
+  CockroachEntity,
+  INTERNAL_ATTRIBUTE_DO_NOT_RETURN,
+} from '../../config/baseEntity';
 
-export class UserEntity extends AppwriteEntity {
+export class UserEntity extends CockroachEntity {
   name: string;
 
   email: string;
@@ -12,24 +14,13 @@ export class UserEntity extends AppwriteEntity {
   phone: string;
 
   @Exclude()
-  meta: string;
+  meta: INTERNAL_ATTRIBUTE_DO_NOT_RETURN<string>;
 
   @Exclude()
-  friends: any;
-
-  // work around until appwrite allow to create multiple 1way relation
-  // https://github.com/appwrite/appwrite/issues/6281
-  @Exclude()
-  'friendInvitations-receiver': any;
+  appwriteId: INTERNAL_ATTRIBUTE_DO_NOT_RETURN<string>;
 
   constructor(partial: Partial<UserEntity>) {
     super(partial);
     Object.assign(this, partial);
   }
 }
-
-/**
- * Appwrite user data stored in appwrite
- * @INTERNAL DO NOT RETURN TO CLIENT
- */
-export type AppWriteUserEntity = Models.User<Models.Preferences>;

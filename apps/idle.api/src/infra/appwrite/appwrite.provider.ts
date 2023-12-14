@@ -20,6 +20,7 @@ export class AppWriteProvider {
       friendInvitation: 'friend-invitations',
       user: 'users',
       friend: 'user-friends',
+      room: 'rooms',
     },
   };
 

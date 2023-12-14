@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ID } from '@idle/model';
 import { instanceToPlain } from 'class-transformer';
 import { FriendRepository } from '../friend/repository';
@@ -26,14 +26,14 @@ export class UserService {
     }
 
     // exclude self
-    users = users.filter((user) => user.$id !== loggedInUserId);
+    users = users.filter((user) => user.id !== loggedInUserId);
 
     if (users.length === 0) {
       return [];
     }
 
-    const userIds = users.map((user) => user.$id);
-    const friends = await this._friendRepository.getFriends(userIds);
+    const userIds = users.map((user) => user.id);
+    const friends = await this._friendRepository.getFriendsOf(userIds);
     const friendRequests =
       await this._friendRepository.getFriendRequestsBySender(
         [...userIds, loggedInUserId],
@@ -42,18 +42,18 @@ export class UserService {
 
     const results = users.map((user) => {
       const temp = {
-        id: user.$id,
+        id: user.id,
         name: user.name,
         avatar: user.avatar,
         bio: 'wait for implement',
       };
 
       const currentUserFriendList = friends.find(
-        (entity) => entity.user.$id === user.$id,
+        (entity) => entity.user.id === user.id,
       );
 
       const isFriend = currentUserFriendList?.friends.some(
-        (friend) => friend.$id === loggedInUserId,
+        (friend) => friend.id === loggedInUserId,
       );
 
       // neu da la friend roi thi khong can check friend request nua
@@ -65,13 +65,14 @@ export class UserService {
           pendingFriendRequest: null,
         };
       }
+
       // neu khong phai friend thi tim xem co friend request dang pending khong
       const request = friendRequests.find(
         (entity) =>
-          (entity.sender.$id === user.$id &&
-            entity.receiver.$id === loggedInUserId) ||
-          (entity.sender.$id === loggedInUserId &&
-            entity.receiver.$id === user.$id),
+          (entity.sender.id === user.id &&
+            entity.receiver.id === loggedInUserId) ||
+          (entity.sender.id === loggedInUserId &&
+            entity.receiver.id === user.id),
       );
       return {
         ...temp,
@@ -92,17 +93,13 @@ export class UserService {
   async getProfile(id: ID, loggedInUserId: ID) {
     // get users and check if he/she a friend of current user
     const user = await this._userRepository.getById(id);
-    if (!user) {
-      throw new BadRequestException(`Cannot find user with id: ${id}`);
-    }
-
-    const userId = user.$id;
-    const friends = await this._friendRepository.getFriends([userId]);
+    const userId = user.id;
+    const friends = await this._friendRepository.getFriendsOf([userId]);
 
     const isFriend = friends.find(
       (record) =>
-        record.user.$id === userId &&
-        record.friends.some((friend) => friend.$id === loggedInUserId),
+        record.user.id === userId &&
+        record.friends.some((friend) => friend.id === loggedInUserId),
     );
 
     if (isFriend) {
@@ -122,7 +119,7 @@ export class UserService {
       );
 
     const request = friendRequests.find(
-      (rq) => rq.receiver.$id === loggedInUserId,
+      (rq) => rq.receiver.id === loggedInUserId,
     );
     if (request) {
       return {

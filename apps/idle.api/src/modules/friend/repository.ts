@@ -1,13 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import { ID } from '@idle/model';
-import { Inject } from '@nestjs/common';
-import { ID as AppwriteID, Query } from 'node-appwrite';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { FriendEntity, FriendRequestStatusType } from './entities';
 import { FriendRequestEntity } from '../common/friendRequest.entity';
-import {
-  AppWriteProvider,
-  PersistentAppWriteProvider,
-} from '../../infra/appwrite';
+import { UserEntity } from '../common/user.entity';
+import { PrismaProvider } from '../../infra/prisma/prisma.provider';
 
 // Interface isn't a injection token in runtime,
 // https://stackoverflow.com/a/74561702/14668586
@@ -43,31 +44,43 @@ export abstract class FriendRepository {
    * Get friends of multiple users:
    * @return {Record<string, FriendEntity>}: [userId - their friends]
    */
-  abstract getFriends(userIds: ID[]): Promise<FriendEntity[]>;
+  abstract getFriendsOf(userIds: ID[]): Promise<FriendEntity[]>;
+  abstract findFriendByName(he: ID, name: string): Promise<UserEntity[]>;
   // #endregion
 }
 
+@Injectable()
 export class FriendRepositoryImpl implements FriendRepository {
-  constructor(
-    @Inject(PersistentAppWriteProvider)
-    private readonly _appwriteAdmin: AppWriteProvider,
-  ) {}
+  constructor(private readonly _prisma: PrismaProvider) {}
 
   // friend
   async addFriend(requester: ID, recipient: ID): Promise<FriendEntity> {
-    const doc = await this._appwriteAdmin.database.getDocument<FriendEntity>(
-      AppWriteProvider.defaultDatabaseId,
-      AppWriteProvider.projectDbCollections.chat.friend,
-      requester,
-    );
-    const result = this._appwriteAdmin.database.updateDocument<FriendEntity>(
-      AppWriteProvider.defaultDatabaseId,
-      AppWriteProvider.projectDbCollections.chat.friend,
-      requester,
-      {
-        friends: [...doc.friends.map((f) => f.$id), recipient],
+    const doc: FriendEntity = await this._prisma.userFriend.findFirstOrThrow({
+      where: {
+        userId: requester,
       },
-    );
+    });
+
+    const friendIds =
+      doc.friends?.map((u) => ({
+        id: u.id,
+      })) ?? [];
+
+    const result = this._prisma.userFriend.update({
+      where: {
+        userId: requester,
+      },
+      data: {
+        friends: {
+          connect: [
+            ...friendIds,
+            {
+              id: recipient,
+            },
+          ],
+        },
+      },
+    });
     return result;
   }
 
@@ -76,17 +89,18 @@ export class FriendRepositoryImpl implements FriendRepository {
     throw new Error('Method not implemented.');
   }
 
-  async getFriends(userIds: ID[]): Promise<FriendEntity[]> {
-    const { total, documents } =
-      await this._appwriteAdmin.database.listDocuments<FriendEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.friend,
-        [Query.equal('user', userIds)],
-      );
-
-    if (total === 0) {
-      return [];
-    }
+  async getFriendsOf(userIds: ID[]): Promise<FriendEntity[]> {
+    const documents = await this._prisma.userFriend.findMany({
+      where: {
+        userId: {
+          in: userIds,
+        },
+      },
+      include: {
+        user: true,
+        friends: true,
+      },
+    });
     return documents.map((doc) => new FriendEntity(doc));
   }
 
@@ -95,14 +109,26 @@ export class FriendRepositoryImpl implements FriendRepository {
     sender: string,
     receiver: string,
   ): Promise<FriendRequestEntity> {
-    const id = AppwriteID.unique();
-    const request =
-      await this._appwriteAdmin.database.createDocument<FriendRequestEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.friendInvitation,
-        id,
-        { sender, receiver },
-      );
+    const request: FriendRequestEntity =
+      await this._prisma.friendInvitation.create({
+        data: {
+          status: 'pending',
+          receiver: {
+            connect: {
+              id: receiver,
+            },
+          },
+          sender: {
+            connect: {
+              id: sender,
+            },
+          },
+        },
+        include: {
+          receiver: true,
+          sender: true,
+        },
+      });
 
     return new FriendRequestEntity(request);
   }
@@ -111,16 +137,19 @@ export class FriendRepositoryImpl implements FriendRepository {
     sender: ID[],
     status: FriendRequestStatusType,
   ): Promise<FriendRequestEntity[]> {
-    const { total, documents } =
-      await this._appwriteAdmin.database.listDocuments<FriendRequestEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.friendInvitation,
-        [Query.equal('sender', sender), Query.equal('status', status)],
-      );
-
-    if (total === 0) {
-      return [];
-    }
+    const documents: FriendRequestEntity[] =
+      await this._prisma.friendInvitation.findMany({
+        where: {
+          senderId: {
+            in: sender,
+          },
+          status,
+        },
+        include: {
+          receiver: true,
+          sender: true,
+        },
+      });
     return documents.map((doc) => new FriendRequestEntity(doc));
   }
 
@@ -128,13 +157,18 @@ export class FriendRepositoryImpl implements FriendRepository {
     docId: ID,
     updates: { status: FriendRequestStatusType },
   ): Promise<FriendRequestEntity> {
-    const doc =
-      await this._appwriteAdmin.database.updateDocument<FriendRequestEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.friendInvitation,
-        docId,
-        updates,
-      );
+    const doc = await this._prisma.friendInvitation.update({
+      where: {
+        id: docId,
+      },
+      data: {
+        status: updates.status,
+      },
+      include: {
+        receiver: true,
+        sender: true,
+      },
+    });
     return new FriendRequestEntity(doc);
   }
 
@@ -142,47 +176,91 @@ export class FriendRepositoryImpl implements FriendRepository {
     sender: ID,
     receiver: ID,
   ): Promise<FriendRequestEntity | null> {
-    const { total, documents } =
-      await this._appwriteAdmin.database.listDocuments<FriendRequestEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.friendInvitation,
-        [Query.equal('receiver', receiver), Query.equal('sender', sender)],
-      );
+    try {
+      const doc: FriendRequestEntity =
+        await this._prisma.friendInvitation.findFirstOrThrow({
+          where: {
+            senderId: sender,
+            receiverId: receiver,
+          },
+          include: {
+            sender: true,
+            receiver: true,
+          },
+        });
 
-    if (total === 0) {
+      return new FriendRequestEntity(doc);
+    } catch (error) {
       return null;
     }
-    return new FriendRequestEntity(documents[0]);
   }
 
   async getFriendRequest(requestId: string): Promise<FriendRequestEntity> {
-    const doc =
-      await this._appwriteAdmin.database.getDocument<FriendRequestEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.friendInvitation,
-        requestId,
-      );
+    try {
+      const doc: FriendRequestEntity =
+        await this._prisma.friendInvitation.findFirstOrThrow({
+          where: {
+            id: requestId,
+          },
+          include: {
+            receiver: true,
+            sender: true,
+          },
+        });
 
-    return new FriendRequestEntity(doc);
+      return new FriendRequestEntity(doc);
+    } catch (error) {
+      throw new NotFoundException(`No request found`);
+    }
   }
 
   async getFriendRequestsByReceiver(
     receiver: string,
     status?: FriendRequestStatusType,
   ): Promise<FriendRequestEntity[]> {
-    const query: string[] = [Query.equal('receiver', receiver)];
-
-    if (status) {
-      query.push(Query.equal('status', status));
-    }
-
-    const { documents } =
-      await this._appwriteAdmin.database.listDocuments<FriendRequestEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.friendInvitation,
-        query,
-      );
+    const documents: FriendRequestEntity[] =
+      await this._prisma.friendInvitation.findMany({
+        where: {
+          status,
+          receiverId: receiver,
+        },
+        include: {
+          receiver: true,
+          sender: true,
+        },
+      });
 
     return documents.map((doc) => new FriendRequestEntity(doc));
+  }
+
+  async findFriendByName(self: ID, name: string): Promise<UserEntity[]> {
+    const me = await this._prisma.userFriend.findFirst({
+      where: {
+        userId: self,
+      },
+      include: {
+        friends: true,
+      },
+    });
+
+    if (me === null) {
+      throw new InternalServerErrorException(
+        'You forgot to seed user friend on user create!',
+      );
+    }
+
+    const friends = me.friends.map((user) => user.id);
+    const users: UserEntity[] = await this._prisma.user.findMany({
+      where: {
+        id: {
+          in: friends,
+        },
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return users.map((u) => new UserEntity(u));
   }
 }

@@ -1,4 +1,4 @@
-import { Layout, ConfigProvider, theme } from 'antd';
+import { Layout, ConfigProvider, theme, Button } from 'antd';
 
 import GlobalNavbar from '@idle/chat/components/GlobalNavbar/GlobalNavbar';
 import { Outlet } from 'react-router-dom';
@@ -6,8 +6,8 @@ import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
 import ProtectedRoute from '@idle/chat/router/ProtectedRoute';
 import { FireBaseInstance } from '../Firebase';
 import { useEffect } from 'react';
-import { Account } from 'appwrite';
-import { AppWriteProvider } from '../providers/appwrite';
+// import { Account } from 'appwrite';
+// import { AppWriteProvider } from '../providers/appwrite';
 
 const { useToken } = theme;
 
@@ -36,8 +36,9 @@ export default function AppLayoutWithGnb() {
         <aside className="relative z-10 w-20">
           <GlobalNavbar />
         </aside>
+
         <Layout.Content>
-          <button
+          {/* <button
             type="button"
             onClick={async () => {
               const token = await new Account(AppWriteProvider).createJWT();
@@ -46,7 +47,7 @@ export default function AppLayoutWithGnb() {
             }}
           >
             issue token
-          </button>
+          </button> */}
           <Outlet />
         </Layout.Content>
       </Layout>

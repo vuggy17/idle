@@ -1,0 +1,76 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex"]
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DEV_DATABASE_URL")
+}
+
+model FriendInvitation {
+  id         String         @id @default(cuid()) @db.String(30)
+  status     request_status
+  senderId   String?        @map("sender_id") @db.String(30)
+  receiverId String?        @map("receiver_id") @db.String(30)
+  sender     User?          @relation("friend_invitations_sender_idTousers", fields: [senderId], references: [id], onUpdate: NoAction)
+  receiver   User?          @relation("friend_invitations_receiver_idTousers", fields: [receiverId], references: [id], onUpdate: NoAction)
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+
+  @@map("friend_invitations")
+}
+
+model Room {
+  id        String    @id @default(cuid()) @db.String(30)
+  type      room_type
+  members   User[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("rooms")
+}
+
+model UserFriend {
+  id        String   @id @default(cuid()) @db.String(30)
+  userId    String?  @unique @map("user_id") @db.String(30)
+  user      User?    @relation("user_friend_user_to_user_id", fields: [userId], references: [id], onUpdate: NoAction)
+  friends   User[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_friends")
+}
+
+model User {
+  id                          String             @id @default(cuid()) @db.String(30)
+  email                       String?
+  phone                       String?            @db.String(18)
+  name                        String
+  avatar                      String?
+  meta                        String
+  appwriteId                  String             @unique @map("appwrite_id") @db.String(30)
+  createdAt                   DateTime           @default(now()) @map("created_at")
+  updatedAt                   DateTime           @updatedAt @map("updated_at")
+  rooms                       Room[]
+  user_friends_user           UserFriend?        @relation("user_friend_user_to_user_id")
+  user_friends_friends        UserFriend[]
+  friend_invitations_sender   FriendInvitation[] @relation("friend_invitations_sender_idTousers")
+  friend_invitations_receiver FriendInvitation[] @relation("friend_invitations_receiver_idTousers")
+
+  @@index([name, meta, email])
+  @@map("users")
+}
+
+enum request_status {
+  pending
+  accepted
+  declined
+  cancelled
+}
+
+enum room_type {
+  private
+  group
+  bot
+}

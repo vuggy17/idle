@@ -1,4 +1,5 @@
 import {
+  Button,
   ConfigProvider,
   Flex,
   Menu,
@@ -10,11 +11,13 @@ import {
 import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
 import { useAtomValue } from 'jotai';
 import { currentUserAtom } from '@idle/chat/store/user';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AppPages, RouteKey } from '@idle/chat/router/routes';
 import UserProfilePopupContent from './UserProfilePopupContent';
 import NavIcon from './NavIcon';
+import { Plus } from 'iconoir-react';
+import NewChatModal from '@idle/chat/features/messaging/pages/components/newchat/NewChatModal';
 
 const { useToken } = theme;
 
@@ -61,6 +64,7 @@ function getAppNavigateMenu(
 
 export default function GlobalNavbar() {
   const currentUser = useAtomValue(currentUserAtom);
+  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const { token } = useToken();
   const location = useLocation();
 
@@ -121,21 +125,50 @@ export default function GlobalNavbar() {
             items={menuItems}
           />
         </ConfigProvider>
-        <Tooltip title={currentUser.name}>
-          <Popover
-            content={<UserProfilePopupContent user={currentUser} />}
-            trigger="click"
-            placement="rightTop"
-          >
-            <PartialAvatar
-              src={currentUser.avatar || currentUser.name}
-              shape="square"
-              size={42}
-              className="mx-auto hover:cursor-pointer"
+        <div>
+          <Tooltip title="Create conversation">
+            <Button
+              onClick={() => setIsNewChatModalOpen(true)}
+              type="primary"
+              size="large"
+              className="align-top block mx-auto mb-4 hover:rotate-45"
+              icon={
+                <Plus
+                  height={18}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    verticalAlign: '-.2em',
+                  }}
+                />
+              }
             />
-          </Popover>
-        </Tooltip>
+          </Tooltip>
+
+          <Tooltip title={currentUser.name}>
+            <Popover
+              content={<UserProfilePopupContent user={currentUser} />}
+              trigger="click"
+              placement="rightTop"
+            >
+              <PartialAvatar
+                src={currentUser.avatar || currentUser.name}
+                shape="square"
+                size={42}
+                className="mx-auto hover:cursor-pointer"
+              />
+            </Popover>
+          </Tooltip>
+        </div>
       </Flex>
+      <NewChatModal
+        width={600}
+        title="New message"
+        open={isNewChatModalOpen}
+        onCancel={() => setIsNewChatModalOpen(false)}
+        onOk={() => setIsNewChatModalOpen(true)}
+        okText="Create"
+      />
     </ConfigProvider>
   );
 }

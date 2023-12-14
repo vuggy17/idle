@@ -1,6 +1,6 @@
 import { ValueOf } from '@idle/typing';
 import { UserEntity } from '../common/user.entity';
-import { AppwriteEntity } from '../../config/baseEntity';
+import { CockroachEntity } from '../../config/baseEntity';
 
 export const FriendRequestStatus = {
   pending: 'pending',
@@ -11,10 +11,12 @@ export const FriendRequestStatus = {
 
 export type FriendRequestStatusType = ValueOf<typeof FriendRequestStatus>;
 
-export class FriendEntity extends AppwriteEntity {
-  user: UserEntity;
+export class FriendEntity extends CockroachEntity {
+  userId: string;
 
-  friends: UserEntity[];
+  user?: UserEntity;
+
+  friends?: UserEntity[];
 
   constructor(partial: Partial<FriendEntity>) {
     super(partial);

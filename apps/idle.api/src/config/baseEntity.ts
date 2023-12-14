@@ -1,33 +1,24 @@
-import { Type, Expose, Transform, Exclude } from 'class-transformer';
+import { Type, Expose, Transform } from 'class-transformer';
 import { ID } from '@idle/model';
 import { dayjs } from '../utils/dayjs';
 
-export class AppwriteEntity {
-  @Expose({
-    name: 'id',
-  })
-  $id: ID;
+export class CockroachEntity {
+  id: ID;
 
   @Type(() => Number)
   @Expose({ name: 'createdAt' })
   @Transform(({ value }) => dayjs(value).unix())
-  $createdAt: string;
+  createdAt: Date;
 
   @Type(() => Number)
   @Expose({ name: 'updatedAt' })
   @Transform(({ value }) => dayjs(value).unix())
-  $updatedAt: string;
+  updatedAt: Date;
 
-  @Exclude()
-  $databaseId: ID;
-
-  @Exclude()
-  $collectionId: string;
-
-  @Exclude()
-  $permissions: Array<string>;
-
-  constructor(partial: Partial<AppwriteEntity>) {
+  constructor(partial: Partial<CockroachEntity>) {
     Object.assign(this, partial);
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type INTERNAL_ATTRIBUTE_DO_NOT_RETURN<T = never> = T;

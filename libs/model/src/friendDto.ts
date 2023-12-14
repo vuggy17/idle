@@ -29,3 +29,9 @@ export type FriendRequestResponseDTO = {
   createdAt: TIME;
   updatedAt: TIME;
 };
+
+export type FindFriendRequestDTO = {
+  q: string;
+};
+
+export type FindFriendResponseDTO = UserDTO[];

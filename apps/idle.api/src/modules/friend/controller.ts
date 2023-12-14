@@ -1,5 +1,6 @@
 import {
   CreateFriendRequestRequestDTO,
+  FindFriendRequestDTO,
   ID,
   ModifyFriendRequestDTO,
 } from '@idle/model';
@@ -14,7 +15,7 @@ import {
 import { FriendService } from './service';
 import { Auth } from '../../config/decorators/auth';
 import { AuthUser } from '../../config/decorators/authUser';
-import { AppWriteUserEntity } from '../common/user.entity';
+import { UserEntity } from '../common/user.entity';
 
 @Auth()
 @Controller('friends')
@@ -29,11 +30,12 @@ export class FriendController {
    */
   @Post('invitation/create')
   async handleSendingFriendRequest(
-    @AuthUser() user: AppWriteUserEntity,
+    @AuthUser() user: UserEntity,
     @Body() body: CreateFriendRequestRequestDTO,
   ) {
     const receiver = body.sentTo;
-    const sender = user.$id;
+    const sender = user.id;
+
     const request = await this.friendService.createFriendRequest(
       sender,
       receiver,
@@ -43,6 +45,7 @@ export class FriendController {
 
   @Get('invitation')
   async getFriendRequest(@Query('id') requestId: ID) {
+    if (!requestId) throw new BadRequestException('Missing request id');
     return this.friendService.getFriendRequest(requestId);
   }
 
@@ -62,7 +65,15 @@ export class FriendController {
   }
 
   @Get('invitations')
-  async getAllFriendInvitation(@AuthUser() user: AppWriteUserEntity) {
-    return this.friendService.getAllFriendRequest(user.$id, 'pending');
+  async getAllFriendInvitation(@AuthUser() user: UserEntity) {
+    return this.friendService.getAllFriendRequest(user.id, 'pending');
+  }
+
+  @Get()
+  async findFriends(
+    @AuthUser() user: UserEntity,
+    @Query() { q }: FindFriendRequestDTO,
+  ) {
+    return this.friendService.findFriendByName(q, user.id);
   }
 }

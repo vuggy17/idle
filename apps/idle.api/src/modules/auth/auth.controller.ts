@@ -8,7 +8,7 @@ import {
   AppWriteProvider,
 } from '../../infra/appwrite';
 import { Auth } from '../../config/decorators/auth';
-import { AppWriteUserEntity } from '../common/user.entity';
+import { UserEntity } from '../common/user.entity';
 import { AuthUser } from '../../config/decorators/authUser';
 import { UserRepository } from '../user/repository';
 
@@ -34,7 +34,7 @@ export class AuthController {
   }
 
   @Get('me')
-  async getMe(@AuthUser() user: AppWriteUserEntity) {
-    return this._userRepository.getById(user.$id);
+  async getMe(@AuthUser() user: UserEntity) {
+    return this._userRepository.getById(user.id);
   }
 }

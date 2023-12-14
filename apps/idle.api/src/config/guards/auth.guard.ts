@@ -11,13 +11,14 @@ import {
 } from '../../infra/appwrite';
 import { HeaderGetter } from '../../utils/headerGetter';
 import { AggregateByTenantContextIdStrategy } from '../ContextIdStrategy';
-import { AppWriteUserEntity } from '../../modules/common/user.entity';
+import { AuthRepository } from '../../modules/auth/auth.repository';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     @Inject(DisposableAppWriteClient)
     private readonly appwrite: AppWriteProvider,
+    private readonly _authRepository: AuthRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -27,8 +28,9 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload: AppWriteUserEntity = await this.appwrite.account.get();
-      request.user = payload;
+      const payload = await this.appwrite.account.get();
+      const user = await this._authRepository.findUserByAppWriteId(payload.$id);
+      request.user = user;
     } catch (error) {
       if ('type' in error && error.type === 'user_jwt_invalid') {
         const userId = HeaderGetter.getUserId(request);

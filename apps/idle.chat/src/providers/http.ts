@@ -14,6 +14,11 @@ import {
   CreateFriendRequestRequestDTO,
   ModifyFriendRequestDTO,
   FriendRequestResponseDTO,
+  FindFriendRequestDTO,
+  FindFriendResponseDTO,
+  CreatePrivateRoomRequestDTO,
+  RoomDTO,
+  CreateRoomResponseDTO,
 } from '@idle/model';
 import { Account } from 'appwrite';
 import { WithAbortSignal } from '../type';
@@ -186,6 +191,27 @@ export class HttpClient {
       body,
     );
     return result.data;
+  }
+
+  async findFriends(
+    query: FindFriendRequestDTO,
+  ): Promise<FindFriendResponseDTO> {
+    const apiQuery = new URLSearchParams({ q: query.q }).toString();
+    const response = await this.client.get<FindFriendResponseDTO>(
+      `friends?${apiQuery}`,
+    );
+    return response.data;
+  }
+
+  // async findRoomByMemberList(): Promise<RoomDTO[]> {}
+  async createRoom(
+    body: CreatePrivateRoomRequestDTO,
+  ): Promise<CreateRoomResponseDTO> {
+    const response = await this.client.post<CreateRoomResponseDTO>(
+      'rooms',
+      body,
+    );
+    return response.data;
   }
 }
 

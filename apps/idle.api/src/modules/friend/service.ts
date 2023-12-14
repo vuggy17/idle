@@ -24,7 +24,7 @@ export class FriendService {
     // If request exists, update it, otherwise create a new one
     const request = existedRequest
       ? await this.updateFriendRequest(
-          existedRequest.$id,
+          existedRequest.id,
           FriendRequestStatus.pending,
         )
       : await this.createNewFriendRequest(sender, receiver);
@@ -45,12 +45,12 @@ export class FriendService {
     // make friend
     const jobs = [
       this._friendRequestRepository.addFriend(
-        request.receiver.$id,
-        request.sender.$id,
+        request.receiver.id,
+        request.sender.id,
       ),
       this._friendRequestRepository.addFriend(
-        request.sender.$id,
-        request.receiver.$id,
+        request.sender.id,
+        request.receiver.id,
       ),
     ];
     await Promise.all(jobs);
@@ -84,6 +84,14 @@ export class FriendService {
       );
 
     return requests;
+  }
+
+  async findFriendByName(name: string, requester: ID) {
+    const friends = await this._friendRequestRepository.findFriendByName(
+      requester,
+      name,
+    );
+    return friends;
   }
 
   private async updateFriendRequest(

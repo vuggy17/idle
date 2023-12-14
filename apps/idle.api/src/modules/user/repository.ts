@@ -1,12 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import { Inject } from '@nestjs/common';
-import { Query } from 'node-appwrite';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ID } from '@idle/model';
-import {
-  PersistentAppWriteProvider,
-  AppWriteProvider,
-} from '../../infra/appwrite';
 import { UserEntity } from '../common/user.entity';
+import { PrismaProvider } from '../../infra/prisma/prisma.provider';
 
 export abstract class UserRepository {
   abstract findMany(query: string): Promise<UserEntity[]>;
@@ -14,39 +10,38 @@ export abstract class UserRepository {
   abstract getAll(): Promise<UserEntity[]>;
 }
 
+@Injectable()
 export class UserRepositoryImpl implements UserRepository {
-  constructor(
-    @Inject(PersistentAppWriteProvider)
-    private readonly appwriteAdmin: AppWriteProvider,
-  ) {}
+  constructor(private readonly _prisma: PrismaProvider) {}
 
   async getById(id: ID): Promise<UserEntity> {
-    const doc = await this.appwriteAdmin.database.getDocument<UserEntity>(
-      AppWriteProvider.defaultDatabaseId,
-      AppWriteProvider.projectDbCollections.chat.user,
-      id,
-    );
+    try {
+      const doc = await this._prisma.user.findFirstOrThrow({
+        where: {
+          id,
+        },
+      });
 
-    return new UserEntity(doc);
+      return new UserEntity(doc);
+    } catch (error) {
+      throw new BadRequestException(`Cannot find user with id: ${id}`);
+    }
   }
 
   async findMany(query: string): Promise<UserEntity[]> {
-    const { documents } =
-      await this.appwriteAdmin.database.listDocuments<UserEntity>(
-        AppWriteProvider.defaultDatabaseId,
-        AppWriteProvider.projectDbCollections.chat.user,
-        [Query.search('meta', query)],
-      );
+    const documents = await this._prisma.user.findMany({
+      where: {
+        meta: {
+          contains: query,
+        },
+      },
+    });
 
     return documents.map((doc) => new UserEntity(doc));
   }
 
   async getAll(): Promise<UserEntity[]> {
-    const doc = await this.appwriteAdmin.database.listDocuments<UserEntity>(
-      AppWriteProvider.defaultDatabaseId,
-      AppWriteProvider.projectDbCollections.chat.user,
-    );
-
-    return doc.documents.map((doc) => new UserEntity(doc));
+    const documents = await this._prisma.user.findMany();
+    return documents.map((doc) => new UserEntity(doc));
   }
 }

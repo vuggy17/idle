@@ -1,0 +1,42 @@
+[
+  {
+    "email": "devtest@gmail.com",
+    "phone": "",
+    "name": "primary user",
+    "meta": "dev test user devtest@gmail.com ",
+    "avatar": "",
+    "appwriteId":"654b5ff6a20b3ba2f183"
+  },
+  {
+    "email": "duy@gmail.com",
+    "phone": "",
+    "name": "user duy vu dang khuong ",
+    "meta": "user duy vu dang khuong  duy@gmail.com ",
+    "avatar": "",
+    "appwriteId":"655a1bd717a1156feb03"
+  },
+  {
+    "email": "devtest12@gmail.com",
+    "phone": "",
+    "name": "tett user",
+    "meta": "tett user devtest12@gmail.com ",
+    "avatar": "",
+    "appwriteId":"6571a60c4515d969f4b2"
+  },
+  {
+    "email": "dev1test@gmail.com",
+    "phone": "",
+    "name": "user appwrite dev",
+    "meta": "user appwrite dev dev1test@gmail.com ",
+    "avatar": "",
+    "appwriteId":"6576ccb7bb65f5a59d6d"
+  },
+  {
+    "email": "vuggy17@gmail.com",
+    "phone": "",
+    "name": "user test",
+    "meta": "user test vuggy17@gmail.com ",
+    "avatar": "",
+    "appwriteId":"65783f2667e49368e9f6"
+  }
+]

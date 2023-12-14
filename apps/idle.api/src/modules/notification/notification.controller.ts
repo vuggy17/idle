@@ -3,7 +3,7 @@ import { SaveFCMTokenRequestDTO } from '@idle/model';
 import { FCMTokenRepository } from '../../config/repository';
 import { FCMTokenRepositoryImpl } from './FCMToken.repository';
 import { AuthUser } from '../../config/decorators/authUser';
-import { AppWriteUserEntity } from '../common/user.entity';
+import { UserEntity } from '../common/user.entity';
 import { Auth } from '../../config/decorators/auth';
 
 @Auth()
@@ -22,8 +22,8 @@ export class NotificationController {
   }
 
   @Get('fcm')
-  async get(@AuthUser() user: AppWriteUserEntity) {
+  async get(@AuthUser() user: UserEntity) {
     console.log('auth user', user);
-    return this.FCMTokenRepo.get(user.$id);
+    return this.FCMTokenRepo.get(user.id);
   }
 }

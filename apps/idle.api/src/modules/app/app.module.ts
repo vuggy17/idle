@@ -7,9 +7,9 @@ import envSchema from '../../config/schema';
 import { AuthModule } from '../auth/auth.module';
 import { AppWriteModule } from '../../infra/appwrite';
 import { UserModule } from '../user/user.module';
-import { FirebaseModule } from '../../infra/firebase/firebase.module';
-import { NotificationModule } from '../notification/notification.module';
 import { FriendModule } from '../friend/module';
+import { RoomModule } from '../room/room.module';
+import { PrismaModule } from '../../infra/prisma';
 
 @Module({
   imports: [
@@ -20,6 +20,7 @@ import { FriendModule } from '../friend/module';
     }),
     // infra
     AppWriteModule,
+    PrismaModule,
     // FirebaseModule,
 
     // functional
@@ -27,6 +28,7 @@ import { FriendModule } from '../friend/module';
     UserModule,
     // NotificationModule,
     FriendModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

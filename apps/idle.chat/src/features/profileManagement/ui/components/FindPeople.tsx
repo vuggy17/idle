@@ -34,6 +34,7 @@ import GetUserSearchResultUseCase from '../../useCases/getUserSearchResult';
 import { PartialBy } from '@idle/chat/type';
 import PeopleSearchResult from './PeopleSearchResult';
 import FriendSearchResult from './FriendSearchResult';
+import SearchWithPopup from '@idle/chat/components/SearchWithPopup/SearchWithPopup';
 
 const { useToken } = theme;
 async function getSearchSuggestions(
@@ -72,7 +73,6 @@ export function FindPeople() {
   const [delayedQuery] = useDebounce(nameQuery, 300);
 
   // search suggestions state
-  const [resultSuggestionOpen, setResultSuggestionOpen] = useState(false);
   const [searchSuggestions, setSearchSuggestions] =
     useState<GetUserSearchSuggestionResponseDTO>([]);
 
@@ -88,26 +88,9 @@ export function FindPeople() {
     | undefined
   >();
 
-  // reference to suggestion popup
-  const suggestionPopupRef = useRef<HTMLDivElement>(null);
-  useClickOutsideListener(
-    suggestionPopupRef,
-    useCallback(() => {
-      setResultSuggestionOpen(false);
-    }, []),
-  );
-
   // when user press enter or press search button manually
   const onSearch = async (query: string) => {
-    setResultSuggestionOpen(false);
     await getSearchResult(query, new AbortController().signal, setSearchResult);
-  };
-
-  const onPressEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    const searchElm = e.target as HTMLInputElement;
-    const searchText = searchElm.value;
-
-    onSearch(searchText);
   };
 
   const onCloseProfileDetailView = useCallback(
@@ -140,23 +123,11 @@ export function FindPeople() {
       ).finally(() => setSearching(false));
     } else {
       setSearchSuggestions([]);
-      setResultSuggestionOpen(false);
     }
     return () => {
       abortSignal.abort();
     };
   }, [delayedQuery]);
-
-  const contentStyle: React.CSSProperties = {
-    backgroundColor: token.colorBgElevated,
-    borderRadius: token.borderRadiusLG,
-    boxShadow: token.boxShadowSecondary,
-    cursor: 'pointer',
-  };
-
-  // hide suggestion popup conditions derived from component state
-  const hasAnySearchSuggestions = searchSuggestions.length > 0;
-  const didUserTyped = !!nameQuery;
 
   const shouldOpenProfileViewModal = !!userProfileToView;
 
@@ -181,95 +152,33 @@ export function FindPeople() {
         <div className="max-w-5xl mx-auto mt-36 px-20">
           {/* search input */}
           <Typography.Title level={4}>All people</Typography.Title>
-          <div ref={suggestionPopupRef}>
-            <Dropdown
-              getPopupContainer={() =>
-                suggestionPopupRef.current as HTMLDivElement
-              }
-              trigger={[]}
-              open={resultSuggestionOpen}
-              placement="bottom"
-              arrow={false}
-              menu={{
-                style: {
-                  maxHeight: 320,
-                  overflow: 'auto',
-                },
-                items: searchSuggestions.map((user) => ({
-                  key: user.name,
-                  label: (
-                    <UserCard
-                      name={user.name}
-                      userName={user.name}
-                      avatar={user.avatar}
-                    />
-                  ),
-                  'data-testid': 'find-people-suggestion-item',
-                })),
-                onClick: ({ key }) => {
-                  // find user to select
-                  const profileToView = searchSuggestions.find(
-                    (suggestion) => suggestion.name === key,
-                  );
-                  setUserProfileToView(profileToView);
-                  setResultSuggestionOpen(false);
-                },
-              }}
-              dropdownRender={(menu) => (
-                <div
-                  style={contentStyle}
-                  data-testid="find-people-suggestion-popup"
-                >
-                  <Space
-                    className="w-full justify-between hover:font-semibold"
-                    onClick={() => {
-                      if (nameQuery) onSearch(nameQuery);
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && nameQuery) {
-                        onSearch(nameQuery);
-                      }
-                    }}
-                  >
-                    <Space style={{ padding: 8 }}>
-                      <Typography.Text strong>Search: </Typography.Text>
-                      <Typography.Text data-testid="find-people-search-phrase">
-                        {nameQuery}
-                      </Typography.Text>
-                    </Space>
-                    {searching ? <Spin size="small" className="mr-4" /> : null}
-                  </Space>
-                  <Divider style={{ margin: 0 }} />
-                  {cloneElement(menu as React.ReactElement)}
-                </div>
-              )}
-            >
-              <Input
-                data-testid="search-people-input"
-                onKeyDown={(e) => {
-                  // open popup when user is typing
-                  if (!resultSuggestionOpen) setResultSuggestionOpen(true);
-                  if (e.key === 'Enter') onPressEnter(e);
-                }}
-                spellCheck={false}
-                onFocus={() => {
-                  setResultSuggestionOpen(
-                    didUserTyped || hasAnySearchSuggestions,
-                  );
-                }}
-                onClick={() => {
-                  if (nameQuery) setResultSuggestionOpen(true);
-                }}
-                onChange={(e) => {
-                  setNameQuery(e.target.value);
-                }}
-                size="large"
-                placeholder="Search for people"
-              />
-            </Dropdown>
-          </div>
+
+          <SearchWithPopup
+            value={nameQuery}
+            onChange={(query) => {
+              setNameQuery(query)
+            }}
+            loading={searching}
+            onSearch={onSearch}
+            options={searchSuggestions.map((user) => ({
+              key: user.name,
+              label: (
+                <UserCard
+                  name={user.name}
+                  userName={user.name}
+                  avatar={user.avatar}
+                />
+              ),
+              'data-testid': 'find-people-suggestion-item',
+            }))}
+            onItemClick={({ key }) => {
+              const profileToView = searchSuggestions.find(
+                (suggestion) => suggestion.name === key,
+              );
+              setUserProfileToView(profileToView);
+            }}
+          />
+
 
           {searchResult && searchResult.length > 0 ? (
             <ConfigProvider
@@ -294,8 +203,7 @@ export function FindPeople() {
                 <List
                   data-testid="find-people-friend-list"
                   footer={
-                    friendList &&
-                    friendList.length > FRIEND_LIST_MAX_LENGTH ? (
+                    friendList && friendList.length > FRIEND_LIST_MAX_LENGTH ? (
                       <div className="text-center">
                         <Button
                           block

@@ -1,15 +1,22 @@
 import { ValueOf } from '@idle/typing';
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
+import { ID } from '@idle/model';
 import { UserEntity } from './user.entity';
-import { AppwriteEntity } from '../../config/baseEntity';
+import { CockroachEntity } from '../../config/baseEntity';
 import { FriendRequestStatus } from '../friend/entities';
 
 /**
  * This should match {@linkcode CreateFriendRequestResponseDTO}
  */
 
-export class FriendRequestEntity extends AppwriteEntity {
+export class FriendRequestEntity extends CockroachEntity {
   status: ValueOf<typeof FriendRequestStatus>;
+
+  @Exclude()
+  senderId: ID;
+
+  @Exclude()
+  receiverId: ID;
 
   @Type(() => UserEntity)
   sender: UserEntity;

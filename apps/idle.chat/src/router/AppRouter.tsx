@@ -7,11 +7,11 @@ import { AppRoutes, AppSubPages } from './routes';
 
 const router = createBrowserRouter([
   {
-    lazy: () => import('@idle/chat/app/AppLayoutWithGnb'),
+    lazy: () => import('../app/AppLayoutWithGnb'),
     children: [
       {
         path: AppRoutes.home.key,
-        lazy: () => import('@idle/chat/features/chat/pages/index'),
+        lazy: () => import('../features/messaging/pages/index'),
       },
       {
         path: AppRoutes.dm.key,
@@ -19,28 +19,23 @@ const router = createBrowserRouter([
       },
       {
         path: AppRoutes.activity.key,
-        lazy: () =>
-          import('@idle/chat/features/notifications/ui/NotificationCenter'),
+        lazy: () => import('../features/notifications/ui/NotificationCenter'),
       },
       {
         path: AppRoutes.discover.key,
         lazy: () =>
-          import(
-            '@idle/chat/features/profileManagement/ui/pages/DiscoverLayout'
-          ),
+          import('../features/profileManagement/ui/pages/DiscoverLayout'),
         children: [
           {
             index: true,
             lazy: () =>
-              import(
-                '@idle/chat/features/profileManagement/ui/components/FindPeople'
-              ),
+              import('../features/profileManagement/ui/components/FindPeople'),
           },
           {
             path: AppSubPages.discover_request,
             lazy: () =>
               import(
-                '@idle/chat/features/profileManagement/ui/components/FriendInvitation'
+                '../features/profileManagement/ui/components/FriendInvitation'
               ).then((res) => ({
                 Component: res.Component,
                 loader: res.Loader,
@@ -52,7 +47,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    lazy: () => import('@idle/chat/features/auth/ui/pages/Login'),
+    lazy: () => import('../features/auth/ui/pages/Login'),
   },
   {
     path: '/',
@@ -60,7 +55,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'register',
-    lazy: () => import('@idle/chat/features/auth/ui/pages/Register'),
+    lazy: () => import('../features/auth/ui/pages/Register'),
   },
   {
     path: '*',

@@ -17,6 +17,7 @@
   ],
   "include": [
     "src/**/*.ts",
-    "typing.d.ts"
+    "typing.d.ts",
+    "backup/**/*.json"
   ]
 }
