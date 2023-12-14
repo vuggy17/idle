@@ -30,6 +30,10 @@ export abstract class FriendRepository {
     receiver: ID,
   ): Promise<FriendRequestEntity>;
   abstract getFriendRequest(requestId: ID): Promise<FriendRequestEntity>;
+  abstract getFriendRequestsByReceiver(
+    receiver: ID,
+    status?: FriendRequestStatusType,
+  ): Promise<FriendRequestEntity[]>;
   // #endregion
 
   // #region friend
@@ -160,5 +164,25 @@ export class FriendRepositoryImpl implements FriendRepository {
       );
 
     return new FriendRequestEntity(doc);
+  }
+
+  async getFriendRequestsByReceiver(
+    receiver: string,
+    status?: FriendRequestStatusType,
+  ): Promise<FriendRequestEntity[]> {
+    const query: string[] = [Query.equal('receiver', receiver)];
+
+    if (status) {
+      query.push(Query.equal('status', status));
+    }
+
+    const { documents } =
+      await this._appwriteAdmin.database.listDocuments<FriendRequestEntity>(
+        AppWriteProvider.defaultDatabaseId,
+        AppWriteProvider.projectDbCollections.chat.friendInvitation,
+        query,
+      );
+
+    return documents.map((doc) => new FriendRequestEntity(doc));
   }
 }
