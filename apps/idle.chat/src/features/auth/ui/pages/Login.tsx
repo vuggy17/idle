@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
 import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
-import useAuth from '@idle/chat/hooks/useAuth';
 import { AppRoutes } from '@idle/chat/router/routes';
+import useAuth from '@idle/chat/services/useAuth';
 import LoginForm, { LoginFormData } from '../components/LoginForm';
 
 // test user
 const testUserRegisterInfo: LoginFormData = {
   email: 'devtest@gmail.com',
-  password: 'Zg92K2jHN8rkbW',
+  password: 'alphine123',
 };
 
 function Login() {

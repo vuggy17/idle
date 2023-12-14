@@ -1,17 +1,19 @@
 import { UseCase } from '@idle/chat/type';
 import { RegisterUserRequestDTO, RegisterUserResponseDTO } from '@idle/model';
-import { AuthServiceImpl } from '@idle/chat/services/authService';
-import { UserRepository } from '../repositories/userRepository';
+import {
+  AuthRepository,
+  AuthServiceImpl,
+} from '../repositories/authRepository';
 
 export default class RegisterUseCase
   implements UseCase<RegisterUserRequestDTO, RegisterUserResponseDTO>
 {
-  constructor(private userRepository: UserRepository = AuthServiceImpl) {}
+  constructor(private userRepository: AuthRepository = AuthServiceImpl) {}
 
   async execute(
     registerInfo: RegisterUserRequestDTO,
   ): Promise<RegisterUserResponseDTO> {
     const baseUserInfo = await this.userRepository.register(registerInfo);
-    return { ...baseUserInfo, avatar: '' };
+    return baseUserInfo;
   }
 }

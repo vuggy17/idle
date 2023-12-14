@@ -1,19 +1,16 @@
+import { UserDTO } from '@idle/model';
 import { atom } from 'jotai';
 
-type User = {
-  $id: string;
-  email: string;
-  name: string;
-  phone: string;
-  avatar?: string;
-};
+type User = UserDTO;
 
 const guest: User = {
-  $id: '',
+  id: '',
   email: 'guest',
   name: 'guest',
   phone: 'guest',
   avatar: '',
+  createdAt: -1,
+  updatedAt: -1,
 };
 
 const userAtom = atom<User>(guest);

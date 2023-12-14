@@ -1,12 +1,14 @@
 import { UseCase } from '@idle/chat/type';
 import { LoginUserRequestDTO, LoginUserResponseDTO } from '@idle/model';
-import { AuthServiceImpl } from '@idle/chat/services/authService';
-import { UserRepository } from '../repositories/userRepository';
+import {
+  AuthRepository,
+  AuthServiceImpl,
+} from '../repositories/authRepository';
 
 export default class LoginUseCase
   implements UseCase<LoginUserRequestDTO, LoginUserResponseDTO>
 {
-  constructor(private userRepository: UserRepository = AuthServiceImpl) {}
+  constructor(private userRepository: AuthRepository = AuthServiceImpl) {}
 
   async execute({
     email,

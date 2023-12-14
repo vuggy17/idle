@@ -1,19 +1,11 @@
 import { createStore } from 'jotai';
-import { AuthServiceImpl } from '@idle/chat/services/authService';
+import { AuthServiceImpl } from '@idle/chat/features/auth/repositories/authRepository';
 import { currentUserAtom } from '@idle/chat/store/user';
 
-const guest = {
-  $id: '',
-  email: 'guest',
-  name: 'guest',
-  phone: 'guest',
-};
 export default async function setup(store: ReturnType<typeof createStore>) {
+  const authProvider = AuthServiceImpl;
   try {
-    const authProvider = AuthServiceImpl;
     const currentLoggedInUser = await authProvider.getCurrentUser();
     store.set(currentUserAtom, currentLoggedInUser);
-  } catch (error) {
-    store.set(currentUserAtom, guest);
-  }
+  } catch (error) {} // prevent crash when a new user is opening the app
 }

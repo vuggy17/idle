@@ -1,8 +1,6 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 
 import {
-  DeclineFriendRequestResponseDTO,
-  AcceptFriendRequestResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
   DeactivateAccountRequestDTO,
@@ -12,13 +10,53 @@ import {
   SaveFCMTokenRequestDTO,
   GetUserSearchSuggestionRequestDTO,
   GetUserSearchResultRequestDTO,
+  UserDTO,
+  CreateFriendRequestRequestDTO,
+  ModifyFriendRequestDTO,
+  FriendRequestResponseDTO,
 } from '@idle/model';
+import { Account } from 'appwrite';
 import { WithAbortSignal } from '../type';
+import { AppWriteProvider } from './appwrite';
 
 const API_PREFIX = '/api/';
 const axiosClient = axios.create({
   baseURL: API_PREFIX,
 });
+
+axiosClient.interceptors.request.use((config) => {
+  const tokenOrNull = localStorage.getItem('jwt') ?? '';
+  const userIdOrNull = localStorage.getItem('user_id') ?? '';
+  if (tokenOrNull) {
+    config.headers.setAuthorization(`Bearer ${JSON.parse(tokenOrNull)}`);
+  }
+  if (userIdOrNull) {
+    config.headers.set('x-user-id', JSON.stringify(userIdOrNull));
+  }
+  return config;
+});
+axiosClient.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config!;
+    const { response } = error;
+    if (
+      response?.status === 401 &&
+      (response?.data as any).type === 'user_jwt_invalid'
+    ) {
+      // get new token
+      const token = await new Account(AppWriteProvider).createJWT();
+      localStorage.setItem('jwt', JSON.stringify(token.jwt));
+      try {
+        const retry = await axiosClient(originalRequest);
+        return retry;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return Promise.reject(error);
+  },
+);
 
 export class HttpClient {
   /**
@@ -92,14 +130,14 @@ export class HttpClient {
   ): Promise<GetFriendRequestStatusResponseDTO> {
     const query = new URLSearchParams({ id: requestId }).toString();
     const result = await this.client.get<GetFriendRequestStatusResponseDTO>(
-      `invitation?${query}`,
+      `friends/invitation?${query}`,
     );
     return result.data;
   }
 
   async acceptFriendRequest(requestId: string) {
-    const result = await this.client.post<AcceptFriendRequestResponseDTO>(
-      'invitation',
+    const result = await this.client.post<FriendRequestResponseDTO>(
+      'friends/invitation',
       {
         action: 'accept',
         requestId,
@@ -109,8 +147,8 @@ export class HttpClient {
   }
 
   async declineFriendRequest(requestId: string) {
-    const result = await this.client.post<DeclineFriendRequestResponseDTO>(
-      'invitation',
+    const result = await this.client.post<FriendRequestResponseDTO>(
+      'friends/invitation',
       {
         action: 'decline',
         requestId,
@@ -123,6 +161,29 @@ export class HttpClient {
     return this.client.post<unknown>('notification/fcm', {
       body,
     });
+  }
+
+  async getMe(): Promise<UserDTO> {
+    const result = await this.client.get<UserDTO>('auth/me');
+    return result.data;
+  }
+
+  async sendFriendRequest(body: CreateFriendRequestRequestDTO) {
+    const result = await this.client.post<FriendRequestResponseDTO>(
+      'friends/invitation/create',
+      body,
+    );
+    return result.data;
+  }
+
+  async modifyFriendRequest(
+    body: ModifyFriendRequestDTO,
+  ): Promise<FriendRequestResponseDTO> {
+    const result = await this.client.post<FriendRequestResponseDTO>(
+      'friends/invitation',
+      body,
+    );
+    return result.data;
   }
 }
 
