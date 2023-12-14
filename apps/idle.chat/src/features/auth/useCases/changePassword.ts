@@ -3,13 +3,15 @@ import {
   ChangePasswordRequestDTO,
   ChangePasswordResponseDTO,
 } from '@idle/model';
-import { AuthServiceImpl } from '@idle/chat/services/authService';
-import { UserRepository } from '../repositories/userRepository';
+import {
+  AuthRepository,
+  AuthServiceImpl,
+} from '../repositories/authRepository';
 
 export default class ChangePasswordUseCase
   implements UseCase<ChangePasswordRequestDTO, ChangePasswordResponseDTO>
 {
-  constructor(private userRepository: UserRepository = AuthServiceImpl) {}
+  constructor(private userRepository: AuthRepository = AuthServiceImpl) {}
 
   async execute(
     data: ChangePasswordRequestDTO,

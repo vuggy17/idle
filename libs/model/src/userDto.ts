@@ -1,5 +1,5 @@
 import { ID, TIME } from './common';
-import { CreateFriendRequestResponseDTO } from './friendDto';
+import { FriendRequestResponseDTO } from './friendDto';
 
 export type GetUserSearchSuggestionRequestDTO = {
   q: string;
@@ -27,5 +27,5 @@ export type GetUserSearchResultResponseDTO = {
    */
   hasPendingRequest: boolean;
 
-  pendingFriendRequest: CreateFriendRequestResponseDTO | null;
+  pendingFriendRequest: FriendRequestResponseDTO | null;
 }[];

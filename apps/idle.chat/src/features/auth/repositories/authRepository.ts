@@ -1,16 +1,30 @@
-import { Account, ID } from 'appwrite';
 import {
+  ChangePasswordResponseDTO,
   DeactivateAccountResponseDTO,
   LoginUserResponseDTO,
   RegisterUserRequestDTO,
   RegisterUserResponseDTO,
   UserDTO,
 } from '@idle/model';
-import { UserRepository } from '@idle/chat/features/auth/repositories/userRepository';
+
+import { Account, ID, Models } from 'appwrite';
 import { AppWriteProvider } from '@idle/chat/providers/appwrite';
 import HttpProvider, { HttpClient } from '@idle/chat/providers/http';
 
-export default class AuthService implements UserRepository {
+export interface AuthRepository {
+  register(userData: RegisterUserRequestDTO): Promise<RegisterUserResponseDTO>;
+  login(email: string, password: string): Promise<LoginUserResponseDTO>;
+  getCurrentUser(): Promise<UserDTO>;
+  logout(sessionId: string): Promise<void>;
+  changePassword(
+    currentPass: string,
+    newPass: string,
+  ): Promise<ChangePasswordResponseDTO>;
+  disableAccount(accId: string): Promise<DeactivateAccountResponseDTO>;
+  createAuthToken(): Promise<string>;
+}
+
+export default class AuthRepositoryImpl1 implements AuthRepository {
   constructor(
     private accountGateway: Account,
     private httpGateway: HttpClient,
@@ -41,7 +55,9 @@ export default class AuthService implements UserRepository {
    * @return current logged in user
    */
   async getCurrentUser(): Promise<UserDTO> {
-    return this.accountGateway.get();
+    const user = await this.httpGateway.getMe();
+
+    return user;
   }
 
   /**
@@ -51,7 +67,10 @@ export default class AuthService implements UserRepository {
     await this.accountGateway.deleteSession(sessionId);
   }
 
-  async changePassword(currentPass: string, newPass: string): Promise<UserDTO> {
+  async changePassword(
+    currentPass: string,
+    newPass: string,
+  ): Promise<Models.User<Models.Preferences>> {
     return this.accountGateway.updatePassword(newPass, currentPass);
   }
 
@@ -61,9 +80,14 @@ export default class AuthService implements UserRepository {
     });
     return result.data;
   }
+
+  async createAuthToken(): Promise<string> {
+    const token = await this.accountGateway.createJWT();
+    return token.jwt;
+  }
 }
 
-export const AuthServiceImpl = new AuthService(
+export const AuthServiceImpl = new AuthRepositoryImpl1(
   new Account(AppWriteProvider),
   HttpProvider,
 );

@@ -14,8 +14,8 @@ import {
 import ModalFallback from '@idle/chat/components/Fallbacks/ModalFallback';
 import UserCard from '@idle/chat/components/UserCard';
 import { User } from '@idle/chat/features/auth/entities/user';
-import useAuth from '@idle/chat/hooks/useAuth';
 import { lazy, useState, Suspense } from 'react';
+import useAuth from '@idle/chat/services/useAuth';
 import SetsStatusModal from './SetStatusModal';
 
 const PreferencePage = lazy(

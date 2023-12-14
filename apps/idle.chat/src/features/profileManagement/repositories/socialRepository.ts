@@ -1,12 +1,12 @@
 import {
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
-  DeclineFriendRequestResponseDTO,
-  AcceptFriendRequestResponseDTO,
   GetUserSearchSuggestionRequestDTO,
   GetUserSearchSuggestionResponseDTO,
   GetUserSearchResultRequestDTO,
   GetUserSearchResultResponseDTO,
+  ID,
+  FriendRequestResponseDTO,
 } from '@idle/model';
 
 export interface SocialRepository {
@@ -26,11 +26,11 @@ export interface SocialRepository {
     requestId: string,
   ): Promise<GetFriendRequestStatusResponseDTO>;
 
-  acceptFriendRequest(
-    requestId: string,
-  ): Promise<AcceptFriendRequestResponseDTO>;
+  acceptFriendRequest(requestId: string): Promise<FriendRequestResponseDTO>;
 
-  declineFriendRequest(
-    requestId: string,
-  ): Promise<DeclineFriendRequestResponseDTO>;
+  declineFriendRequest(requestId: string): Promise<FriendRequestResponseDTO>;
+
+  cancelFriendRequest(requestId: string): Promise<FriendRequestResponseDTO>;
+
+  createFriendRequest(receiver: ID): Promise<FriendRequestResponseDTO>;
 }

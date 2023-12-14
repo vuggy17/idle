@@ -1,17 +1,14 @@
 import { SocialServiceImpl } from '@idle/chat/services/socialService';
-import {
-  AcceptFriendRequestResponseDTO,
-  DeclineFriendRequestResponseDTO,
-} from '@idle/model';
+import { FriendRequestResponseDTO } from '@idle/model';
 import { UseCase } from '@idle/chat/type';
 import { SocialRepository } from '../repositories/socialRepository';
 
 type Input = {
   requestId: string;
-  action: 'decline' | 'accept';
+  action: 'decline' | 'accept' | 'cancel';
 };
 
-type Output = DeclineFriendRequestResponseDTO | AcceptFriendRequestResponseDTO;
+type Output = FriendRequestResponseDTO;
 
 /**
  * Accept friend request of a user
@@ -28,14 +25,19 @@ export default class ModifyFriendRequestUseCase
   ) {}
 
   async execute({ requestId, action }: Input): Promise<Output> {
-    const { isValid } =
+    const request =
       await this.socialRepository.getFriendRequestStatus(requestId);
+
+    // A request is valid when it is in pending state
+    const isValid = request.status === 'pending';
 
     if (isValid) {
       if (action === 'accept')
         return this.socialRepository.acceptFriendRequest(requestId);
       if (action === 'decline')
         return this.socialRepository.declineFriendRequest(requestId);
+      if (action === 'cancel')
+        return this.socialRepository.cancelFriendRequest(requestId);
     }
     throw new Error('Cannot accept friend request at the moment');
   }

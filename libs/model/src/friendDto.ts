@@ -8,16 +8,14 @@ export type GetPendingFriendRequestResponseDTO = {
   createdAt: TIME;
 };
 
-// A request is valid when it is not accepted or deleted
-export type GetFriendRequestStatusResponseDTO = { isValid: boolean };
-export type AcceptFriendRequestResponseDTO = UserDTO;
-export type DeclineFriendRequestResponseDTO =
-  GetPendingFriendRequestResponseDTO;
-
+export type GetFriendRequestStatusResponseDTO = FriendRequestResponseDTO;
 export type CreateFriendRequestRequestDTO = {
-  /* `sentTo` is a property in the `CreateFriendRequestRequestDTO` interface. It represents the ID of
-  the user to whom the friend request is being sent. */
   sentTo: ID;
+};
+
+export type ModifyFriendRequestDTO = {
+  requestId: ID;
+  action: 'accept' | 'decline' | 'cancel';
 };
 
 /**
@@ -28,7 +26,7 @@ export type CreateFriendRequestRequestDTO = {
  * - `cancelled`: The sender has cancelled the friend request before the recipient could respond.
  */
 type FriendRequestStatus = 'pending' | 'accepted' | 'declined' | 'cancelled';
-export type CreateFriendRequestResponseDTO = {
+export type FriendRequestResponseDTO = {
   id: ID;
   status: FriendRequestStatus;
   sender: UserDTO;

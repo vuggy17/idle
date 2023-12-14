@@ -21,19 +21,19 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-  lazy,
-  Suspense,
 } from 'react';
 import { useDebounce } from 'use-debounce';
 import useClickOutsideListener from '@idle/chat/hooks/useClickOutsideListener';
-import { SearchResultCard } from './SearchResult';
 import SearchResultModal from './SearchResultModal';
 import {
   GetUserSearchResultResponseDTO,
   GetUserSearchSuggestionResponseDTO,
+  ID,
 } from '@idle/model';
 import GetUserSearchResultUseCase from '../../useCases/getUserSearchResult';
 import { PartialBy } from '@idle/chat/type';
+import PeopleSearchResult from './PeopleSearchResult';
+import FriendSearchResult from './FriendSearchResult';
 
 const { useToken } = theme;
 async function getSearchSuggestions(
@@ -83,7 +83,7 @@ export function FindPeople() {
   const [userProfileToView, setUserProfileToView] = useState<
     | PartialBy<
         GetUserSearchResultResponseDTO[number],
-        'isFriend' | 'hasPendingRequest' | 'bio'
+        'isFriend' | 'hasPendingRequest' | 'bio' | 'pendingFriendRequest'
       >
     | undefined
   >();
@@ -100,11 +100,6 @@ export function FindPeople() {
   // when user press enter or press search button manually
   const onSearch = async (query: string) => {
     setResultSuggestionOpen(false);
-    // TODO:
-    // search for user
-    // return more detailed user information
-
-    // fake feature with current search suggestions
     await getSearchResult(query, new AbortController().signal, setSearchResult);
   };
 
@@ -119,6 +114,18 @@ export function FindPeople() {
     () => setUserProfileToView(undefined),
     [],
   );
+
+  const onFriendRequestAccepted = useCallback((userId: ID) => {
+    setSearchResult((allUsers) => {
+      const user = allUsers.find((u) => u.id === userId);
+      if (user) {
+        user.isFriend = true;
+        user.pendingFriendRequest = null;
+        user.hasPendingRequest = false;
+      }
+      return [...allUsers];
+    });
+  }, []);
 
   // get search suggestions after user typed 300ms
   useEffect(() => {
@@ -205,14 +212,9 @@ export function FindPeople() {
                     (suggestion) => suggestion.name === key,
                   );
                   setUserProfileToView(profileToView);
-                  console.log(
-                    '🚀 ~ file: FindPeople.tsx:203 ~ FindPeople ~ profileToView:',
-                    profileToView,
-                  );
                   setResultSuggestionOpen(false);
                 },
               }}
-              // eslint-disable-next-line react/no-unstable-nested-components
               dropdownRender={(menu) => (
                 <div
                   style={contentStyle}
@@ -293,7 +295,7 @@ export function FindPeople() {
                   data-testid="find-people-friend-list"
                   footer={
                     friendList &&
-                    friendList.length <= FRIEND_LIST_MAX_LENGTH ? (
+                    friendList.length > FRIEND_LIST_MAX_LENGTH ? (
                       <div className="text-center">
                         <Button
                           block
@@ -326,12 +328,13 @@ export function FindPeople() {
                   }
                   dataSource={friendList}
                   renderItem={(item) => (
-                    <SearchResultCard
+                    <FriendSearchResult
+                      id={item.id}
                       name={item.name}
                       avatar={item.avatar ?? ''}
                       key={item.name}
                       bio={item.bio ?? ''}
-                      isFriend={item.isFriend}
+                      isFriend={true}
                     />
                   )}
                 />
@@ -369,13 +372,16 @@ export function FindPeople() {
                   }
                   dataSource={people}
                   renderItem={(item) => (
-                    <SearchResultCard
+                    <PeopleSearchResult
+                      onFriendRequestAccepted={onFriendRequestAccepted}
+                      id={item.id}
                       name={item.name}
                       avatar={item.avatar ?? ''}
                       key={item.name}
                       bio={item.bio ?? ''}
                       isFriend={item.isFriend}
                       hasPendingRequest={item.hasPendingRequest}
+                      pendingFriendRequest={item.pendingFriendRequest}
                     />
                   )}
                 />

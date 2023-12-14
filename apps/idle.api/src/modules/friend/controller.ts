@@ -1,10 +1,20 @@
-import { CreateFriendRequestRequestDTO } from '@idle/model';
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  CreateFriendRequestRequestDTO,
+  ID,
+  ModifyFriendRequestDTO,
+} from '@idle/model';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { FriendService } from './service';
 import { Auth } from '../../config/decorators/auth';
 import { AuthUser } from '../../config/decorators/authUser';
 import { AppWriteUserEntity } from '../common/user.entity';
-import { FriendRequestEntity } from '../common/friendRequest.entity';
 
 @Auth()
 @Controller('friends')
@@ -15,9 +25,9 @@ export class FriendController {
    *
    * @param user
    * @param body
-   * @returns {Promise<CreateFriendRequestResponseDTO>} response
+   * @returns {Promise<FriendRequestResponseDTO>} response
    */
-  @Post('invitation')
+  @Post('invitation/create')
   async handleSendingFriendRequest(
     @AuthUser() user: AppWriteUserEntity,
     @Body() body: CreateFriendRequestRequestDTO,
@@ -28,6 +38,26 @@ export class FriendController {
       sender,
       receiver,
     );
-    return new FriendRequestEntity(request);
+    return request;
+  }
+
+  @Get('invitation')
+  async getFriendRequest(@Query('id') requestId: ID) {
+    return this.friendService.getFriendRequest(requestId);
+  }
+
+  @Post('invitation')
+  async handleUpdateFriendRequest(@Body() body: ModifyFriendRequestDTO) {
+    const { action, requestId } = body;
+    switch (action) {
+      case 'accept':
+        return this.friendService.acceptFriendRequest(requestId);
+      case 'decline':
+        return this.friendService.declineFriendRequest(requestId);
+      case 'cancel':
+        return this.friendService.cancelFriendRequest(requestId);
+      default:
+        throw new BadRequestException('Unknown action: ', action);
+    }
   }
 }

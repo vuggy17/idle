@@ -20,7 +20,6 @@ const testUserRegisterInfo: RegisterFormData = {
 function Register() {
   const [form] = Form.useForm<RegisterFormData>();
   const [isRegistering, setIsRegistering] = useState(false);
-  const setUserAtom = useSetAtom(currentUserAtom);
   const navigate = useNavigate();
 
   const onUserSubmitRegisterForm = async (formValues: RegisterFormData) => {
@@ -28,9 +27,8 @@ function Register() {
 
     try {
       const registerUseCase = new RegisterUseCase();
-      const newUser = await registerUseCase.execute(formValues);
-      setUserAtom(newUser);
-      navigate('/welcome');
+      await registerUseCase.execute(formValues);
+      navigate('/login');
     } catch (error) {
       if (error instanceof AppwriteException) {
         if (error.type === 'user_already_exists' || error.code === 409) {
