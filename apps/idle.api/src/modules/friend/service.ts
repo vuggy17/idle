@@ -76,6 +76,16 @@ export class FriendService {
     return request;
   }
 
+  async getAllFriendRequest(userId: ID, status: FriendRequestStatusType) {
+    const requests =
+      await this._friendRequestRepository.getFriendRequestsByReceiver(
+        userId,
+        status,
+      );
+
+    return requests;
+  }
+
   private async updateFriendRequest(
     existedRequest: ID,
     status: FriendRequestStatusType,

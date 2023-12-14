@@ -60,4 +60,9 @@ export class FriendController {
         throw new BadRequestException('Unknown action: ', action);
     }
   }
+
+  @Get('invitations')
+  async getAllFriendInvitation(@AuthUser() user: AppWriteUserEntity) {
+    return this.friendService.getAllFriendRequest(user.$id, 'pending');
+  }
 }

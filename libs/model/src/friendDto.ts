@@ -1,12 +1,7 @@
 import { UserDTO } from './authDto';
 import { ID, TIME } from './common';
 
-export type GetPendingFriendRequestResponseDTO = {
-  id: ID;
-  name: string;
-  avatar: string;
-  createdAt: TIME;
-};
+export type GetPendingFriendRequestResponseDTO = FriendRequestResponseDTO[];
 
 export type GetFriendRequestStatusResponseDTO = FriendRequestResponseDTO;
 export type CreateFriendRequestRequestDTO = {
