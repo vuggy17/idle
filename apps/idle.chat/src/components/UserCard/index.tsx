@@ -1,5 +1,5 @@
 import { Flex, Space, Typography } from 'antd';
-import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
+import PartialAvatar from './PartialAvatar';
 
 type UserCardProps = {
   name: string;
@@ -14,7 +14,7 @@ UserCard.defaultProps = {
 export default function UserCard({ name, userName, avatar }: UserCardProps) {
   return (
     <Space>
-      <PartialAvatar shape="square" src={avatar} />
+      <PartialAvatar shape="square" src={avatar || userName} />
       <Flex vertical>
         <Typography.Text strong>{name}</Typography.Text>
         <Typography.Text type="secondary" ellipsis>

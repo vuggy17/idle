@@ -1,6 +1,7 @@
-import { Avatar, List } from 'antd';
+import { List } from 'antd';
 import { useMemo } from 'react';
 import { ListItemProps } from 'antd/es/list';
+import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
 
 export function CommonSearchResult({
   id,
@@ -33,7 +34,7 @@ export function CommonSearchResult({
   return (
     <List.Item {...listItemProps}>
       <List.Item.Meta
-        avatar={<Avatar src={avatar} />}
+        avatar={<PartialAvatar src={avatar || name} />}
         title={name}
         description={userDescription}
       />
