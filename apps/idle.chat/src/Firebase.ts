@@ -16,15 +16,15 @@ const config = {
   measurementId: 'G-RS9WTK4CRE',
 };
 
-//https://stackoverflow.com/questions/63937976/how-to-get-fcm-token
-//https://stackoverflow.com/questions/75432399/messaging-failed-service-worker-registration
-//https://firebase.google.com/docs/cloud-messaging/js/client#generate_a_new_key_pair
+// https://stackoverflow.com/questions/63937976/how-to-get-fcm-token
+// https://stackoverflow.com/questions/75432399/messaging-failed-service-worker-registration
+// https://firebase.google.com/docs/cloud-messaging/js/client#generate_a_new_key_pair
 export class Firebase {
   readonly app: FirebaseApp;
 
   constructor() {
     if (getApps().length) {
-      this.app = getApps()[0];
+      this.app = getApps().at(0)!;
     }
     this.app = initializeApp(config);
     // getAnalytics(this.app);
@@ -51,7 +51,7 @@ export class Firebase {
 
   async getFCMToken() {
     try {
-      const app = this.app;
+      const { app } = this;
       const messaging = getMessaging(app);
 
       const token = await getToken(messaging, {
@@ -65,7 +65,7 @@ export class Firebase {
     }
   }
 
-  async askNotificationPermission(): Promise<boolean> {
+  static async askNotificationPermission(): Promise<boolean> {
     const notificationPermission = await Notification.requestPermission();
     return notificationPermission === 'granted';
   }
