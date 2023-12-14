@@ -120,7 +120,9 @@ export class HttpClient {
 
   async getPendingFriendRequests(): Promise<GetPendingFriendRequestResponseDTO> {
     const result =
-      await this.client.get<GetPendingFriendRequestResponseDTO>(`invitation`);
+      await this.client.get<GetPendingFriendRequestResponseDTO>(
+        `friends/invitations`,
+      );
 
     return result.data;
   }
