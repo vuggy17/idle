@@ -70,7 +70,8 @@ function Component({ ...props }: SearchResultModalProps) {
   const profileActions = useMemo(() => {
     if (profile?.isFriend === undefined) {
       return <Skeleton.Button />;
-    } else if (profile.isFriend) {
+    }
+    if (profile.isFriend) {
       return (
         <Button
           icon={
@@ -87,7 +88,8 @@ function Component({ ...props }: SearchResultModalProps) {
           Send message
         </Button>
       );
-    } else if (doesFriendRequestSent) {
+    }
+    if (doesFriendRequestSent) {
       return (
         <Tooltip title="Press again to cancel">
           <Button
@@ -153,7 +155,7 @@ function Component({ ...props }: SearchResultModalProps) {
             <PartialAvatar
               size={96}
               shape="circle"
-              src={user.avatar ?? tempProfileCover}
+              src={user.avatar || tempProfileCover}
               className="shadow-lg "
               style={{
                 background: token.colorBgElevated,

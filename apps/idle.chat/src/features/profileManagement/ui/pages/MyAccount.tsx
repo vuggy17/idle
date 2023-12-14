@@ -87,7 +87,7 @@ export default function MyAccount({ user }: MyAccountProps) {
                       shape="square"
                       size={64}
                       alt={name}
-                      src={avatar}
+                      src={avatar || name}
                     />
                   </Form.Item>
                   <Form.Item

@@ -128,6 +128,7 @@ export default function GlobalNavbar() {
             placement="rightTop"
           >
             <PartialAvatar
+              src={currentUser.avatar || currentUser.name}
               shape="square"
               size={42}
               className="mx-auto hover:cursor-pointer"
