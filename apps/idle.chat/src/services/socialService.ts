@@ -1,6 +1,5 @@
 import {
-  AcceptFriendRequestResponseDTO,
-  DeclineFriendRequestResponseDTO,
+  FriendRequestResponseDTO,
   GetFriendRequestStatusResponseDTO,
   GetPendingFriendRequestResponseDTO,
   GetUserSearchResultRequestDTO,
@@ -41,16 +40,33 @@ export default class SocialService implements SocialRepository {
     return this.httpGateway.getFriendRequestStatus(friendId);
   }
 
+  async createFriendRequest(
+    receiver: string,
+  ): Promise<FriendRequestResponseDTO> {
+    return this.httpGateway.sendFriendRequest({
+      sentTo: receiver,
+    });
+  }
+
   async acceptFriendRequest(
     requestId: string,
-  ): Promise<AcceptFriendRequestResponseDTO> {
+  ): Promise<FriendRequestResponseDTO> {
     return this.httpGateway.acceptFriendRequest(requestId);
   }
 
   async declineFriendRequest(
     requestId: string,
-  ): Promise<DeclineFriendRequestResponseDTO> {
+  ): Promise<FriendRequestResponseDTO> {
     return this.httpGateway.declineFriendRequest(requestId);
+  }
+
+  async cancelFriendRequest(
+    requestId: string,
+  ): Promise<FriendRequestResponseDTO> {
+    return this.httpGateway.modifyFriendRequest({
+      action: 'cancel',
+      requestId,
+    });
   }
 }
 
