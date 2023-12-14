@@ -1,9 +1,17 @@
 import { Models } from 'appwrite';
-import { ID } from './common';
+import { ID, TIME } from './common';
 
-export type UserDTO = Models.User<Models.Preferences> & { avatar: string };
+export type UserDTO = {
+  id: ID;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  createdAt: TIME;
+  updatedAt: TIME;
+};
 
-export type RegisterUserResponseDTO = UserDTO;
+export type RegisterUserResponseDTO = Models.User<Models.Preferences>;
 export type RegisterUserRequestDTO = {
   email: string;
   password: string;
@@ -16,8 +24,8 @@ export type LoginUserRequestDTO = {
   password: string;
 };
 
-export type ChangePasswordResponseDTO = UserDTO;
+export type ChangePasswordResponseDTO = Models.User<Models.Preferences>;
 export type ChangePasswordRequestDTO = { currentPass: string; newPass: string };
 
-export type DeactivateAccountResponseDTO = UserDTO;
+export type DeactivateAccountResponseDTO = Models.User<Models.Preferences>;
 export type DeactivateAccountRequestDTO = { id: ID };
