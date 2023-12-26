@@ -15,7 +15,7 @@ export class RoomController {
     @AuthUser() user: UserEntity,
     @Body() body: CreatePrivateRoomRequestDTO,
   ) {
-    return this._roomService.createPrivateRoom(user.id, body.with);
+    return this._roomService.tryCreatePrivateRoom(user.id, body.with);
   }
 
   @Get()

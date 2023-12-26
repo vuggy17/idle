@@ -21,7 +21,14 @@
         "*.js",
         "*.jsx"
       ],
-      "rules": {}
+      "rules": {
+        "no-underscore-dangle": [
+          "error",
+          {
+            "allowAfterThis": true
+          }
+        ]
+      }
     },
     {
       "files": [

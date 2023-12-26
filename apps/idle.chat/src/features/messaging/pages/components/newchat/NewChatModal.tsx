@@ -1,13 +1,9 @@
-import { Flex, Modal, ModalProps, Select, Tag } from 'antd';
-import { useCallback, useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import PartialAvatar from '../../../../../components/UserCard/PartialAvatar';
+import { Flex, Modal, ModalProps } from 'antd';
+import { useState } from 'react';
 import { User } from '@idle/chat/features/auth/entities/user';
-import { DebounceSelect } from '../../../../../components/DebounceSelect';
+import PartialAvatar from '../../../../../components/UserCard/PartialAvatar';
 import PeoplePicker from './PeoplePicker';
-import CreateRoomUseCase from '../../../useCases/createRoom';
-import { useAtomValue } from 'jotai';
-import { currentUserAtom } from '@idle/chat/store/user';
+import CreatePrivateRoomUseCase from '../../../useCases/createRoom';
 
 const users = [
   {
@@ -67,7 +63,6 @@ const tagRender = (props: TagRenderProps) => {
 export default function NewChatModal({ ...props }: ModalProps) {
   const { onOk, ...selectProps } = props;
   const [selectedUser, setSelectedUser] = useState<User[]>([]);
-  const currentUser = useAtomValue(currentUserAtom);
 
   const createOrNavigateChat = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -77,10 +72,9 @@ export default function NewChatModal({ ...props }: ModalProps) {
       return;
     }
 
-    const executor = new CreateRoomUseCase();
+    const executor = new CreatePrivateRoomUseCase();
     executor.execute({
-      self: currentUser,
-      users: [currentUser, ...selectedUser],
+      target: selectedUser[0].id,
     });
     onOk?.(e);
   };
