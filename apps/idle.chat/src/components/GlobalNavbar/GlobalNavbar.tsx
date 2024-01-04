@@ -18,6 +18,8 @@ import UserProfilePopupContent from './UserProfilePopupContent';
 import NavIcon from './NavIcon';
 import { Plus } from 'iconoir-react';
 import NewChatModal from '@idle/chat/features/messaging/pages/components/newchat/NewChatModal';
+import { workspaceListAtom } from '@idle/chat/utils/workspace/atom';
+import WorkspaceInfo from './WorkspaceInfo';
 
 const { useToken } = theme;
 
@@ -67,6 +69,7 @@ export default function GlobalNavbar() {
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const { token } = useToken();
   const location = useLocation();
+  const list = useAtomValue(workspaceListAtom);
 
   const currentPage = location.pathname.split('/')[1] as RouteKey;
 
@@ -95,11 +98,8 @@ export default function GlobalNavbar() {
         align="center"
       >
         {/* workspace icon */}
-        <PartialAvatar
-          shape="square"
-          src="https://placehold.co/600x400"
-          size={52}
-          className="mx-auto mb-6 hover:cursor-pointer"
+        <WorkspaceInfo
+          metadata={{ flavour: list[0].flavour, id: list[0].id }}
         />
         <ConfigProvider
           theme={{

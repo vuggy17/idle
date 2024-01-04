@@ -1,6 +1,7 @@
 import { ID } from '@idle/model';
 import { ConfigProvider, Flex, Input, List, Typography } from 'antd';
 import { useRef, useState } from 'react';
+import useRoom from '@idle/chat/hooks/useRoom';
 import ConversationItem from './ConversationItem';
 import uniqueId from '../../../../../utils/uniqueId';
 import useConversationItemStyle from './useConversationItemStyle';
@@ -39,28 +40,15 @@ export default function ChatSideBar({
   activeConversation: ID;
   onItemClick: (item: RoomItem) => void;
 }) {
-  const [data, setData] = useState(rooms);
+  const [data, onScrolledToBottom] = useRoom();
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  const appendData = () => {
-    setData((prev) => [
-      ...prev,
-      ...new Array(4).fill({}).map((_, i) => ({
-        id: uniqueId(),
-        name: `room ${i} with long long long long long content`,
-        sub: `room ${i} sub`,
-        img: 'room image',
-        lastUpdatedAt: 2,
-      })),
-    ]);
-  };
 
   const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
     if (
       e.currentTarget.scrollHeight - e.currentTarget.scrollTop ===
       ContainerHeight
     ) {
-      appendData();
+      onScrolledToBottom();
     }
   };
 
