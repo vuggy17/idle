@@ -1,10 +1,12 @@
 import { ID } from '@idle/model';
 import { ConfigProvider, Flex, Input, List, Typography } from 'antd';
 import { useRef, useState } from 'react';
-import useRoom from '@idle/chat/hooks/useRoom';
-import ConversationItem from './ConversationItem';
+import useRoomMeta from '@idle/chat/hooks/useRoomMeta';
+import RoomItem from './RoomItem';
 import uniqueId from '../../../../../utils/uniqueId';
 import useConversationItemStyle from './useConversationItemStyle';
+import { useAtomValue } from 'jotai';
+import { currentWorkspaceAtom, waitForCurrentWorkspaceAtom } from '@idle/chat/utils/workspace/atom';
 
 const rooms = [
   {
@@ -40,16 +42,17 @@ export default function ChatSideBar({
   activeConversation: ID;
   onItemClick: (item: RoomItem) => void;
 }) {
-  const [data, onScrolledToBottom] = useRoom();
+  console.log('sidebar')
+  const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
+  const roomMetaList = useRoomMeta(currentWorkspace.idleWorkSpace);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
-    if (
-      e.currentTarget.scrollHeight - e.currentTarget.scrollTop ===
-      ContainerHeight
-    ) {
-      onScrolledToBottom();
-    }
+    // if (
+    //   e.currentTarget.scrollHeight - e.currentTarget.scrollTop ===
+    //   ContainerHeight
+    // ) {
+    // }
   };
 
   const hideScrollbar = () => {
@@ -63,6 +66,7 @@ export default function ChatSideBar({
   };
 
   const { styles, cx } = useConversationItemStyle();
+
   return (
     <div
       ref={sidebarRef}
@@ -85,25 +89,21 @@ export default function ChatSideBar({
             </div>
           }
           className="overflow-hidden"
-          dataSource={data}
+          dataSource={roomMetaList}
           renderItem={(room) => (
             <div
-              onClick={() => onItemClick(room)}
+              // onClick={() => onItemClick(room)}
               role="menuitem"
               tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'enter') {
-                  onItemClick(room);
-                }
-              }}
+              // onKeyDown={(e) => {
+              //   if (e.key === 'enter') {
+              //     onItemClick(room);
+              //   }
+              // }}
             >
-              <ConversationItem
+              <RoomItem
                 key={room.id}
-                title={room.name}
-                sub={room.sub}
-                img={room.img}
-                lastUpdatedAt={room.lastUpdatedAt}
-                isActive={activeConversation === room.id}
+
               />
             </div>
           )}

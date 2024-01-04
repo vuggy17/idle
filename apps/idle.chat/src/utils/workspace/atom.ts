@@ -2,11 +2,11 @@ import { atomWithObservable } from 'jotai/utils';
 import { Observable } from 'rxjs';
 import { atom } from 'jotai';
 import { WorkspaceMetadata } from './metadata';
-import roomManagerInstance from '.';
+import workspaceManagerInstance from '.';
 import Workspace from './workspace';
 
 const logger = console;
-export const workspaceManagerAtom = atom(() => roomManagerInstance);
+export const workspaceManagerAtom = atom(() => workspaceManagerInstance);
 
 export const workspaceListAtom = atomWithObservable<WorkspaceMetadata[]>(
   (get) => {
@@ -47,7 +47,9 @@ export const currentWorkspaceAtom = atom<Workspace | null>(null);
 // wait for current workspace, if current workspace is null, it will suspend
 export const waitForCurrentWorkspaceAtom = atom((get) => {
   const currentWorkspace = get(currentWorkspaceAtom);
+  console.log('current', currentWorkspace);
   if (!currentWorkspace) {
+    console.log('su');
     // suspended
     logger.info('suspended for current workspace');
     return new Promise<Workspace>((_) => {});

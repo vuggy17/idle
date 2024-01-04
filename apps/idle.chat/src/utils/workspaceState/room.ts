@@ -17,9 +17,9 @@ export type RoomOptions = {
 };
 
 export default class Room {
-  private readonly store: any;
+  private readonly rootDoc: Doc;
 
-  private readonly doc: Doc;
+  messages:
 
   private readonly workspace: Workspace;
 
@@ -29,19 +29,7 @@ export default class Room {
     const { id, workspace, doc } = options;
     this.id = id;
     this.workspace = workspace;
-    this.doc = doc;
-  }
-
-  get messages() {
-    return this.store.messages;
-  }
-
-  get meta() {
-    return this.store.meta as RoomMeta;
-  }
-
-  get members() {
-    return this.store.members;
+    this.rootDoc = doc;
   }
 
   async load() {

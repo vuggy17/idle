@@ -1,8 +1,10 @@
 /* eslint-disable no-param-reassign */
-import { Doc } from 'yjs';
+import { Doc, Map } from 'yjs';
 import { bind, JSONObject } from 'immer-yjs';
 
 export default class IdleDoc extends Doc {
+  private _messages: Map<Doc>;
+
   getMapProxy<State extends JSONObject>(key: string) {
     const map = super.getMap<State>(key);
     const binder = bind<State>(map);
