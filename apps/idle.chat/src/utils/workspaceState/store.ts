@@ -1,11 +1,13 @@
 import { ID } from '@idle/model';
 import { Doc } from 'yjs';
 // eslint-disable-next-line import/no-cycle
+import { createId } from '@paralleldrive/cuid2';
+// eslint-disable-next-line import/no-cycle
 import Room from './room';
 import IdleDoc from './doc';
 
 export type StoreOptions = {
-  idGenerator: 'cuid' | 'nanoid';
+  idGenerator: 'cuid';
   id?: ID;
 };
 
@@ -18,20 +20,18 @@ export class Store {
 
   constructor(private options: StoreOptions) {
     this.id = this.options.id || this.generateId();
-    this.doc = new IdleDoc();
+    this.doc = new IdleDoc({ guid: options.id });
   }
 
   generateId() {
     if (this.options.idGenerator === 'cuid') {
-      return 'clqvtjlo3000008jvg6yyfhr9';
+      return createId();
     }
-    return 'rIWoU8BURBAsyoLO-SuTA';
+    throw new Error(`Id generator not supported: ${this.options.idGenerator}`);
   }
 
   addRoom(room: Room) {
     this.rooms.set(room.id, room);
-    console.log('room added');
-    console.log(this.rooms);
   }
 
   removeRoom(room: Room) {

@@ -2,6 +2,7 @@ import { Atom, atom, useAtomValue } from 'jotai';
 import uniqueId from '../utils/uniqueId';
 import { IdleWorkspace } from '../utils/workspaceState';
 import { RoomMeta } from '../utils/workspaceState/meta';
+import workspaceManager from '../utils/workspace';
 
 const data = [
   {
@@ -22,17 +23,19 @@ const data = [
 
 const weakMap = new WeakMap<IdleWorkspace, Atom<RoomMeta[]>>();
 
-export default function useRoomMeta(workspace: IdleWorkspace): RoomMeta[] {
+export default function useRoomMetas(workspace: IdleWorkspace): RoomMeta[] {
   if (!weakMap.has(workspace)) {
     const roomMetasAtom = atom<RoomMeta[]>(workspace.meta.roomMetas);
     weakMap.set(workspace, roomMetasAtom);
     roomMetasAtom.onMount = (set) => {
       set(workspace.meta.roomMetas);
-      const { unsubscribe } = workspace.meta.roomMetaAdded.subscribe(() => {
+
+      const subscriber = workspace.meta.roomMetasUpdated.subscribe(() => {
         set(workspace.meta.roomMetas);
       });
-
-      return () => unsubscribe();
+      return () => {
+        subscriber.unsubscribe();
+      };
     };
   }
   return useAtomValue(weakMap.get(workspace) as Atom<RoomMeta[]>);

@@ -15,7 +15,6 @@ export const workspaceListAtom = atomWithObservable<WorkspaceMetadata[]>(
       subscriber.next(manager.list.workspaceList);
 
       return manager.list.onStatusChanged.subscribe((status) => {
-        console.log('status', status);
         subscriber.next(status.workspaceList);
       });
     });
@@ -47,9 +46,7 @@ export const currentWorkspaceAtom = atom<Workspace | null>(null);
 // wait for current workspace, if current workspace is null, it will suspend
 export const waitForCurrentWorkspaceAtom = atom((get) => {
   const currentWorkspace = get(currentWorkspaceAtom);
-  console.log('current', currentWorkspace);
   if (!currentWorkspace) {
-    console.log('su');
     // suspended
     logger.info('suspended for current workspace');
     return new Promise<Workspace>((_) => {});

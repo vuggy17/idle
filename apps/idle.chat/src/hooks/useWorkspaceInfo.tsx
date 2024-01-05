@@ -18,11 +18,13 @@ export default function useWorkspaceInfo(
     const workspaceInformation = workspaceManager.list.getInformation(meta);
 
     setInformation(workspaceInformation.info);
-    return workspaceInformation.onUpdated
-      .subscribe((info) => {
-        setInformation(info);
-      })
-      .unsubscribe();
+    const subscriber = workspaceInformation.onUpdated.subscribe((info) => {
+      setInformation(info);
+    });
+
+    return () => {
+      subscriber.unsubscribe();
+    };
   }, [meta, workspace, workspaceManager]);
 
   return information;

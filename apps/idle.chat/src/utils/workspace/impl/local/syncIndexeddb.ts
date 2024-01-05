@@ -45,8 +45,12 @@ export class IndexDBStorage implements SyncStorage {
 
   private readonly _notifier: BroadcastChannel;
 
+  private _db: IDBPDatabase<BlockSuiteBinaryDB> | null = null;
+
   constructor(
-    private readonly _db: IDBPDatabase<BlockSuiteBinaryDB>,
+    private readonly getDatabaseFn: () => Promise<
+      IDBPDatabase<BlockSuiteBinaryDB>
+    >,
     private readonly _roomId: ID,
   ) {
     this._notifier = new BroadcastChannel(`${this.name}:${this._roomId}`);
@@ -56,11 +60,19 @@ export class IndexDBStorage implements SyncStorage {
     return this._name;
   }
 
+  private async getDb() {
+    if (!this._db) {
+      this._db = await this.getDatabaseFn();
+    }
+    return this._db;
+  }
+
   async pull(
     docId: string,
     state: Uint8Array,
   ): Promise<{ data: Uint8Array; state?: Uint8Array | undefined } | null> {
-    const store = this._db
+    const db = await this.getDb();
+    const store = db
       .transaction('workspace', 'readonly')
       .objectStore('workspace');
     const data = await store.get(docId);
@@ -78,7 +90,8 @@ export class IndexDBStorage implements SyncStorage {
   }
 
   async push(docId: string, update: Uint8Array): Promise<void> {
-    const store = this._db
+    const db = await this.getDb();
+    const store = db
       .transaction('workspace', 'readwrite')
       .objectStore('workspace');
 
@@ -117,7 +130,7 @@ export class IndexDBStorage implements SyncStorage {
   }
 }
 
-export async function createIndexedDBStorage(
+export function createIndexedDBStorage(
   profileId: string,
   dbName = DEFAULT_DB_NAME,
   mergeCount = 1,
@@ -128,7 +141,5 @@ export async function createIndexedDBStorage(
     });
   };
 
-  const db = await getDb();
-
-  return new IndexDBStorage(db, profileId);
+  return new IndexDBStorage(getDb, profileId);
 }

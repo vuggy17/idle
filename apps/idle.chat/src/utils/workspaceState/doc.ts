@@ -3,7 +3,7 @@ import { Doc, Map } from 'yjs';
 import { bind, JSONObject } from 'immer-yjs';
 
 export default class IdleDoc extends Doc {
-  private _messages: Map<Doc>;
+  private _rooms: Map<Doc> = this.getMap('rooms');
 
   getMapProxy<State extends JSONObject>(key: string) {
     const map = super.getMap<State>(key);
@@ -33,5 +33,9 @@ export default class IdleDoc extends Doc {
         },
       }) as unknown as State,
     };
+  }
+
+  get rooms() {
+    return this._rooms;
   }
 }

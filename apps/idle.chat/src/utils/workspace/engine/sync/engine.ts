@@ -1,6 +1,6 @@
 import type { Doc } from 'yjs';
 
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { SharedPriorityTarget } from '../../utils/SharedPriorityTarget';
 import { MANUALLY_STOP, throwIfAborted } from '../../utils/throwIfAborted';
 import { SyncEngineStep, SyncPeerStep } from './consts';
@@ -86,7 +86,7 @@ export class SyncEngine {
       this.forceStop();
     }
     this.abort = new AbortController();
-
+    console.log('workspace sync start');
     this.sync(this.abort.signal).catch((err) => {
       // should never reach here
       this.logger.error(err);
@@ -139,7 +139,7 @@ export class SyncEngine {
       remotePeers: this.remotes.map(() => null),
     };
 
-    const cleanUp: (() => void)[] = [];
+    const cleanUp: Subscription[] = [];
     try {
       // Step 1: start local sync peer
       state.localPeer = new SyncPeer(
@@ -148,12 +148,11 @@ export class SyncEngine {
         this.priorityTarget,
       );
 
-      cleanUp.push(
-        state.localPeer.onStatusChange.subscribe(() => {
-          if (!signal.aborted)
-            this.updateSyncingState(state.localPeer, state.remotePeers);
-        }).unsubscribe,
-      );
+      const subscriber = state.localPeer.onStatusChange.subscribe(() => {
+        if (!signal.aborted)
+          this.updateSyncingState(state.localPeer, state.remotePeers);
+      });
+      cleanUp.push(subscriber);
 
       this.updateSyncingState(state.localPeer, state.remotePeers);
 
@@ -161,16 +160,17 @@ export class SyncEngine {
       await state.localPeer.waitForLoaded(signal);
 
       // Step 3: start remote sync peer
-      state.remotePeers = this.remotes.map((remote) => {
-        const peer = new SyncPeer(this.rootDoc, remote, this.priorityTarget);
-        cleanUp.push(
-          peer.onStatusChange.subscribe(() => {
-            if (!signal.aborted)
-              this.updateSyncingState(state.localPeer, state.remotePeers);
-          }).unsubscribe,
-        );
-        return peer;
-      });
+      // state.remotePeers = this.remotes.map((remote) => {
+      //   console.log('ccc');
+      //   const peer = new SyncPeer(this.rootDoc, remote, this.priorityTarget);
+      //   cleanUp.push(
+      //     peer.onStatusChange.subscribe(() => {
+      //       if (!signal.aborted)
+      //         this.updateSyncingState(state.localPeer, state.remotePeers);
+      //     }).unsubscribe,
+      //   );
+      //   return peer;
+      // });
 
       this.updateSyncingState(state.localPeer, state.remotePeers);
 
@@ -187,6 +187,7 @@ export class SyncEngine {
       });
     } catch (error) {
       if (error === MANUALLY_STOP || signal.aborted) {
+        console.log('MANUALLY_STOP');
         return;
       }
       throw error;
@@ -196,8 +197,8 @@ export class SyncEngine {
       for (const remotePeer of state.remotePeers) {
         remotePeer?.stop();
       }
-      for (const clean of cleanUp) {
-        clean();
+      for (const subscription of cleanUp) {
+        subscription.unsubscribe();
       }
     }
   }

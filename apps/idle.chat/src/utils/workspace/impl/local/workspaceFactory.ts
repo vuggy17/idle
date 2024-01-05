@@ -12,7 +12,7 @@ export const localWorkspaceFactory: WorkspaceFactory = {
     const blobEngine = new BlobEngine(createIndexeddbBlobStorage(metadata.id), [
       // createStaticBlobStorage(),
     ]);
-    const bs = new IdleWorkspace({
+    const stateWorkspace = new IdleWorkspace({
       id: metadata.id,
       idGenerator: 'cuid',
       // blobStorages: [
@@ -23,22 +23,19 @@ export const localWorkspaceFactory: WorkspaceFactory = {
       // idGenerator: () => nanoid(),
       // schema: globalBlockSuiteSchema,
     });
-    // const syncEngine = new SyncEngine(
-    //   bs.doc,
-    //   createLocalStorage(metadata.id),
-    //   [],
-    // );
+
+    const storage = createLocalStorage(metadata.id);
+
+    const syncEngine = new SyncEngine(stateWorkspace.doc, storage, []);
     // const awarenessProvider = createBroadcastChannelAwarenessProvider(
     //   metadata.id,
     //   bs.awarenessStore.awareness,
     // );
-    // const engine = new WorkspaceEngine(blobEngine, syncEngine, [
-    //   awarenessProvider,
-    // ]);
+    const engine = new WorkspaceEngine(blobEngine, syncEngine);
 
     // setupEditorFlags(bs);
 
-    return new Workspace(metadata, bs);
+    return new Workspace(metadata, engine, stateWorkspace);
   },
   async getWorkspaceBlob(id, blobKey) {
     const blobStorage = createIndexeddbBlobStorage(id);

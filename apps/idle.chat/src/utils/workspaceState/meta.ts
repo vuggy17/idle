@@ -2,6 +2,7 @@ import { ID } from '@idle/model';
 import { Subject } from 'rxjs';
 import { Binder } from 'immer-yjs/src';
 import { Array as YArray, Map as YMap, Text as YText, YEvent } from 'yjs';
+import ColumnGroup from 'antd/es/table/ColumnGroup';
 import IdleDoc from './doc';
 
 export interface RoomMeta {
@@ -108,6 +109,10 @@ export default class WorkspaceMeta {
 
   get rooms() {
     return this._proxy.rooms;
+  }
+
+  getRoomMeta(roomID: ID) {
+    return this.roomMetas.find((room) => room.id === roomID);
   }
 
   addRoomMeta(page: RoomMeta, index?: number) {

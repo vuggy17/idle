@@ -1,5 +1,6 @@
 import difference from 'lodash.difference';
 import { applyUpdate, encodeStateAsUpdate } from 'yjs';
+import { createId } from '@paralleldrive/cuid2';
 import { IdleWorkspace } from '../../../workspaceState';
 import { WorkspaceInfo, WorkspaceListProvider } from '../../list/provider';
 import WorkspaceFlavour from '../../list/workspaceFlavour';
@@ -61,17 +62,17 @@ export function createLocalRoomListProvider(): WorkspaceListProvider {
      * @param initial callback to put initial data to workspace
      */
     async create(initial) {
-      function nanoid() {
-        return 'GFs1qUQ7PlWM2AMZ6WM3n';
+      function cuid() {
+        return createId;
       }
-      const id = nanoid();
+      const id = createId();
 
       const blobStorage = createIndexeddbBlobStorage(id);
-      const syncStorage = await createLocalStorage(id);
+      const syncStorage = createLocalStorage(id);
 
       const workspace = new IdleWorkspace({
         id,
-        idGenerator: 'nanoid',
+        idGenerator: 'cuid',
       });
 
       await initial(workspace, blobStorage);
@@ -158,7 +159,6 @@ export function createLocalRoomListProvider(): WorkspaceListProvider {
       });
 
       applyUpdate(wp.doc, data.data);
-
       return {
         name: wp.meta.name,
         avatar: wp.meta.avatar,

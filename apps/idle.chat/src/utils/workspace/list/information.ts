@@ -46,6 +46,14 @@ export class RoomInformation {
       avatar: this._info.avatar,
       name: this._info.name,
     };
+
+    workspace.idleWorkSpace.meta.commonFieldsUpdated.subscribe(() => {
+      console.log('infooo');
+      this.info = {
+        avatar: workspace.idleWorkSpace.meta.avatar ?? this.info.avatar,
+        name: workspace.idleWorkSpace.meta.name ?? this.info.name,
+      };
+    });
   }
 
   getCachedInformation() {

@@ -1,8 +1,10 @@
-import { ID } from '@idle/model';
+import { ID, TIME } from '@idle/model';
 import { Doc } from 'yjs';
 import Message from '../workspace/message';
 // eslint-disable-next-line import/no-cycle
 import Workspace from './workspace';
+import RoomDoc from './roomDoc';
+import IdleDoc from './doc';
 
 type RoomMeta = {
   id: ID;
@@ -13,26 +15,35 @@ type RoomMeta = {
 export type RoomOptions = {
   id: ID;
   workspace: Workspace;
-  doc: Doc;
+  doc: IdleDoc;
 };
 
-export default class Room {
-  private readonly rootDoc: Doc;
-
-  messages:
-
+export default class Room extends RoomDoc {
   private readonly workspace: Workspace;
 
   readonly id: ID;
 
   constructor(options: RoomOptions) {
     const { id, workspace, doc } = options;
+    super(id, doc);
     this.id = id;
     this.workspace = workspace;
-    this.rootDoc = doc;
+  }
+
+  get meta() {
+    return this.workspace.meta.getRoomMeta(this.id);
   }
 
   async load() {
     return this;
+  }
+
+  addMessage(
+    text?: string,
+    attachments?: string[],
+    author: ID,
+    createdAt: TIME,
+  ) {
+    throw new Error('not implemented');
   }
 }

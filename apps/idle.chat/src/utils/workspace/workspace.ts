@@ -1,12 +1,13 @@
 import { Subject } from 'rxjs';
 import { WorkspaceMetadata } from './metadata';
 import { IdleWorkspace } from '../workspaceState';
+import { WorkspaceEngine, WorkspaceEngineStatus } from './engine';
 
 const logger = console;
 
 export type WorkspaceStatus = {
   mode: 'ready' | 'closed';
-  // engine: WorkspaceEngineStatus;
+  engine: WorkspaceEngineStatus;
   // upgrade: WorkspaceUpgradeStatus;
 };
 
@@ -39,20 +40,20 @@ export default class Workspace {
 
   constructor(
     public meta: WorkspaceMetadata,
-    // public engine: RoomEngine,
+    public engine: WorkspaceEngine,
     public idleWorkSpace: IdleWorkspace,
   ) {
     this._status = {
       mode: 'closed',
-      // engine: engine.status,
+      engine: engine.status,
       // upgrade: this.upgrade.status,
     };
-    // this.engine.onStatusChange.on(status => {
-    //   this.status = {
-    //     ...this.status,
-    //     engine: status,
-    //   };
-    // });
+    this.engine.onStatusChange.subscribe((status) => {
+      this.status = {
+        ...this.status,
+        engine: status,
+      };
+    });
 
     this.start();
   }
@@ -65,17 +66,18 @@ export default class Workspace {
       return;
     }
     logger.info('start workspace', this.id);
-    // this.engine.start();
+    this.engine.start();
     this.status = {
       ...this.status,
       mode: 'ready',
-      // engine: this.engine.status,
+      engine: this.engine.status,
     };
   }
 
   // eslint-disable-next-line class-methods-use-this
   canGracefulStop() {
-    return true;
+    // return true;
+    return this.engine.canGracefulStop();
     // return this.engine.canGracefulStop() && !this.status.upgrade.upgrading;
   }
 
@@ -84,11 +86,11 @@ export default class Workspace {
       return;
     }
     logger.info('stop workspace', this.id);
-    // this.engine.forceStop();
+    this.engine.forceStop();
     this.status = {
       ...this.status,
       mode: 'closed',
-      // engine: this.engine.status,
+      engine: this.engine.status,
     };
     this.onStop.next();
   }
@@ -97,6 +99,6 @@ export default class Workspace {
   // same as `WorkspaceEngine.sync.setPriorityRule`
   // eslint-disable-next-line class-methods-use-this
   setPriorityRule(target: ((id: string) => boolean) | null) {
-    // this.engine.sync.setPriorityRule(target);
+    this.engine.sync.setPriorityRule(target);
   }
 }

@@ -1,5 +1,11 @@
 import { Subject } from 'rxjs';
-import { Doc, applyUpdate, encodeStateAsUpdate, encodeStateVector } from 'yjs';
+import {
+  Doc,
+  applyUpdate,
+  encodeStateAsUpdate,
+  encodeStateVector,
+  mergeUpdates,
+} from 'yjs';
 import isEqual from 'deep-equal';
 import { SyncPeerStep } from './consts';
 import { SyncStorage } from './storage';
@@ -122,108 +128,123 @@ export class SyncPeer {
     }
   }
 
+  // handle updates from storage
+  handleStorageUpdates = (id: string, data: Uint8Array) => {
+    this.state.pullUpdatesQueue.push({
+      id,
+      data,
+    });
+    this.reportSyncStatus();
+  };
+
   /**
    * main synchronization logic
    */
   // eslint-disable-next-line class-methods-use-this
   async sync(abortOuter: AbortSignal) {
-    throw new Error('not implemented');
-    return new Promise<any>(() => {});
+    this.initState();
+    console.log('local peer syncing');
+    const abortInner = new AbortController();
+    abortOuter.addEventListener('abort', (reason) => {
+      abortInner.abort(reason);
+    });
+    let dispose: (() => void) | null = null;
+    try {
+      this.reportSyncStatus();
+      // start listen storage updates
+      dispose = await this.storage.subscribe(
+        this.handleStorageUpdates,
+        (reason) => {
+          // abort if storage disconnect, should trigger retry loop
+          abortInner.abort(`subscribe disconnect:${reason}`);
+        },
+      );
+      throwIfAborted(abortInner.signal);
+      console.log('load rootdoc', this.rootDoc);
+      // Step 1: load root doc
+      await this.connectDoc(this.rootDoc, abortInner.signal);
+      // Step 2: load subdocs
+      this.state.subdocsLoadQueue.push(
+        ...Array.from(this.rootDoc.getSubdocs()).map((doc) => ({
+          id: doc.guid,
+          doc,
+        })),
+      );
+      this.reportSyncStatus();
+      this.rootDoc.on('subdocs', this.handleSubdocsUpdate);
+      // Finally: start sync
+      await Promise.all([
+        // load subdocs
+        (async () => {
+          while (throwIfAborted(abortInner.signal)) {
+            // eslint-disable-next-line no-await-in-loop
+            const subdoc = await this.state.subdocsLoadQueue.next(
+              abortInner.signal,
+            );
+            this.state.subdocLoading = true;
+            this.reportSyncStatus();
+            // eslint-disable-next-line no-await-in-loop
+            await this.connectDoc(subdoc.doc, abortInner.signal);
+            this.state.subdocLoading = false;
+            this.reportSyncStatus();
+          }
+        })(),
+        // pull updates
+        (async () => {
+          while (throwIfAborted(abortInner.signal)) {
+            // eslint-disable-next-line no-await-in-loop
+            const { id, data } = await this.state.pullUpdatesQueue.next(
+              abortInner.signal,
+            );
 
-    // this.initState();
-    // const abortInner = new AbortController();
-    // abortOuter.addEventListener('abort', (reason) => {
-    //   abortInner.abort(reason);
-    // });
-    // let dispose: (() => void) | null = null;
-    // try {
-    //   this.reportSyncStatus();
-    //   // start listen storage updates
-    //   dispose = await this.storage.subscribe(
-    //     this.handleStorageUpdates,
-    //     (reason) => {
-    //       // abort if storage disconnect, should trigger retry loop
-    //       abortInner.abort('subscribe disconnect:' + reason);
-    //     },
-    //   );
-    //   throwIfAborted(abortInner.signal);
-    //   // Step 1: load root doc
-    //   await this.connectDoc(this.rootDoc, abortInner.signal);
-    //   // Step 2: load subdocs
-    //   this.state.subdocsLoadQueue.push(
-    //     ...Array.from(this.rootDoc.getSubdocs()).map((doc) => ({
-    //       id: doc.guid,
-    //       doc,
-    //     })),
-    //   );
-    //   this.reportSyncStatus();
-    //   this.rootDoc.on('subdocs', this.handleSubdocsUpdate);
-    //   // Finally: start sync
-    //   await Promise.all([
-    //     // load subdocs
-    //     (async () => {
-    //       while (throwIfAborted(abortInner.signal)) {
-    //         const subdoc = await this.state.subdocsLoadQueue.next(
-    //           abortInner.signal,
-    //         );
-    //         this.state.subdocLoading = true;
-    //         this.reportSyncStatus();
-    //         await this.connectDoc(subdoc.doc, abortInner.signal);
-    //         this.state.subdocLoading = false;
-    //         this.reportSyncStatus();
-    //       }
-    //     })(),
-    //     // pull updates
-    //     (async () => {
-    //       while (throwIfAborted(abortInner.signal)) {
-    //         const { id, data } = await this.state.pullUpdatesQueue.next(
-    //           abortInner.signal,
-    //         );
-    //         // don't apply empty data or Uint8Array([0, 0])
-    //         if (
-    //           !(
-    //             data.byteLength === 0 ||
-    //             (data.byteLength === 2 && data[0] === 0 && data[1] === 0)
-    //           )
-    //         ) {
-    //           const subdoc = this.state.connectedDocs.get(id);
-    //           if (subdoc) {
-    //             applyUpdate(subdoc, data, this.name);
-    //           }
-    //         }
-    //         this.reportSyncStatus();
-    //       }
-    //     })(),
-    //     // push updates
-    //     (async () => {
-    //       while (throwIfAborted(abortInner.signal)) {
-    //         const { id, data } = await this.state.pushUpdatesQueue.next(
-    //           abortInner.signal,
-    //         );
-    //         this.state.pushingUpdate = true;
-    //         this.reportSyncStatus();
-    //         const merged = mergeUpdates(data);
-    //         // don't push empty data or Uint8Array([0, 0])
-    //         if (
-    //           !(
-    //             merged.byteLength === 0 ||
-    //             (merged.byteLength === 2 && merged[0] === 0 && merged[1] === 0)
-    //           )
-    //         ) {
-    //           await this.storage.push(id, merged);
-    //         }
-    //         this.state.pushingUpdate = false;
-    //         this.reportSyncStatus();
-    //       }
-    //     })(),
-    //   ]);
-    // } finally {
-    //   dispose?.();
-    //   for (const docs of this.state.connectedDocs.values()) {
-    //     this.disconnectDoc(docs);
-    //   }
-    //   this.rootDoc.off('subdocs', this.handleSubdocsUpdate);
-    // }
+            console.log(data.length);
+            // don't apply empty data or Uint8Array([0, 0])
+            if (
+              !(
+                data.byteLength === 0 ||
+                (data.byteLength === 2 && data[0] === 0 && data[1] === 0)
+              )
+            ) {
+              const subdoc = this.state.connectedDocs.get(id);
+              if (subdoc) {
+                applyUpdate(subdoc, data, this.name);
+              }
+            }
+            this.reportSyncStatus();
+          }
+        })(),
+        // push updates
+        (async () => {
+          while (throwIfAborted(abortInner.signal)) {
+            // eslint-disable-next-line no-await-in-loop
+            const { id, data } = await this.state.pushUpdatesQueue.next(
+              abortInner.signal,
+            );
+            this.state.pushingUpdate = true;
+            this.reportSyncStatus();
+            const merged = mergeUpdates(data);
+            // don't push empty data or Uint8Array([0, 0])
+            if (
+              !(
+                merged.byteLength === 0 ||
+                (merged.byteLength === 2 && merged[0] === 0 && merged[1] === 0)
+              )
+            ) {
+              // eslint-disable-next-line no-await-in-loop
+              await this.storage.push(id, merged);
+            }
+            this.state.pushingUpdate = false;
+            this.reportSyncStatus();
+          }
+        })(),
+      ]);
+    } finally {
+      dispose?.();
+      for (const docs of this.state.connectedDocs.values()) {
+        this.disconnectDoc(docs);
+      }
+      this.rootDoc.off('subdocs', this.handleSubdocsUpdate);
+    }
   }
 
   private readonly state: {
@@ -258,10 +279,12 @@ export class SyncPeer {
   }
 
   async connectDoc(doc: Doc, abort: AbortSignal) {
+    console.log(doc.guid);
     const { data: docData, state: inStorageState } =
       (await this.storage.pull(doc.guid, encodeStateVector(doc))) ?? {};
     throwIfAborted(abort);
 
+    console.log('docdata', docData?.length);
     if (docData) {
       applyUpdate(doc, docData, 'load');
     }
@@ -283,6 +306,12 @@ export class SyncPeer {
     this.reportSyncStatus();
   }
 
+  disconnectDoc(doc: Doc) {
+    doc.off('update', this.handleYDocUpdates);
+    this.state.connectedDocs.delete(doc.guid);
+    this.reportSyncStatus();
+  }
+
   // handle updates from ydoc
   handleYDocUpdates = (update: Uint8Array, origin: string, doc: Doc) => {
     // don't push updates from storage
@@ -300,6 +329,25 @@ export class SyncPeer {
       });
     }
 
+    this.reportSyncStatus();
+  };
+
+  // handle subdocs changes, append new subdocs to queue, remove subdocs from queue
+  handleSubdocsUpdate = ({
+    added,
+    removed,
+  }: {
+    added: Set<Doc>;
+    removed: Set<Doc>;
+  }) => {
+    for (const subdoc of added) {
+      this.state.subdocsLoadQueue.push({ id: subdoc.guid, doc: subdoc });
+    }
+
+    for (const subdoc of removed) {
+      this.disconnectDoc(subdoc);
+      this.state.subdocsLoadQueue.remove((doc) => doc.doc === subdoc);
+    }
     this.reportSyncStatus();
   };
 
@@ -329,6 +377,8 @@ export class SyncPeer {
       pendingPushUpdates:
         this.state.pushUpdatesQueue.length + (this.state.pushingUpdate ? 1 : 0),
     };
+
+    console.log('sync staus: ', this.status);
   }
 
   async waitForLoaded(abort?: AbortSignal) {

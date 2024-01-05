@@ -1,12 +1,15 @@
 import { ID } from '@idle/model';
 import { ConfigProvider, Flex, Input, List, Typography } from 'antd';
 import { useRef, useState } from 'react';
-import useRoomMeta from '@idle/chat/hooks/useRoomMeta';
+import useRoomMetas from '@idle/chat/hooks/useRoomMeta';
 import RoomItem from './RoomItem';
 import uniqueId from '../../../../../utils/uniqueId';
 import useConversationItemStyle from './useConversationItemStyle';
 import { useAtomValue } from 'jotai';
-import { currentWorkspaceAtom, waitForCurrentWorkspaceAtom } from '@idle/chat/utils/workspace/atom';
+import {
+  currentWorkspaceAtom,
+  waitForCurrentWorkspaceAtom,
+} from '@idle/chat/utils/workspace/atom';
 
 const rooms = [
   {
@@ -42,9 +45,10 @@ export default function ChatSideBar({
   activeConversation: ID;
   onItemClick: (item: RoomItem) => void;
 }) {
-  console.log('sidebar')
   const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
-  const roomMetaList = useRoomMeta(currentWorkspace.idleWorkSpace);
+  const roomMetaList = useRoomMetas(currentWorkspace.idleWorkSpace);
+
+  console.log("🚀 ~ file: index.tsx:51 ~ roomMetaList:", roomMetaList)
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
@@ -90,7 +94,7 @@ export default function ChatSideBar({
           }
           className="overflow-hidden"
           dataSource={roomMetaList}
-          renderItem={(room) => (
+          renderItem={(metadata) => (
             <div
               // onClick={() => onItemClick(room)}
               role="menuitem"
@@ -101,10 +105,7 @@ export default function ChatSideBar({
               //   }
               // }}
             >
-              <RoomItem
-                key={room.id}
-
-              />
+              <RoomItem key={metadata.id} meta={metadata} />
             </div>
           )}
         />

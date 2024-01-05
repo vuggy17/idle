@@ -66,10 +66,9 @@ export default class WorkspaceManager {
       throw new Error(`Unknown workspace flavour: ${metadata.flavour}`);
     }
     const workspace = factory.openWorkspace(metadata);
-
     // sync information with workspace list, when workspace's avatar and name changed, information will be updated
     this.list.getInformation(metadata).syncWithWorkspace(workspace);
-
+    console.log('workspace information', workspace.idleWorkSpace.meta.name);
     return workspace;
   }
 
