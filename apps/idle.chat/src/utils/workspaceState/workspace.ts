@@ -43,9 +43,7 @@ export default class IdleWorkspace {
   }
 
   private _bindRoomMetaEvents() {
-    console.log('bind room meta');
     this.meta.roomMetaAdded.subscribe((roomId) => {
-      console.log('room added 1');
       const room = new Room({
         id: roomId,
         doc: this.doc,
@@ -72,8 +70,9 @@ export default class IdleWorkspace {
    * If the `init` parameter is passed, a `surface`, `note`, and `paragraph` block
    * will be created in the page simultaneously.
    */
-  createRoom(options: { id?: string }) {
-    const { id: roomId = this._store.generateId() } = options;
+  createRoom(options: { id?: string; members: ID[] }) {
+    const { id, members } = options;
+    const roomId = id ?? this._store.generateId();
     if (this._hasRoom(roomId)) {
       throw new Error('room already exists');
     }
@@ -82,6 +81,7 @@ export default class IdleWorkspace {
       id: roomId,
       title: '',
       createDate: +new Date(),
+      members,
     });
     return this.getRoom(roomId) as Room;
   }

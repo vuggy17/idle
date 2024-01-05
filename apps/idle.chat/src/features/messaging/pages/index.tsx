@@ -10,39 +10,40 @@ import ChatSideBar from './components/sidebar';
 import { Suspense, useEffect } from 'react';
 import createFirstAppData from '@idle/chat/bootstrap/createFirstAppData';
 import { workspaceListAtom } from '@idle/chat/utils/workspace/atom';
+import { Outlet } from 'react-router-dom';
 
-export default function Welcome() {
+export default function MessagingLayout() {
   const userInfo = useAtomValue(currentUserAtom);
   const [activeChatId, setActiveChatId] = useAtom(activeChatIdAtom);
   // const list = useAtomValue(workspaceListAtom);
   // console.log(list);
   return (
     // <Suspense fallback="loading workspace list">
-      <Layout className="h-full">
-        <Layout.Sider theme="light" width={300}>
-          <ChatSideBar
-            activeConversation={activeChatId}
-            onItemClick={(item) => {
-              setActiveChatId(item.id);
-            }}
-          />
-        </Layout.Sider>
-        <Layout.Content className="overflow-y-auto">
-          <Card>
-            <Typography>You have logged in as {userInfo.name} </Typography>
-            <Button onClick={() => createFirstAppData()}>
-              Create first workspace
-            </Button>
-          </Card>
-          <NxWelcome title={userInfo.name} />
-        </Layout.Content>
-      </Layout>
+    <Layout className="h-full">
+      <Layout.Sider theme="light" width={300}>
+        <ChatSideBar
+          activeConversation={activeChatId}
+          onItemClick={(item) => {
+            setActiveChatId(item.id);
+          }}
+        />
+      </Layout.Sider>
+      <Layout.Content className="overflow-y-auto">
+        <Card>
+          <Typography>You have logged in as {userInfo.name} </Typography>
+          <Button onClick={() => createFirstAppData()}>
+            Create first workspace
+          </Button>
+        </Card>
+        <Outlet />
+      </Layout.Content>
+    </Layout>
     // </Suspense>
   );
 }
 
 export const Component = () => {
-  return wrapErrorBoundary(<Welcome />);
+  return wrapErrorBoundary(<MessagingLayout />);
 };
 
 // export const loader: LoaderFunction = async ({ params }) => null;

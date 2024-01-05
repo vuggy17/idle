@@ -2,7 +2,6 @@ import { Atom, atom, useAtomValue } from 'jotai';
 import uniqueId from '../utils/uniqueId';
 import { IdleWorkspace } from '../utils/workspaceState';
 import { RoomMeta } from '../utils/workspaceState/meta';
-import workspaceManager from '../utils/workspace';
 
 const data = [
   {

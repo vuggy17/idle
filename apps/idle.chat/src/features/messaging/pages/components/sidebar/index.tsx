@@ -45,10 +45,12 @@ export default function ChatSideBar({
   activeConversation: ID;
   onItemClick: (item: RoomItem) => void;
 }) {
-  const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
-  const roomMetaList = useRoomMetas(currentWorkspace.idleWorkSpace);
+  const workspace = useAtomValue(currentWorkspaceAtom)
+  console.log(workspace)
+  // const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
+  // const roomMetaList = useRoomMetas(currentWorkspace.idleWorkSpace);
+  // console.log("🚀 ~ file: index.tsx:50 ~ roomMetaList:", roomMetaList)
 
-  console.log("🚀 ~ file: index.tsx:51 ~ roomMetaList:", roomMetaList)
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
@@ -93,7 +95,8 @@ export default function ChatSideBar({
             </div>
           }
           className="overflow-hidden"
-          dataSource={roomMetaList}
+          dataSource={[]}
+          // dataSource={roomMetaList}
           renderItem={(metadata) => (
             <div
               // onClick={() => onItemClick(room)}

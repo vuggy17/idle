@@ -11,6 +11,7 @@ type PeoplePickerProps = {
 export default function PeoplePicker({ ...props }: PeoplePickerProps) {
   return (
     <DebounceSelect
+      prefetch={true}
       mode="multiple"
       placeholder="Select users"
       fetchOptions={fetchUserList}

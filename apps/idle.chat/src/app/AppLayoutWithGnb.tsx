@@ -1,6 +1,6 @@
 import { Layout, ConfigProvider, theme, Button } from 'antd';
 
-import GlobalNavbar from '@idle/chat/components/GlobalNavbar/GlobalNavbar';
+import RootAppSidebar from '@idle/chat/components/RootAppSidebar/RootAppSidebar';
 import { Outlet } from 'react-router-dom';
 import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
 import ProtectedRoute from '@idle/chat/router/ProtectedRoute';
@@ -21,19 +21,6 @@ const { useToken } = theme;
 export default function AppLayoutWithGnb() {
   const [loading, setLoading] = useState(true);
   const { token } = useToken();
-  const [_, setCurrentWorkspace] = useAtom(currentWorkspaceAtom);
-  const list = useAtomValue(workspaceListAtom);
-
-  const firstWorkspaceMeta = list[0];
-  const workspace = useWorkspace(firstWorkspaceMeta);
-  useEffect(() => {
-    if (!workspace) {
-      setCurrentWorkspace(null);
-    }
-
-    setCurrentWorkspace(workspace);
-  }, [firstWorkspaceMeta, list, workspace]);
-
   // save FCM token to server if user has loggedIn
   useEffect(() => {
     (async () => {
@@ -43,7 +30,7 @@ export default function AppLayoutWithGnb() {
 
   useEffect(() => {
     createFirstAppData().then(() => setLoading(false));
-  });
+  }, []);
 
   if (loading) {
     return;
@@ -60,7 +47,7 @@ export default function AppLayoutWithGnb() {
     >
       <Layout className="h-full" hasSider>
         <aside className="relative z-10 w-20">
-          <GlobalNavbar />
+          <RootAppSidebar />
         </aside>
 
         <Layout.Content>

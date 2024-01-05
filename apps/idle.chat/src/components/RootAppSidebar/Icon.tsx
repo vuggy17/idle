@@ -11,7 +11,7 @@ const { useToken } = theme;
  *
  * @see {@linkcode RouteKey}
  */
-export default function NavIcon({
+export default function SideBarIcon({
   type,
   solid,
 }: {
@@ -25,7 +25,7 @@ export default function NavIcon({
   // eslint-disable-next-line consistent-return
   const icon = useMemo(() => {
     switch (type) {
-      case 'home':
+      case 'workspace':
         return (
           <HomeSimpleDoor
             fill={solid ? colorPrimary : 'none'}

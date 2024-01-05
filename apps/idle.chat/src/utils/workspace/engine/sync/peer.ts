@@ -143,7 +143,6 @@ export class SyncPeer {
   // eslint-disable-next-line class-methods-use-this
   async sync(abortOuter: AbortSignal) {
     this.initState();
-    console.log('local peer syncing');
     const abortInner = new AbortController();
     abortOuter.addEventListener('abort', (reason) => {
       abortInner.abort(reason);
@@ -160,7 +159,6 @@ export class SyncPeer {
         },
       );
       throwIfAborted(abortInner.signal);
-      console.log('load rootdoc', this.rootDoc);
       // Step 1: load root doc
       await this.connectDoc(this.rootDoc, abortInner.signal);
       // Step 2: load subdocs
@@ -197,7 +195,6 @@ export class SyncPeer {
               abortInner.signal,
             );
 
-            console.log(data.length);
             // don't apply empty data or Uint8Array([0, 0])
             if (
               !(
@@ -279,12 +276,10 @@ export class SyncPeer {
   }
 
   async connectDoc(doc: Doc, abort: AbortSignal) {
-    console.log(doc.guid);
     const { data: docData, state: inStorageState } =
       (await this.storage.pull(doc.guid, encodeStateVector(doc))) ?? {};
     throwIfAborted(abort);
 
-    console.log('docdata', docData?.length);
     if (docData) {
       applyUpdate(doc, docData, 'load');
     }

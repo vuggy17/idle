@@ -8,25 +8,25 @@ import {
   Tooltip,
   theme,
 } from 'antd';
-import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
 import { useAtomValue } from 'jotai';
-import { currentUserAtom } from '@idle/chat/store/user';
 import { useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { AppPages, RouteKey } from '@idle/chat/router/routes';
-import UserProfilePopupContent from './UserProfilePopupContent';
-import NavIcon from './NavIcon';
 import { Plus } from 'iconoir-react';
-import NewChatModal from '@idle/chat/features/messaging/pages/components/newchat/NewChatModal';
-import { workspaceListAtom } from '@idle/chat/utils/workspace/atom';
+import { waitForCurrentWorkspaceAtom } from '../../utils/workspace/atom';
+import { AppPages, RouteKey } from '../../router/routes';
+import { currentUserAtom } from '../../store/user';
+import NavIcon from './Icon';
+import UserProfilePopupContent from './UserProfilePopupContent';
 import WorkspaceInfo from './WorkspaceInfo';
+import NewChatModal from '../../features/messaging/components/newchat/NewChatModal';
+import PartialAvatar from '../UserCard/PartialAvatar';
 
 const { useToken } = theme;
 
 const menuConfig = [
   {
-    key: AppPages.home,
-    icon: AppPages.home,
+    key: '.',
+    icon: AppPages.workspace,
     label: 'Home',
   },
   {
@@ -56,7 +56,7 @@ function getAppNavigateMenu(
     key: menuItem.key,
     icon: <NavIcon type={menuItem.icon} solid={currentPage === menuItem.key} />,
     label: (
-      <Link to={`/${menuItem.key}`} relative="path">
+      <Link to={`${menuItem.key}`} relative="route">
         {menuItem.label}
       </Link>
     ),
@@ -64,17 +64,16 @@ function getAppNavigateMenu(
   }));
 }
 
-export default function GlobalNavbar() {
+export default function RootAppSidebar() {
   const currentUser = useAtomValue(currentUserAtom);
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const { token } = useToken();
   const location = useLocation();
-  const list = useAtomValue(workspaceListAtom);
+  const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
 
-  const currentPage = location.pathname.split('/')[1] as RouteKey;
-
+  const currentPage = location.pathname.split('/')[3] ?? ('.' as RouteKey);
   const menuItems = useMemo(
-    () => getAppNavigateMenu(menuConfig, currentPage),
+    () => getAppNavigateMenu(menuConfig, currentPage as RouteKey),
     [currentPage],
   );
 
@@ -99,7 +98,7 @@ export default function GlobalNavbar() {
       >
         {/* workspace icon */}
         <WorkspaceInfo
-          metadata={{ flavour: list[0].flavour, id: list[0].id }}
+          metadata={{ flavour: workspace.flavour, id: workspace.id }}
         />
         <ConfigProvider
           theme={{

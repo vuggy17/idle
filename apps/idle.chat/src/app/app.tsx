@@ -3,7 +3,7 @@ import { SerializableThemeConfig } from '@idle/chat/components/context/readTheme
 import getCurrentStore from '@idle/chat/store/atom';
 import { App as AntdApp } from 'antd';
 import useLocalStorageState from 'use-local-storage-state';
-import AppRouter from '../router/AppRouter';
+import AppRouter from '../router';
 
 export default function App() {
   const [themeConfig, setThemeConfig] =

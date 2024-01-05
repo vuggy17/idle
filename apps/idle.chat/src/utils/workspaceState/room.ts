@@ -37,13 +37,4 @@ export default class Room extends RoomDoc {
   async load() {
     return this;
   }
-
-  addMessage(
-    text?: string,
-    attachments?: string[],
-    author: ID,
-    createdAt: TIME,
-  ) {
-    throw new Error('not implemented');
-  }
 }

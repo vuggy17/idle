@@ -15,8 +15,8 @@ export default async function createFirstAppData(): Promise<null | ID> {
     async (workspace) => {
       workspace.meta.setName(UNTITLED_WORKSPACE);
 
-      const room = workspace.createRoom({});
-      workspace.setRoomMeta(room.id, {});
+      // const room = workspace.createRoom({});
+      // workspace.setRoomMeta(room.id, {});
 
       console.debug('create first workspace');
     },

@@ -4,6 +4,13 @@ import { User } from '@idle/chat/features/auth/entities/user';
 import PartialAvatar from '../../../../../components/UserCard/PartialAvatar';
 import PeoplePicker from './PeoplePicker';
 import CreatePrivateRoomUseCase from '../../../useCases/createRoom';
+import useRoomHelper from '@idle/chat/hooks/useRoomHelper';
+import { useAtomValue } from 'jotai';
+import {
+  currentWorkspaceAtom,
+  waitForCurrentWorkspaceAtom,
+} from '@idle/chat/utils/workspace/atom';
+import { currentUserAtom } from '@idle/chat/store/user';
 
 const users = [
   {
@@ -62,6 +69,11 @@ const tagRender = (props: TagRenderProps) => {
 
 export default function NewChatModal({ ...props }: ModalProps) {
   const { onOk, ...selectProps } = props;
+  const workspace = useAtomValue(currentWorkspaceAtom);
+  console.log("🚀 ~ file: NewChatModal.tsx:73 ~ NewChatModal ~ workspace:", workspace)
+  // const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
+  // const currentUser = useAtomValue(currentUserAtom);
+  // const { createRoomAndOpen } = useRoomHelper(workspace.idleWorkSpace);
   const [selectedUser, setSelectedUser] = useState<User[]>([]);
 
   const createOrNavigateChat = (
@@ -72,10 +84,11 @@ export default function NewChatModal({ ...props }: ModalProps) {
       return;
     }
 
-    const executor = new CreatePrivateRoomUseCase();
-    executor.execute({
-      target: selectedUser[0].id,
-    });
+    // createRoomAndOpen([selectedUser[0].id, currentUser.id]);
+    // const executor = new CreatePrivateRoomUseCase();
+    // executor.execute({
+    //   target: selectedUser[0].id,
+    // });
     onOk?.(e);
   };
 

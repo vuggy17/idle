@@ -2,13 +2,13 @@ import { ID } from '@idle/model';
 import { Subject } from 'rxjs';
 import { Binder } from 'immer-yjs/src';
 import { Array as YArray, Map as YMap, Text as YText, YEvent } from 'yjs';
-import ColumnGroup from 'antd/es/table/ColumnGroup';
 import IdleDoc from './doc';
 
 export interface RoomMeta {
-  id: string;
+  id: ID;
   title: string;
   createDate: number;
+  members: ID[];
 }
 
 export type WorkspaceMetadataState = {
