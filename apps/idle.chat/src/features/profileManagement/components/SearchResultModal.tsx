@@ -11,10 +11,10 @@ import {
   theme,
 } from 'antd';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import PartialAvatar from '@idle/chat/components/UserCard/PartialAvatar';
 import { ChatBubble, Check, UserPlus } from 'iconoir-react';
 import { MouseEvent, memo, useEffect, useMemo, useState } from 'react';
-import HttpProvider from '@idle/chat/providers/http';
+import HttpProvider from '../../../providers/http';
+import PartialAvatar from '../../../components/UserCard/PartialAvatar';
 
 type SearchResult = {
   id: string;

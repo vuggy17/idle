@@ -1,7 +1,7 @@
 import { List } from 'antd';
 import { useMemo } from 'react';
 import { ListItemProps } from 'antd/es/list';
-import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
+import PartialAvatar from '../../../components/UserCard/PartialAvatar';
 
 export function CommonSearchResult({
   id,

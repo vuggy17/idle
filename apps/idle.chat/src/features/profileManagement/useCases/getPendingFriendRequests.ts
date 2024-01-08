@@ -1,6 +1,6 @@
-import { SocialServiceImpl } from '@idle/chat/services/socialService';
 import { GetPendingFriendRequestResponseDTO } from '@idle/model';
-import { UseCase } from '@idle/chat/type';
+import { SocialServiceImpl } from '../../../services/socialService';
+import { UseCase } from '../../../type';
 import { SocialRepository } from '../repositories/socialRepository';
 
 export default class GetPendingFriendRequestUseCase

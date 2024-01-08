@@ -1,13 +1,11 @@
 import { Card, Form, Layout, Space, Typography } from 'antd';
 
-import { useSetAtom } from 'jotai';
-import { currentUserAtom } from '@idle/chat/store/user';
 import { useNavigate } from 'react-router-dom';
-import RegisterUseCase from '@idle/chat/features/auth/useCases/register';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
-import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
+import { wrapErrorBoundary } from '../../../router/wrapErrorBoundary';
 import RegisterForm, { RegisterFormData } from '../components/RegisterForm';
+import RegisterUseCase from '../useCases/register';
 
 // test user
 const testUserRegisterInfo: RegisterFormData = {

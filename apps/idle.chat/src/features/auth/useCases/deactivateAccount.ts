@@ -1,9 +1,9 @@
-import { UseCase } from '@idle/chat/type';
 import { DeactivateAccountResponseDTO } from '@idle/model';
 import {
   AuthRepository,
   AuthServiceImpl,
 } from '../repositories/authRepository';
+import { UseCase } from '../../../type';
 
 type Input = { email: string; password: string };
 type Output = DeactivateAccountResponseDTO;

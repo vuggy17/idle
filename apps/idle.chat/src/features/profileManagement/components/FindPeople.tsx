@@ -1,40 +1,27 @@
 import {
   Button,
   ConfigProvider,
-  Divider,
-  Dropdown,
-  Input,
   Layout,
   List,
   Space,
-  Spin,
   Typography,
   theme,
 } from 'antd';
-import UserCard from '@idle/chat/components/UserCard';
-import GetUserSearchSuggestionUseCase from '@idle/chat/features/profileManagement/useCases/getUserSearchSuggestion';
-import React, {
-  KeyboardEvent,
-  cloneElement,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDebounce } from 'use-debounce';
-import useClickOutsideListener from '@idle/chat/hooks/useClickOutsideListener';
-import SearchResultModal from './SearchResultModal';
 import {
   GetUserSearchResultResponseDTO,
   GetUserSearchSuggestionResponseDTO,
   ID,
 } from '@idle/model';
-import GetUserSearchResultUseCase from '../../useCases/getUserSearchResult';
-import { PartialBy } from '@idle/chat/type';
+import { PartialBy } from '../../../type';
+import SearchWithPopup from '../../../components/SearchWithPopup/SearchWithPopup';
+import UserCard from '../../../components/UserCard';
+import SearchResultModal from './SearchResultModal';
+import GetUserSearchResultUseCase from '../useCases/getUserSearchResult';
 import PeopleSearchResult from './PeopleSearchResult';
 import FriendSearchResult from './FriendSearchResult';
-import SearchWithPopup from '@idle/chat/components/SearchWithPopup/SearchWithPopup';
+import GetUserSearchSuggestionUseCase from '../useCases/getUserSearchSuggestion';
 
 const { useToken } = theme;
 async function getSearchSuggestions(
@@ -156,7 +143,7 @@ export function FindPeople() {
           <SearchWithPopup
             value={nameQuery}
             onChange={(query) => {
-              setNameQuery(query)
+              setNameQuery(query);
             }}
             loading={searching}
             onSearch={onSearch}
@@ -178,7 +165,6 @@ export function FindPeople() {
               setUserProfileToView(profileToView);
             }}
           />
-
 
           {searchResult && searchResult.length > 0 ? (
             <ConfigProvider
@@ -242,7 +228,7 @@ export function FindPeople() {
                       avatar={item.avatar ?? ''}
                       key={item.name}
                       bio={item.bio ?? ''}
-                      isFriend={true}
+                      isFriend
                     />
                   )}
                 />

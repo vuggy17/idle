@@ -1,8 +1,6 @@
-/* eslint-disable @nx/enforce-module-boundaries */
-import WorkspaceFlavour from '@idle/chat/utils/workspace/list/workspaceFlavour';
 import { Tooltip } from 'antd';
-import React from 'react';
-import useWorkspaceInfo from '@idle/chat/hooks/useWorkspaceInfo';
+import WorkspaceFlavour from '../../utils/workspace/list/workspaceFlavour';
+import useWorkspaceInfo from '../../hooks/useWorkspaceInfo';
 import PartialAvatar from '../UserCard/PartialAvatar';
 
 type WorkspaceInfoProps = {

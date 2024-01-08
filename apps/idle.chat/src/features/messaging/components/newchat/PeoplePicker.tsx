@@ -1,8 +1,8 @@
 import {
-  DebounceSelect,
   DebounceSelectProps,
-} from '@idle/chat/components/DebounceSelect';
-import HttpProvider from '@idle/chat/providers/http';
+  DebounceSelect,
+} from '../../../../components/DebounceSelect';
+import HttpProvider from '../../../../providers/http';
 
 type PeoplePickerProps = {
   onChange?: DebounceSelectProps['onChange'];
@@ -11,7 +11,7 @@ type PeoplePickerProps = {
 export default function PeoplePicker({ ...props }: PeoplePickerProps) {
   return (
     <DebounceSelect
-      prefetch={true}
+      prefetch
       mode="multiple"
       placeholder="Select users"
       fetchOptions={fetchUserList}

@@ -17,9 +17,9 @@ import { Await, LoaderFunction, useNavigate } from 'react-router-dom';
 import { useLoaderData, defer } from 'react-router-typesafe';
 import { Refresh } from 'iconoir-react';
 import { FriendRequestResponseDTO, ID } from '@idle/model';
-import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
-import GetPendingFriendRequestUseCase from '../../useCases/getPendingFriendRequests';
-import ModifyFriendRequestUseCase from '../../useCases/modifyFriendRequest';
+import PartialAvatar from '../../../components/UserCard/PartialAvatar';
+import GetPendingFriendRequestUseCase from '../useCases/getPendingFriendRequests';
+import ModifyFriendRequestUseCase from '../useCases/modifyFriendRequest';
 import FriendRequestButton, {
   FriendRequestActions,
 } from './FriendRequestButton';

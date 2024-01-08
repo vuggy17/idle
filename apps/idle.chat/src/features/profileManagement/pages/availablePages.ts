@@ -1,4 +1,4 @@
-import { ValueOf } from '@idle/chat/utils/typing';
+import { ValueOf } from '../../../utils/typing';
 
 export const PreferenceSubPages = {
   General: '1',

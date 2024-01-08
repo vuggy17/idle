@@ -1,6 +1,14 @@
 import { Flex, List, Typography } from 'antd';
-import PartialAvatar from '../../../../../components/UserCard/PartialAvatar';
-import { RoomMeta } from '@idle/chat/utils/workspaceState/meta';
+import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
+import { RoomMeta } from '../../../../utils/workspaceState/meta';
+
+export type RoomItem = {
+  id: string;
+  name: string;
+  sub: string;
+  img: string;
+  lastUpdatedAt: number;
+};
 
 // export default function RoomItem({
 //   isActive,
@@ -37,13 +45,13 @@ import { RoomMeta } from '@idle/chat/utils/workspaceState/meta';
 //   );
 // }
 
-export default function RoomMetaRender({ meta }: { meta: RoomMeta }) {
+export function RoomMetaRender({ meta }: { meta: RoomMeta }) {
   const { createDate, id, title } = meta;
   console.log(meta);
   const isActive = false;
   const sub = title;
   const lastUpdatedAt = createDate;
-  const img = null
+  const img = null;
   return (
     <List.Item className={`min-w-0 ${isActive ? 'active' : ''}`}>
       <Flex align="center" className="min-w-0 px-4">

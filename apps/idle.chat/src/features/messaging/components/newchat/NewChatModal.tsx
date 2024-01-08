@@ -1,16 +1,10 @@
 import { Flex, Modal, ModalProps } from 'antd';
 import { useState } from 'react';
-import { User } from '@idle/chat/features/auth/entities/user';
-import PartialAvatar from '../../../../../components/UserCard/PartialAvatar';
-import PeoplePicker from './PeoplePicker';
-import CreatePrivateRoomUseCase from '../../../useCases/createRoom';
-import useRoomHelper from '@idle/chat/hooks/useRoomHelper';
 import { useAtomValue } from 'jotai';
-import {
-  currentWorkspaceAtom,
-  waitForCurrentWorkspaceAtom,
-} from '@idle/chat/utils/workspace/atom';
-import { currentUserAtom } from '@idle/chat/store/user';
+import { waitForCurrentWorkspaceAtom } from '../../../../utils/workspace/atom';
+import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
+import PeoplePicker from './PeoplePicker';
+import { User } from '../../../auth/entities/user';
 
 const users = [
   {
@@ -69,8 +63,7 @@ const tagRender = (props: TagRenderProps) => {
 
 export default function NewChatModal({ ...props }: ModalProps) {
   const { onOk, ...selectProps } = props;
-  const workspace = useAtomValue(currentWorkspaceAtom);
-  console.log("🚀 ~ file: NewChatModal.tsx:73 ~ NewChatModal ~ workspace:", workspace)
+  const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
   // const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
   // const currentUser = useAtomValue(currentUserAtom);
   // const { createRoomAndOpen } = useRoomHelper(workspace.idleWorkSpace);

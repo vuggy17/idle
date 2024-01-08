@@ -2,7 +2,7 @@ import {
   GetUserSearchSuggestionRequestDTO,
   GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
-import { SocialServiceImpl } from '@idle/chat/services/socialService';
+import { SocialServiceImpl } from '../../../services/socialService';
 import { UseCase, WithAbortSignal } from '../../../type';
 import { SocialRepository } from '../repositories/socialRepository';
 

@@ -1,13 +1,13 @@
+import { useAtomValue } from 'jotai';
+import { FriendRequestResponseDTO, ID } from '@idle/model';
+import { App } from 'antd';
 import FriendRequestButton, {
   FriendRequestActions,
 } from './FriendRequestButton';
-import { useAtomValue } from 'jotai';
-import { currentUserAtom } from '@idle/chat/store/user';
-import { FriendRequestResponseDTO, ID } from '@idle/model';
-import CreateFriendRequestUseCase from '../../useCases/createFriendRequest';
-import ModifyFriendRequestUseCase from '../../useCases/modifyFriendRequest';
+import CreateFriendRequestUseCase from '../useCases/createFriendRequest';
+import ModifyFriendRequestUseCase from '../useCases/modifyFriendRequest';
 import { CommonSearchResult, SearchResultCardProps } from './SearchResult';
-import { App } from 'antd';
+import { currentUserAtom } from '../../../store/user';
 
 interface PeopleSearchResultProps extends SearchResultCardProps {
   hasPendingRequest?: boolean;

@@ -1,6 +1,6 @@
 import { Layout, ConfigProvider, Space, Typography, Divider } from 'antd';
 
-import UnderConstruction from '@idle/chat/components/UnderConstruction';
+import UnderConstruction from '../../../components/UnderConstruction';
 
 export default function MySetting() {
   return (

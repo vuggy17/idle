@@ -11,9 +11,9 @@ import {
   Typography,
 } from 'antd';
 import { AppwriteException } from 'appwrite';
-import ChangePasswordUseCase from '@idle/chat/features/auth/useCases/changePassword';
 import { PasswordCursor } from 'iconoir-react';
 import { useState } from 'react';
+import ChangePasswordUseCase from '../../auth/useCases/changePassword';
 
 type ChangePasswordForm = {
   password: string;

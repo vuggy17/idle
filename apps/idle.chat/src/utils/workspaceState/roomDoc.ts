@@ -1,7 +1,7 @@
 import { ID } from '@idle/model';
 import * as Y from 'yjs';
 import { Subject } from 'rxjs';
-import { Binder, JSONObject, UpdateFn } from 'immer-yjs/src';
+import { JSONObject, UpdateFn } from 'immer-yjs/src';
 import IdleDoc from './doc';
 
 export default class RoomDoc<State extends JSONObject = Record<string, any>> {
@@ -16,8 +16,6 @@ export default class RoomDoc<State extends JSONObject = Record<string, any>> {
   private _loaded!: boolean;
 
   private _onLoad = new Subject<void>();
-
-  private readonly _binder: Binder<State>;
 
   constructor(id: ID, rootDoc: IdleDoc) {
     this.id = id;
@@ -87,6 +85,7 @@ export default class RoomDoc<State extends JSONObject = Record<string, any>> {
   };
 
   update(fn: UpdateFn<State>) {
-    this._binder.update(fn);
+    console.log(this);
+    throw new Error('not implemented yet');
   }
 }

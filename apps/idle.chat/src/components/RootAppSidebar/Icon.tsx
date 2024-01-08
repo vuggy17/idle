@@ -1,7 +1,7 @@
 import { Flex, theme } from 'antd';
 import { Bell, Compass, HomeSimpleDoor, MultiBubble } from 'iconoir-react';
 import { useMemo } from 'react';
-import { RouteKey } from '@idle/chat/router/routes';
+import { RouteKey } from '../../router/routes';
 
 const { useToken } = theme;
 

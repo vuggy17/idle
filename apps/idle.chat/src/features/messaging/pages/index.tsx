@@ -1,16 +1,12 @@
-import { Button, Card, Layout } from 'antd';
-
-import Typography from 'antd/es/typography/Typography';
-import NxWelcome from '@idle/chat/app/nx-welcome';
-import { useAtom, useAtomValue } from 'jotai';
-import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
-import { currentUserAtom } from '@idle/chat/store/user';
-import { activeChatIdAtom } from '@idle/chat/store/chat';
-import ChatSideBar from './components/sidebar';
-import { Suspense, useEffect } from 'react';
-import createFirstAppData from '@idle/chat/bootstrap/createFirstAppData';
-import { workspaceListAtom } from '@idle/chat/utils/workspace/atom';
+import { Button, Card, Layout, Typography } from 'antd';
+import { useAtomValue, useAtom } from 'jotai';
 import { Outlet } from 'react-router-dom';
+import createFirstAppData from '../../../bootstrap/createFirstAppData';
+import { wrapErrorBoundary } from '../../../router/wrapErrorBoundary';
+import { activeChatIdAtom } from '../../../store/chat';
+import { currentUserAtom } from '../../../store/user';
+
+import ChatSideBar from '../components/sidebar';
 
 export default function MessagingLayout() {
   const userInfo = useAtomValue(currentUserAtom);

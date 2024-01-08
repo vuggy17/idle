@@ -1,5 +1,5 @@
 import { Button, Space } from 'antd';
-import useStateHistory from '../../../../hooks/useStateHistory';
+import useStateHistory from '../../../hooks/useStateHistory';
 
 type FriendRequestStates = 'initial' | 'pending' | 'accepted' | 'declined';
 export type FriendRequestActions = 'SEND' | 'ACCEPT' | 'DECLINE' | 'CANCEL';

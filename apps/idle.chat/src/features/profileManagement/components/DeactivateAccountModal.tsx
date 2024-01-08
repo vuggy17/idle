@@ -10,10 +10,10 @@ import {
   Typography,
 } from 'antd';
 import { AppwriteException } from 'appwrite';
-import DeactivateAccountUseCase from '@idle/chat/features/auth/useCases/deactivateAccount';
 import { useAtomValue } from 'jotai';
 import { useLayoutEffect, useState } from 'react';
-import { currentUserAtom } from '@idle/chat/store/user';
+import { currentUserAtom } from '../../../store/user';
+import DeactivateAccountUseCase from '../../auth/useCases/deactivateAccount';
 
 type DeactivateAccountModalProps = ModalProps;
 type DeactivateAccountForm = {

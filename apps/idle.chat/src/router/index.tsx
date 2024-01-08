@@ -36,20 +36,20 @@ const router = createBrowserRouter([
           {
             path: Routes.discover,
             lazy: () =>
-              import('../features/profileManagement/ui/pages/DiscoverLayout'),
+              import('../features/profileManagement/pages/DiscoverLayout'),
             children: [
               {
                 index: true,
                 lazy: () =>
                   import(
-                    '../features/profileManagement/ui/components/FindPeople'
+                    '../features/profileManagement/components/FindPeople'
                   ),
               },
               {
                 path: 'friend_requests',
                 lazy: () =>
                   import(
-                    '../features/profileManagement/ui/components/FriendInvitation'
+                    '../features/profileManagement/components/FriendInvitation'
                   ).then((res) => ({
                     Component: res.Component,
                     loader: res.Loader,

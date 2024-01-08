@@ -1,5 +1,5 @@
 import { ThemeConfig, theme } from 'antd';
-import { Modify } from '@idle/chat/utils/typing';
+import { Modify } from '../../utils/typing';
 
 export function readThemeConfig(config: SerializableThemeConfig): ThemeConfig {
   const algorithmMapping = {

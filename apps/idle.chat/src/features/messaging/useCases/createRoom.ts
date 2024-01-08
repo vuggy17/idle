@@ -1,5 +1,5 @@
-import { RoomRepositoryImpl } from '@idle/chat/services/roomService';
 import { ID } from '@idle/model';
+import { RoomRepositoryImpl } from '../../../services/roomService';
 import { UseCase } from '../../../type';
 import RoomRepository from '../repositories/roomRepository';
 

@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import {
   SerializableThemeConfig,
   readThemeConfig,
-} from '@idle/chat/components/context/readThemeConfig';
+} from '../../../components/context/readThemeConfig';
 
 const wrapThemeConfig = (
   preset: SerializableThemeConfig,

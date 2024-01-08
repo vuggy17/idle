@@ -3,10 +3,11 @@ import { Card, Form, FormInstance, Layout, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
-import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
-import { AppRoutes } from '@idle/chat/router/routes';
-import useAuth from '@idle/chat/services/useAuth';
+
+import { wrapErrorBoundary } from '../../../router/wrapErrorBoundary';
+import useAuth from '../../../services/useAuth';
 import LoginForm, { LoginFormData } from '../components/LoginForm';
+import { Routes } from '../../../router/routes';
 
 // test user
 const testUserRegisterInfo: LoginFormData = {
@@ -25,7 +26,7 @@ function Login() {
 
     try {
       await login(formValues.email, formValues.password);
-      navigate(`/${AppRoutes.home.key}`);
+      navigate(`/${Routes.workspace}`);
     } catch (error) {
       onLoginFailed(error, form);
     } finally {

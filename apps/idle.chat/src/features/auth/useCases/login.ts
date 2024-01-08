@@ -1,5 +1,5 @@
-import { UseCase } from '@idle/chat/type';
 import { LoginUserRequestDTO, LoginUserResponseDTO } from '@idle/model';
+import { UseCase } from '../../../type';
 import {
   AuthRepository,
   AuthServiceImpl,

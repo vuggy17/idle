@@ -1,20 +1,11 @@
-import { Layout, ConfigProvider, theme, Button } from 'antd';
+import { Layout, ConfigProvider, theme } from 'antd';
 
-import RootAppSidebar from '@idle/chat/components/RootAppSidebar/RootAppSidebar';
 import { Outlet } from 'react-router-dom';
-import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
-import ProtectedRoute from '@idle/chat/router/ProtectedRoute';
-import { FireBaseInstance } from '../Firebase';
 import { Suspense, useEffect, useState } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
-import {
-  currentWorkspaceAtom,
-  workspaceListAtom,
-} from '../utils/workspace/atom';
-import useWorkspace from '../hooks/useWorkspace';
+import { FireBaseInstance } from '../Firebase';
 import createFirstAppData from '../bootstrap/createFirstAppData';
-// import { Account } from 'appwrite';
-// import { AppWriteProvider } from '../providers/appwrite';
+import RootAppSidebar from '../components/RootAppSidebar/RootAppSidebar';
+import { wrapErrorBoundary } from '../router/wrapErrorBoundary';
 
 const { useToken } = theme;
 
@@ -33,7 +24,7 @@ export default function AppLayoutWithGnb() {
   }, []);
 
   if (loading) {
-    return;
+    return null;
   }
   return (
     <ConfigProvider
@@ -71,11 +62,7 @@ export default function AppLayoutWithGnb() {
 }
 
 export const Component = () => {
-  return wrapErrorBoundary(
-    <ProtectedRoute>
-      <AppLayoutWithGnb />
-    </ProtectedRoute>,
-  );
+  return wrapErrorBoundary(<AppLayoutWithGnb />);
 };
 
 // export const loader: LoaderFunction = async ({ params }) => null;

@@ -1,15 +1,15 @@
 import { ID } from '@idle/model';
 import { ConfigProvider, Flex, Input, List, Typography } from 'antd';
-import { useRef, useState } from 'react';
-import useRoomMetas from '@idle/chat/hooks/useRoomMeta';
-import RoomItem from './RoomItem';
-import uniqueId from '../../../../../utils/uniqueId';
-import useConversationItemStyle from './useConversationItemStyle';
+import { useRef } from 'react';
 import { useAtomValue } from 'jotai';
+import useRoomMetas from '../../../../hooks/useRoomMeta';
+import uniqueId from '../../../../utils/uniqueId';
 import {
   currentWorkspaceAtom,
   waitForCurrentWorkspaceAtom,
-} from '@idle/chat/utils/workspace/atom';
+} from '../../../../utils/workspace/atom';
+import { RoomItem, RoomMetaRender } from './RoomItem';
+import useConversationItemStyle from './useConversationItemStyle';
 
 const rooms = [
   {
@@ -28,14 +28,6 @@ const rooms = [
   })),
 ];
 
-type RoomItem = {
-  id: string;
-  name: string;
-  sub: string;
-  img: string;
-  lastUpdatedAt: number;
-};
-
 const ContainerHeight = 400;
 
 export default function ChatSideBar({
@@ -45,10 +37,9 @@ export default function ChatSideBar({
   activeConversation: ID;
   onItemClick: (item: RoomItem) => void;
 }) {
-  const workspace = useAtomValue(currentWorkspaceAtom)
-  console.log(workspace)
-  // const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
-  // const roomMetaList = useRoomMetas(currentWorkspace.idleWorkSpace);
+  const workspace = useAtomValue(currentWorkspaceAtom);
+  const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
+  const roomMetaList = useRoomMetas(currentWorkspace.idleWorkSpace);
   // console.log("🚀 ~ file: index.tsx:50 ~ roomMetaList:", roomMetaList)
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -95,8 +86,7 @@ export default function ChatSideBar({
             </div>
           }
           className="overflow-hidden"
-          dataSource={[]}
-          // dataSource={roomMetaList}
+          dataSource={roomMetaList}
           renderItem={(metadata) => (
             <div
               // onClick={() => onItemClick(room)}
@@ -108,7 +98,7 @@ export default function ChatSideBar({
               //   }
               // }}
             >
-              <RoomItem key={metadata.id} meta={metadata} />
+              <RoomMetaRender key={metadata.id} meta={metadata} />
             </div>
           )}
         />
