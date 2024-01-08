@@ -64,3 +64,5 @@ export function Component() {
     </Suspense>
   );
 }
+
+Component.displayName = 'WorkspacePage';

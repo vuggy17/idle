@@ -41,9 +41,12 @@ export default function useAuth() {
     setUser(guest);
   }, [setUser]);
 
-  return {
-    isAuthenticated,
-    logout,
-    login,
-  };
+  return useMemo(
+    () => ({
+      isAuthenticated,
+      logout,
+      login,
+    }),
+    [isAuthenticated, logout, login],
+  );
 }

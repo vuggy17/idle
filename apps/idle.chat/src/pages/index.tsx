@@ -1,26 +1,33 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
 import createFirstAppData from '../bootstrap/createFirstAppData';
 import { FireBaseInstance } from '../Firebase';
 import ProtectedRoute from '../router/ProtectedRoute';
 import useNavigateHelper from '../hooks/useNavigateHelper';
 import { workspaceListAtom } from '../utils/workspace/atom';
+import { WorkspaceFallback } from './workspace';
+import { Routes } from '../router/routes';
 
 export function Bootstrap() {
-  // navigating and creating may be slow, to avoid flickering, we show workspace fallback
   const [navigating, setNavigating] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { openPage } = useNavigateHelper();
+  const location = useLocation();
+  const isAtWorkspaceRoot = location.pathname.endsWith(Routes.workspace);
+
   const list = useAtomValue(workspaceListAtom);
 
   useLayoutEffect(() => {
-    const lastWorkspaceId = localStorage.getItem('last_workspace_id');
-    const workspaceToOpen =
-      list.find((w) => w.id === lastWorkspaceId) ?? list[0];
+    // don't redirect if we currently in a sub route, ex: workspace/quhcamz20xqas7vxro0e54ze
+    if (isAtWorkspaceRoot) {
+      const lastWorkspaceId = localStorage.getItem('last_workspace_id');
+      const workspaceToOpen =
+        list.find((w) => w.id === lastWorkspaceId) ?? list[0];
+      openPage(workspaceToOpen?.id, '', true);
+    }
     setNavigating(false);
-    openPage(workspaceToOpen?.id, '', true);
-  }, [list, openPage]);
+  }, [list, openPage, isAtWorkspaceRoot]);
 
   useEffect(() => {
     FireBaseInstance.start();
@@ -33,11 +40,7 @@ export function Bootstrap() {
       });
   }, []);
 
-  return loading || navigating ? (
-    <div className="h-full text-center align-baseline">App loading...</div>
-  ) : (
-    <Outlet />
-  );
+  return loading || navigating ? <WorkspaceFallback /> : <Outlet />;
 }
 
 export function Component() {
