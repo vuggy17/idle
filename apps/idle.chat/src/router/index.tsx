@@ -17,12 +17,11 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            lazy: () => import('../features/messaging/pages'),
+            lazy: () => import('../features/messaging/pages/NoRoom'),
           },
-
           {
             path: ':roomId',
-            element: 'roomid',
+            lazy: () => import('../features/messaging/pages/RoomDetail'),
           },
           {
             path: Routes.dm,
@@ -41,9 +40,7 @@ const router = createBrowserRouter([
               {
                 index: true,
                 lazy: () =>
-                  import(
-                    '../features/profileManagement/components/FindPeople'
-                  ),
+                  import('../features/profileManagement/components/FindPeople'),
               },
               {
                 path: 'friend_requests',
