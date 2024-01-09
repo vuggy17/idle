@@ -1,27 +1,31 @@
-import { Layout, ConfigProvider, theme, Button } from 'antd';
+import { Layout, ConfigProvider, theme } from 'antd';
 
-import GlobalNavbar from '@idle/chat/components/GlobalNavbar/GlobalNavbar';
 import { Outlet } from 'react-router-dom';
-import { wrapErrorBoundary } from '@idle/chat/router/wrapErrorBoundary';
-import ProtectedRoute from '@idle/chat/router/ProtectedRoute';
+import { Suspense, useEffect, useState } from 'react';
 import { FireBaseInstance } from '../Firebase';
-import { useEffect } from 'react';
-// import { Account } from 'appwrite';
-// import { AppWriteProvider } from '../providers/appwrite';
+import createFirstAppData from '../bootstrap/createFirstAppData';
+import RootAppSidebar from '../components/RootAppSidebar/RootAppSidebar';
+import { wrapErrorBoundary } from '../router/wrapErrorBoundary';
 
 const { useToken } = theme;
 
 export default function AppLayoutWithGnb() {
+  const [loading, setLoading] = useState(true);
   const { token } = useToken();
-
   // save FCM token to server if user has loggedIn
   useEffect(() => {
     (async () => {
       FireBaseInstance.start();
-      console.log('FCM token', token);
     })();
   }, []);
 
+  useEffect(() => {
+    createFirstAppData().then(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return null;
+  }
   return (
     <ConfigProvider
       theme={{
@@ -34,7 +38,7 @@ export default function AppLayoutWithGnb() {
     >
       <Layout className="h-full" hasSider>
         <aside className="relative z-10 w-20">
-          <GlobalNavbar />
+          <RootAppSidebar />
         </aside>
 
         <Layout.Content>
@@ -48,7 +52,9 @@ export default function AppLayoutWithGnb() {
           >
             issue token
           </button> */}
-          <Outlet />
+          <Suspense fallback="creating app data">
+            <Outlet />
+          </Suspense>
         </Layout.Content>
       </Layout>
     </ConfigProvider>
@@ -56,11 +62,7 @@ export default function AppLayoutWithGnb() {
 }
 
 export const Component = () => {
-  return wrapErrorBoundary(
-    <ProtectedRoute>
-      <AppLayoutWithGnb />
-    </ProtectedRoute>,
-  );
+  return wrapErrorBoundary(<AppLayoutWithGnb />);
 };
 
 // export const loader: LoaderFunction = async ({ params }) => null;

@@ -1,9 +1,9 @@
-import { UseCase } from '@idle/chat/type';
 import { RegisterUserRequestDTO, RegisterUserResponseDTO } from '@idle/model';
 import {
   AuthRepository,
   AuthServiceImpl,
 } from '../repositories/authRepository';
+import { UseCase } from '../../../type';
 
 export default class RegisterUseCase
   implements UseCase<RegisterUserRequestDTO, RegisterUserResponseDTO>

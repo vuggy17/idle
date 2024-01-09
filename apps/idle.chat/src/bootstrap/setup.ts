@@ -1,6 +1,6 @@
 import { createStore } from 'jotai';
-import { AuthServiceImpl } from '@idle/chat/features/auth/repositories/authRepository';
-import { currentUserAtom } from '@idle/chat/store/user';
+import { AuthServiceImpl } from '../features/auth/repositories/authRepository';
+import { currentUserAtom } from '../store/user';
 
 export default async function setup(store: ReturnType<typeof createStore>) {
   const authProvider = AuthServiceImpl;

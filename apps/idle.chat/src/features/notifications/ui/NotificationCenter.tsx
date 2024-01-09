@@ -1,5 +1,5 @@
-import { FireBaseInstance } from '@idle/chat/Firebase';
 import { useEffect } from 'react';
+import { FireBaseInstance } from '../../../Firebase';
 
 export function Component() {
   useEffect(() => {

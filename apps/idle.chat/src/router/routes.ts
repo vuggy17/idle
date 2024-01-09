@@ -1,4 +1,4 @@
-export type RouteKey = 'home' | 'dm' | 'activity' | 'discover';
+export type RouteKey = 'workspace' | 'dm' | 'activity' | 'discover';
 export type SubRouteKey = '.' | 'friend_requests';
 
 /**
@@ -13,9 +13,9 @@ type Route = {
 };
 
 export const AppRoutes: Record<RouteKey, Route> = {
-  home: {
-    key: 'home',
-    name: 'Home',
+  workspace: {
+    key: 'workspace',
+    name: 'Workspace',
   },
   dm: {
     key: 'dm',
@@ -31,8 +31,15 @@ export const AppRoutes: Record<RouteKey, Route> = {
   },
 } as const;
 
+export const Routes = {
+  workspace: 'workspace',
+  dm: 'dm',
+  activity: 'activity',
+  discover: 'discover',
+} as const;
+
 export const AppPages: Record<RouteKey, RouteKey> = {
-  home: 'home',
+  workspace: 'workspace',
   dm: 'dm',
   activity: 'activity',
   discover: 'discover',

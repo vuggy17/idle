@@ -1,4 +1,3 @@
-import { UseCase } from '@idle/chat/type';
 import {
   ChangePasswordRequestDTO,
   ChangePasswordResponseDTO,
@@ -7,6 +6,7 @@ import {
   AuthRepository,
   AuthServiceImpl,
 } from '../repositories/authRepository';
+import { UseCase } from '../../../type';
 
 export default class ChangePasswordUseCase
   implements UseCase<ChangePasswordRequestDTO, ChangePasswordResponseDTO>

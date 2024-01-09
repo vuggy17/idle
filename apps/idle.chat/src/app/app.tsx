@@ -1,9 +1,9 @@
-import { IdleContextProvider } from '@idle/chat/components/context';
-import { SerializableThemeConfig } from '@idle/chat/components/context/readThemeConfig';
-import getCurrentStore from '@idle/chat/store/atom';
 import { App as AntdApp } from 'antd';
 import useLocalStorageState from 'use-local-storage-state';
-import AppRouter from '../router/AppRouter';
+import AppRouter from '../router';
+import { IdleContextProvider } from '../components/context';
+import { SerializableThemeConfig } from '../components/context/readThemeConfig';
+import getCurrentStore from '../store/atom';
 
 export default function App() {
   const [themeConfig, setThemeConfig] =
@@ -20,7 +20,7 @@ export default function App() {
       store={getCurrentStore()}
       themeConfig={themeConfig}
       overrideThemeConfig={(newConfig) => {
-        setThemeConfig((oldConfig) => ({ ...oldConfig, ...newConfig }));
+        setThemeConfig((oldConfig: any) => ({ ...oldConfig, ...newConfig }));
       }}
     >
       <AntdApp className="h-full">

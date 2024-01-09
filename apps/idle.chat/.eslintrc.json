@@ -35,7 +35,9 @@
         "*.ts",
         "*.tsx"
       ],
-      "rules": {}
+      "rules": {
+        "import/prefer-default-export": "off"
+      }
     },
     {
       "files": [

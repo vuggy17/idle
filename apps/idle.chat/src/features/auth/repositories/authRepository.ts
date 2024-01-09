@@ -8,8 +8,8 @@ import {
 } from '@idle/model';
 
 import { Account, ID, Models } from 'appwrite';
-import { AppWriteProvider } from '@idle/chat/providers/appwrite';
-import HttpProvider, { HttpClient } from '@idle/chat/providers/http';
+import { AppWriteProvider } from '../../../providers/appwrite';
+import HttpProvider, { HttpClient } from '../../../providers/http';
 
 export interface AuthRepository {
   register(userData: RegisterUserRequestDTO): Promise<RegisterUserResponseDTO>;

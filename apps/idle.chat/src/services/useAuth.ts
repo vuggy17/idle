@@ -1,8 +1,8 @@
-import LoginUseCase from '@idle/chat/features/auth/useCases/login';
 import { useAtom } from 'jotai';
 import { useCallback, useMemo } from 'react';
-import { currentUserAtom } from '@idle/chat/store/user';
 import { UserDTO } from '@idle/model';
+import { currentUserAtom } from '../store/user';
+import LoginUseCase from '../features/auth/useCases/login';
 import { AuthServiceImpl } from '../features/auth/repositories/authRepository';
 
 const guest: UserDTO = {
@@ -41,9 +41,12 @@ export default function useAuth() {
     setUser(guest);
   }, [setUser]);
 
-  return {
-    isAuthenticated,
-    logout,
-    login,
-  };
+  return useMemo(
+    () => ({
+      isAuthenticated,
+      logout,
+      login,
+    }),
+    [isAuthenticated, logout, login],
+  );
 }

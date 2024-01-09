@@ -7,8 +7,8 @@ import {
   GetUserSearchSuggestionRequestDTO,
   GetUserSearchSuggestionResponseDTO,
 } from '@idle/model';
-import { SocialRepository } from '@idle/chat/features/profileManagement/repositories/socialRepository';
-import HttpProvider, { HttpClient } from '@idle/chat/providers/http';
+import { SocialRepository } from '../features/profileManagement/repositories/socialRepository';
+import HttpProvider, { HttpClient } from '../providers/http';
 
 export default class SocialService implements SocialRepository {
   constructor(private httpGateway: HttpClient) {}

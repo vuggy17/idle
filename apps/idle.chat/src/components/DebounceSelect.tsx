@@ -1,12 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Select, Spin } from 'antd';
 import type { SelectProps } from 'antd/es/select';
-import { useDebouncedCallback } from 'use-debounce';
+import { Options as DebounceOptions, useDebouncedCallback } from 'use-debounce';
 
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType | ValueType[]>, 'options' | 'children'> {
   fetchOptions: (search: string) => Promise<ValueType[]>;
   debounceTimeout?: number;
+  config?: DebounceOptions;
+  prefetch?: boolean;
 }
 
 export function DebounceSelect<
@@ -18,13 +20,15 @@ export function DebounceSelect<
 >({
   fetchOptions,
   debounceTimeout = 800,
+  prefetch = false,
+  config = {},
   ...props
 }: DebounceSelectProps<ValueType>) {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<ValueType[]>([]);
   const fetchRef = useRef(0);
 
-  const debounceFetcher = useDebouncedCallback((value: string) => {
+  const fetchWithSequenceControl = (value: string) => {
     fetchRef.current += 1;
     const fetchId = fetchRef.current;
     setOptions([]);
@@ -39,7 +43,20 @@ export function DebounceSelect<
       setOptions(newOptions);
       setFetching(false);
     });
-  }, debounceTimeout);
+  };
+
+  const debounceFetcher = useDebouncedCallback(
+    fetchWithSequenceControl,
+    debounceTimeout,
+    config,
+  );
+
+  console.log('options', options);
+  useEffect(() => {
+    if (prefetch) {
+      fetchWithSequenceControl('');
+    }
+  }, [prefetch, fetchOptions]);
 
   return (
     <Select

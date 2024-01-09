@@ -1,9 +1,5 @@
-import {
-  GetUserSearchResultResponseDTO,
-  GetUserSearchSuggestionRequestDTO,
-  GetUserSearchSuggestionResponseDTO,
-} from '@idle/model';
-import { SocialServiceImpl } from '@idle/chat/services/socialService';
+import { GetUserSearchResultResponseDTO } from '@idle/model';
+import { SocialServiceImpl } from '../../../services/socialService';
 import { UseCase } from '../../../type';
 import { SocialRepository } from '../repositories/socialRepository';
 
