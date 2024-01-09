@@ -1,7 +1,8 @@
 import { Flex, theme } from 'antd';
 import { Bell, Compass, HomeSimpleDoor, MultiBubble } from 'iconoir-react';
 import { useMemo } from 'react';
-import { RouteKey } from '../../router/routes';
+import { NavLink, useLocation } from 'react-router-dom';
+import { RouteKey, Routes } from '../../router/routes';
 
 const { useToken } = theme;
 
@@ -13,14 +14,27 @@ const { useToken } = theme;
  */
 export default function SideBarIcon({
   type,
-  solid,
+  matchPattern,
 }: {
   type: RouteKey;
-  solid?: boolean;
+  matchPattern: string;
 }) {
   const {
     token: { colorPrimary },
   } = useToken();
+
+  const { pathname } = useLocation();
+
+  const isWorkspacePath = (currentPathName: string) => {
+    if (
+      currentPathName.includes(Routes.dm) ||
+      currentPathName.includes(Routes.activity) ||
+      currentPathName.includes(Routes.discover)
+    )
+      return false;
+
+    return true;
+  };
 
   // eslint-disable-next-line consistent-return
   const icon = useMemo(() => {
@@ -28,36 +42,47 @@ export default function SideBarIcon({
       case 'workspace':
         return (
           <HomeSimpleDoor
-            fill={solid ? colorPrimary : 'none'}
+            fill={isWorkspacePath(pathname) ? colorPrimary : 'none'}
             className="h-full hover:scale-110 duration-200"
           />
         );
 
       case 'dm':
         return (
-          <MultiBubble
-            fill={solid ? colorPrimary : 'none'}
-            className="h-full hover:scale-110 duration-200"
-          />
+          <NavLink to={`${matchPattern}`} className="h-full duration-200">
+            {({ isActive }) => (
+              <MultiBubble
+                fill={isActive ? colorPrimary : 'none'}
+                className="h-full hover:scale-110 "
+              />
+            )}
+          </NavLink>
         );
 
       case 'activity':
         return (
-          <Bell
-            fill={solid ? colorPrimary : 'none'}
-            className="h-full hover:scale-110 duration-200"
-          />
+          <NavLink to={`${matchPattern}`} className="h-full ">
+            {({ isActive }) => (
+              <Bell
+                fill={isActive ? colorPrimary : 'none'}
+                className="h-full hover:scale-110 "
+              />
+            )}
+          </NavLink>
         );
       case 'discover':
         return (
-          <Compass
-            fill={solid ? colorPrimary : 'none'}
-            className="h-full hover:scale-110 duration-200"
-          />
+          <NavLink to={`${matchPattern}`} className="h-full duration-200">
+            {({ isActive }) => (
+              <Compass
+                fill={isActive ? colorPrimary : 'none'}
+                className="h-full hover:scale-110"
+              />
+            )}
+          </NavLink>
         );
     }
-  }, [type, solid, colorPrimary]);
-
+  }, [type, matchPattern, pathname, colorPrimary]);
   return (
     <Flex className="h-full w-full" justify="center" align="center">
       {icon}

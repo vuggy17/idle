@@ -9,23 +9,23 @@ import {
   theme,
 } from 'antd';
 import { useAtomValue } from 'jotai';
-import { useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useMatches } from 'react-router-dom';
 import { Plus } from 'iconoir-react';
 import { waitForCurrentWorkspaceAtom } from '../../utils/workspace/atom';
-import { AppPages, RouteKey } from '../../router/routes';
+import { AppPages } from '../../router/routes';
 import { currentUserAtom } from '../../store/user';
 import NavIcon from './Icon';
 import UserProfilePopupContent from './UserProfilePopupContent';
 import WorkspaceInfo from './WorkspaceInfo';
-import NewChatModal from '../../features/messaging/components/newchat/NewChatModal';
+import NewChatModal from '../../features/messaging/components/NewChatModal';
 import PartialAvatar from '../UserCard/PartialAvatar';
 
 const { useToken } = theme;
 
 const menuConfig = [
   {
-    key: '.',
+    key: 'workspace',
     icon: AppPages.workspace,
     label: 'Home',
   },
@@ -48,13 +48,10 @@ const menuConfig = [
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-function getAppNavigateMenu(
-  configs: typeof menuConfig,
-  currentPage: RouteKey,
-): MenuItem[] {
+function useNavIcons(configs: typeof menuConfig): MenuItem[] {
   return configs.map((menuItem) => ({
     key: menuItem.key,
-    icon: <NavIcon type={menuItem.icon} solid={currentPage === menuItem.key} />,
+    icon: <NavIcon type={menuItem.icon} matchPattern={menuItem.key} />,
     label: (
       <Link to={`${menuItem.key}`} relative="route">
         {menuItem.label}
@@ -65,17 +62,13 @@ function getAppNavigateMenu(
 }
 
 export default function RootAppSidebar() {
-  const currentUser = useAtomValue(currentUserAtom);
-  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
   const { token } = useToken();
-  const location = useLocation();
+  const currentUser = useAtomValue(currentUserAtom);
   const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
+  const matches = useMatches();
 
-  const currentPage = location.pathname.split('/')[3] ?? ('.' as RouteKey);
-  const menuItems = useMemo(
-    () => getAppNavigateMenu(menuConfig, currentPage as RouteKey),
-    [currentPage],
-  );
+  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
+  const menuItems = useNavIcons(menuConfig);
 
   return (
     <ConfigProvider
@@ -113,7 +106,7 @@ export default function RootAppSidebar() {
           }}
         >
           <Menu
-            selectedKeys={[currentPage]}
+            selectedKeys={[(matches[2].handle as any)?.crumb]}
             mode="inline"
             inlineCollapsed
             inlineIndent={0}

@@ -79,7 +79,7 @@ export default class IdleWorkspace {
 
     this.meta.addRoomMeta({
       id: roomId,
-      title: '',
+      title: 'New chat room',
       createDate: +new Date(),
       members,
     });

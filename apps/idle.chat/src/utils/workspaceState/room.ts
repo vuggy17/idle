@@ -33,8 +33,4 @@ export default class Room extends RoomDoc {
   get meta() {
     return this.workspace.meta.getRoomMeta(this.id);
   }
-
-  async load() {
-    return this;
-  }
 }

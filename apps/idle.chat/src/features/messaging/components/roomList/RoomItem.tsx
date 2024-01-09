@@ -1,4 +1,8 @@
 import { Flex, List, Typography } from 'antd';
+import { useAtom, useAtomValue } from 'jotai';
+import { currentRoomIdAtom } from 'apps/idle.chat/src/store/room';
+import useNavigateHelper from 'apps/idle.chat/src/hooks/useNavigateHelper';
+import { waitForCurrentWorkspaceAtom } from 'apps/idle.chat/src/utils/workspace/atom';
 import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
 import { RoomMeta } from '../../../../utils/workspaceState/meta';
 
@@ -46,14 +50,26 @@ export type RoomItem = {
 // }
 
 export function RoomMetaRender({ meta }: { meta: RoomMeta }) {
+  const [currentRoom, setCurrentRoom] = useAtom(currentRoomIdAtom);
+  const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
+  const { jumpToRoom } = useNavigateHelper();
+
   const { createDate, id, title } = meta;
-  console.log(meta);
-  const isActive = false;
   const sub = title;
   const lastUpdatedAt = createDate;
   const img = null;
+
+  const onRoomClick = () => {
+    setCurrentRoom(meta.id);
+    jumpToRoom(workspace.id, meta.id);
+  };
+
+  const isSelected = currentRoom === meta.id;
   return (
-    <List.Item className={`min-w-0 ${isActive ? 'active' : ''}`}>
+    <List.Item
+      className={`min-w-0 ${isSelected ? 'active' : ''}`}
+      onClick={onRoomClick}
+    >
       <Flex align="center" className="min-w-0 px-4">
         <PartialAvatar src={img || title} className="shrink-0 mr-2" />
         <div className="flex-1 basis-0 min-w-0">

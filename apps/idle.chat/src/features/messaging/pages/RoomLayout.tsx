@@ -1,29 +1,59 @@
 import { Layout } from 'antd';
-import { useAtom } from 'jotai';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useCallback, useLayoutEffect } from 'react';
+import { useMatch } from 'react-router-dom';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { ID } from '@idle/model';
+import useRoomMetas from '../../../hooks/useRoomMeta';
+import { currentRoomIdAtom } from '../../../store/room';
+import RoomList from '../components/roomList';
 import { wrapErrorBoundary } from '../../../router/wrapErrorBoundary';
-import { activeChatIdAtom } from '../../../store/chat';
-
-import ChatSideBar from '../components/sidebar';
+import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
+import useNavigateHelper from '../../../hooks/useNavigateHelper';
 
 function Component({ children }: PropsWithChildren) {
-  const [activeChatId, setActiveChatId] = useAtom(activeChatIdAtom);
-  // const list = useAtomValue(workspaceListAtom);
-  // console.log(list);
+  const match = useMatch('workspace/:workspaceId/:roomId');
+  const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
+
+  const setCurrentRoom = useSetAtom(currentRoomIdAtom);
+  const list = useRoomMetas(workspace.idleWorkSpace);
+  const { jumpToRoom } = useNavigateHelper();
+
+  const getRoom = useCallback(
+    (id: ID) => {
+      return list.find((room) => room.id === id);
+    },
+    [list],
+  );
+
+  useLayoutEffect(() => {
+    if (match) {
+      const { params } = match;
+      const room = getRoom(params.roomId || '');
+      if (room) {
+        setCurrentRoom(room.id);
+        localStorage.setItem('last_room_id', room.id);
+      }
+    } else {
+      const lastRoomId = localStorage.getItem('last_room_id') || '';
+      jumpToRoom(workspace.id, lastRoomId);
+      setCurrentRoom(lastRoomId);
+    }
+  }, [
+    match,
+    setCurrentRoom,
+    workspace.idleWorkSpace,
+    getRoom,
+    jumpToRoom,
+    workspace.id,
+  ]);
+
   return (
-    // <Suspense fallback="loading workspace list">
     <Layout className="h-full">
       <Layout.Sider theme="light" width={300}>
-        <ChatSideBar
-          activeConversation={activeChatId}
-          onItemClick={(item) => {
-            setActiveChatId(item.id);
-          }}
-        />
+        <RoomList rooms={list} />
       </Layout.Sider>
       <Layout.Content className="overflow-y-auto">{children}</Layout.Content>
     </Layout>
-    // </Suspense>
   );
 }
 

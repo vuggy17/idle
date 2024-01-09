@@ -1,30 +1,28 @@
 import { ID } from '@idle/model';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Routes } from '../router/routes';
 
 export default function useNavigateHelper() {
   const navigate = useNavigate();
-  const jumpToPage = useCallback(
-    (workspaceId: ID, pageId: ID) => {
-      navigate(`/workspace/${workspaceId}/${pageId}}`);
+  const jumpToRoom = useCallback(
+    (workspaceId: ID, roomId: ID) => {
+      navigate(`/${Routes.workspace}/${workspaceId}/${roomId}`);
     },
     [navigate],
   );
 
-  const openPage = useCallback(
-    (workspaceId: ID, pageId: ID, skipPage = false) => {
-      if (skipPage) navigate(`/workspace/${workspaceId}`);
-      else {
-        navigate(`/workspace/${workspaceId}/${pageId}`);
-      }
+  const jumpToWorkspace = useCallback(
+    (workspaceId: ID) => {
+      navigate(`/${Routes.workspace}/${workspaceId}`);
     },
     [navigate],
   );
   return useMemo(
     () => ({
-      jumpToPage,
-      openPage,
+      jumpToRoom,
+      jumpToWorkspace,
     }),
-    [jumpToPage, openPage],
+    [jumpToRoom, jumpToWorkspace],
   );
 }

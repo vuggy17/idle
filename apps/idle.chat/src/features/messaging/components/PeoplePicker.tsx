@@ -1,8 +1,8 @@
 import {
   DebounceSelectProps,
   DebounceSelect,
-} from '../../../../components/DebounceSelect';
-import HttpProvider from '../../../../providers/http';
+} from '../../../components/DebounceSelect';
+import HttpProvider from '../../../providers/http';
 
 type PeoplePickerProps = {
   onChange?: DebounceSelectProps['onChange'];

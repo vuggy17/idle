@@ -1,10 +1,12 @@
 import { Flex, Modal, ModalProps } from 'antd';
 import { useState } from 'react';
 import { useAtomValue } from 'jotai';
-import { waitForCurrentWorkspaceAtom } from '../../../../utils/workspace/atom';
-import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
+import { currentUserAtom } from '../../../store/user';
+import useRoomHelper from '../../../hooks/useRoomHelper';
+import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
+import PartialAvatar from '../../../components/UserCard/PartialAvatar';
 import PeoplePicker from './PeoplePicker';
-import { User } from '../../../auth/entities/user';
+import { User } from '../../auth/entities/user';
 
 const users = [
   {
@@ -64,9 +66,8 @@ const tagRender = (props: TagRenderProps) => {
 export default function NewChatModal({ ...props }: ModalProps) {
   const { onOk, ...selectProps } = props;
   const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
-  // const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
-  // const currentUser = useAtomValue(currentUserAtom);
-  // const { createRoomAndOpen } = useRoomHelper(workspace.idleWorkSpace);
+  const currentUser = useAtomValue(currentUserAtom);
+  const { createRoomAndOpen } = useRoomHelper(workspace.idleWorkSpace);
   const [selectedUser, setSelectedUser] = useState<User[]>([]);
 
   const createOrNavigateChat = (
@@ -77,7 +78,9 @@ export default function NewChatModal({ ...props }: ModalProps) {
       return;
     }
 
-    // createRoomAndOpen([selectedUser[0].id, currentUser.id]);
+    const roomMembers = [selectedUser[0].id, currentUser.id];
+
+    createRoomAndOpen(roomMembers);
     // const executor = new CreatePrivateRoomUseCase();
     // executor.execute({
     //   target: selectedUser[0].id,

@@ -1,19 +1,26 @@
 import { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ID } from '@idle/model';
 import { IdleWorkspace } from '../utils/workspaceState';
 import useIdleWorkspaceHelper from './useIdleWorkspaceHelper';
+import useNavigateHelper from './useNavigateHelper';
 
 export default function useRoomHelper(workspace: IdleWorkspace) {
-  const navigate = useNavigate();
+  const { jumpToRoom } = useNavigateHelper();
   const { createRoom } = useIdleWorkspaceHelper(workspace);
 
   const createRoomAndOpen = useCallback(
     (memberIds: ID[], roomId?: ID) => {
       const room = createRoom(memberIds, roomId);
-      navigate(room.id);
+      jumpToRoom(workspace.id, room.id);
     },
-    [createRoom, navigate],
+    [createRoom, jumpToRoom, workspace.id],
+  );
+
+  const loadRoom = useCallback(
+    async (roomId: ID) => {
+      await workspace.getRoom(roomId)?.load();
+    },
+    [workspace],
   );
 
   return useMemo(

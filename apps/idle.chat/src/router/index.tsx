@@ -18,24 +18,39 @@ const router = createBrowserRouter([
           {
             index: true,
             lazy: () => import('../features/messaging/pages/NoRoom'),
+            handle: {
+              crumb: 'workspace',
+            },
           },
           {
             path: ':roomId',
             lazy: () => import('../features/messaging/pages/RoomDetail'),
+            handle: {
+              crumb: 'workspace',
+            },
           },
           {
             path: Routes.dm,
             element: 'dm',
+            handle: {
+              crumb: Routes.dm,
+            },
           },
           {
             path: Routes.activity,
             lazy: () =>
               import('../features/notifications/ui/NotificationCenter'),
+            handle: {
+              crumb: Routes.activity,
+            },
           },
           {
             path: Routes.discover,
             lazy: () =>
               import('../features/profileManagement/pages/DiscoverLayout'),
+            handle: {
+              crumb: Routes.discover,
+            },
             children: [
               {
                 index: true,
