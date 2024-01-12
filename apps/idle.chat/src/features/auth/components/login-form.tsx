@@ -1,6 +1,6 @@
 import { Input, Form, FormProps, Button, Space, Typography } from 'antd';
 
-import './loginForm.css';
+import './login-form.css';
 
 export type LoginFormData = {
   email: string;
