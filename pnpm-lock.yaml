@@ -53,6 +53,9 @@ dependencies:
   class-transformer:
     specifier: ^0.5.1
     version: 0.5.1
+  classnames:
+    specifier: ^2.5.1
+    version: 2.5.1
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
@@ -83,9 +86,6 @@ dependencies:
   jotai:
     specifier: ^2.5.0
     version: 2.5.0(@types/react@18.2.41)(react@18.2.0)
-  jotai-location:
-    specifier: ^0.5.2
-    version: 0.5.2(jotai@2.5.0)
   lodash.difference:
     specifier: ^4.5.0
     version: 4.5.0
@@ -417,7 +417,7 @@ packages:
       '@babel/runtime': 7.23.2
       '@emotion/hash': 0.8.0
       '@emotion/unitless': 0.7.5
-      classnames: 2.3.2
+      classnames: 2.5.1
       csstype: 3.1.2
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -439,7 +439,7 @@ packages:
       '@ant-design/colors': 7.0.0
       '@ant-design/icons-svg': 4.3.1
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -451,7 +451,7 @@ packages:
       react: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       json2mq: 0.2.0
       react: 18.2.0
       resize-observer-polyfill: 1.5.1
@@ -4478,7 +4478,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@ctrl/tinycolor': 3.6.1
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -4511,7 +4511,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -4525,7 +4525,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -4541,7 +4541,7 @@ packages:
       '@babel/runtime': 7.23.2
       '@rc-component/portal': 1.1.2(react-dom@18.2.0)(react@18.2.0)
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -4556,7 +4556,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/portal': 1.1.2(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
@@ -5988,7 +5988,7 @@ packages:
       '@rc-component/mutate-observer': 1.1.0(react-dom@18.2.0)(react@18.2.0)
       '@rc-component/tour': 1.10.0(react-dom@18.2.0)(react@18.2.0)
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       copy-to-clipboard: 3.3.3
       dayjs: 1.11.10
       qrcode.react: 3.1.0(react@18.2.0)
@@ -6861,8 +6861,8 @@ packages:
   /class-transformer@0.5.1:
     resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
 
-  /classnames@2.3.2:
-    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+  /classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
     dev: false
 
   /clean-stack@2.2.0:
@@ -10528,14 +10528,6 @@ packages:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
     dev: false
 
-  /jotai-location@0.5.2(jotai@2.5.0):
-    resolution: {integrity: sha512-4S9hDh1wYp4SG4Laq3+Xd0GdW7jwnWlbEuL8U22kv3wUZW892n6gXlNhwU0LaoXnWoGG0gtjSLBuFm5iodFKLg==}
-    peerDependencies:
-      jotai: '>=1.11.0'
-    dependencies:
-      jotai: 2.5.0(@types/react@18.2.41)(react@18.2.0)
-    dev: false
-
   /jotai@2.5.0(@types/react@18.2.41)(react@18.2.0):
     resolution: {integrity: sha512-iPJDFrhNw3KU4o4SSAESeZoW+nM1L/76VULXZWF23qmivBEcbAQjiF5n1W4Hn5dXAol4tmtEYe4HH7d9emEz0Q==}
     engines: {node: '>=12.20.0'}
@@ -12892,7 +12884,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       array-tree-filter: 2.1.0
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-select: 14.10.0(react-dom@18.2.0)(react@18.2.0)
       rc-tree: 5.8.2(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
@@ -12907,7 +12899,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -12920,7 +12912,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -12935,7 +12927,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/portal': 1.1.2(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -12950,7 +12942,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/portal': 1.1.2(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -12965,7 +12957,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -12993,7 +12985,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/portal': 1.1.2(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-dialog: 9.3.4(react-dom@18.2.0)(react@18.2.0)
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
@@ -13009,7 +13001,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/mini-decimal': 1.1.0
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-input: 1.3.5(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -13023,7 +13015,7 @@ packages:
       react-dom: '>=16.0.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13037,7 +13029,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-input: 1.3.5(react-dom@18.2.0)(react@18.2.0)
       rc-menu: 9.12.2(react-dom@18.2.0)(react@18.2.0)
       rc-textarea: 1.5.1(react-dom@18.2.0)(react@18.2.0)
@@ -13054,7 +13046,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-overflow: 1.3.2(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
@@ -13069,7 +13061,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13083,7 +13075,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -13097,7 +13089,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -13111,7 +13103,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13139,7 +13131,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       dayjs: 1.11.10
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -13153,7 +13145,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13167,7 +13159,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13180,7 +13172,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13194,7 +13186,7 @@ packages:
       react-dom: '>=16.0.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -13210,7 +13202,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-overflow: 1.3.2(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
@@ -13227,7 +13219,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13241,7 +13233,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13254,7 +13246,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13269,7 +13261,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/context': 1.4.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       rc-virtual-list: 3.11.3(react-dom@18.2.0)(react@18.2.0)
@@ -13285,7 +13277,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-dropdown: 4.1.0(react-dom@18.2.0)(react@18.2.0)
       rc-menu: 9.12.2(react-dom@18.2.0)(react@18.2.0)
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
@@ -13302,7 +13294,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-input: 1.3.5(react-dom@18.2.0)(react@18.2.0)
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
@@ -13318,7 +13310,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@rc-component/trigger': 1.18.0(react-dom@18.2.0)(react@18.2.0)
-      classnames: 2.3.2
+      classnames: 2.5.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -13330,7 +13322,7 @@ packages:
       react-dom: '*'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-select: 14.10.0(react-dom@18.2.0)(react@18.2.0)
       rc-tree: 5.8.2(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
@@ -13346,7 +13338,7 @@ packages:
       react-dom: '*'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       rc-virtual-list: 3.11.3(react-dom@18.2.0)(react@18.2.0)
@@ -13361,7 +13353,7 @@ packages:
       react-dom: '>=16.9.0'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13387,7 +13379,7 @@ packages:
       react-dom: '*'
     dependencies:
       '@babel/runtime': 7.23.2
-      classnames: 2.3.2
+      classnames: 2.5.1
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.38.0(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0

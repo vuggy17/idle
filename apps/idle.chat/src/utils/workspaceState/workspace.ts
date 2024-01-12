@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { ID } from '@idle/model';
-import WorkspaceMeta, { RoomMeta } from './meta';
+import WorkspaceMeta, { RoomMeta, RoomType } from './meta';
 // eslint-disable-next-line import/no-cycle
 import Room from './room';
 import { Store, StoreOptions } from './store';
@@ -70,8 +70,8 @@ export default class IdleWorkspace {
    * If the `init` parameter is passed, a `surface`, `note`, and `paragraph` block
    * will be created in the page simultaneously.
    */
-  createRoom(options: { id?: string; members: ID[] }) {
-    const { id, members } = options;
+  createRoom(options: { id?: string; members: ID[]; type: RoomType }) {
+    const { id, members, type } = options;
     const roomId = id ?? this._store.generateId();
     if (this._hasRoom(roomId)) {
       throw new Error('room already exists');
@@ -82,6 +82,7 @@ export default class IdleWorkspace {
       title: 'New chat room',
       createDate: +new Date(),
       members,
+      type,
     });
     return this.getRoom(roomId) as Room;
   }
@@ -93,5 +94,21 @@ export default class IdleWorkspace {
     props: Partial<RoomMeta>,
   ) {
     this.meta.setRoomMeta(pageId, props);
+  }
+
+  removeRoom(roomId: ID) {
+    try {
+      const roomMeta = this.meta.getRoomMeta(roomId);
+      if (!roomMeta) throw new Error(`Cannot delete room ${roomId}`);
+
+      const room = this.getRoom(roomId);
+      if (!room) return;
+
+      room.dispose();
+      this.meta.removeRoomMeta(roomId);
+      this._store.removeRoom(room);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

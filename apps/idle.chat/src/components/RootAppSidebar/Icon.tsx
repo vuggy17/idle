@@ -19,6 +19,7 @@ export default function SideBarIcon({
   type: RouteKey;
   matchPattern: string;
 }) {
+  console.log('nav icon ', type);
   const {
     token: { colorPrimary },
   } = useToken();

@@ -21,6 +21,9 @@
       "@idle/model": [
         "libs/model/src/index.ts"
       ],
+      "@chat/components/*": [
+        "apps/idle.chat/src/components/*"
+      ]
     }
   },
   "exclude": [

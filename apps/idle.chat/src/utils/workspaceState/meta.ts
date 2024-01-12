@@ -4,11 +4,17 @@ import { Binder } from 'immer-yjs/src';
 import { Array as YArray, Map as YMap, Text as YText, YEvent } from 'yjs';
 import IdleDoc from './doc';
 
+const RoomVariants = {
+  private: 'private',
+} as const;
+export type RoomType = keyof typeof RoomVariants;
+
 export interface RoomMeta {
   id: ID;
   title: string;
   createDate: number;
   members: ID[];
+  type: RoomType;
 }
 
 export type WorkspaceMetadataState = {
@@ -115,20 +121,29 @@ export default class WorkspaceMeta {
     return this.roomMetas.find((room) => room.id === roomID);
   }
 
-  addRoomMeta(page: RoomMeta, index?: number) {
+  addRoomMeta(room: RoomMeta, index?: number) {
     if (!this.rooms) {
       this._proxy.rooms = [];
     }
 
     this.binder.update((metadata) => {
       if (index === undefined) {
-        metadata.rooms.push(page);
+        metadata.rooms.push(room);
       } else {
-        metadata.rooms.splice(index, 0, page);
+        metadata.rooms.splice(index, 0, room);
       }
     });
+  }
 
-    this.randomValue = 1;
+  removeRoomMeta(roomId: ID) {
+    if (!this.rooms) throw new Error('No rooms existed to delete');
+
+    const index = this.roomMetas.findIndex((room) => room.id === roomId);
+    if (index < 0) return;
+
+    this.binder.update((metadata) => {
+      metadata.rooms.splice(index, 1);
+    });
   }
 
   /**

@@ -1,7 +1,7 @@
 import { Flex, List, Typography } from 'antd';
 import { useAtom, useAtomValue } from 'jotai';
-import { currentRoomIdAtom } from 'apps/idle.chat/src/store/room';
-import useNavigateHelper from 'apps/idle.chat/src/hooks/useNavigateHelper';
+import { currentRoomIdAtom } from '../../../../store/room';
+import useNavigateHelper from '../../../../hooks/useNavigateHelper';
 import { waitForCurrentWorkspaceAtom } from 'apps/idle.chat/src/utils/workspace/atom';
 import PartialAvatar from '../../../../components/UserCard/PartialAvatar';
 import { RoomMeta } from '../../../../utils/workspaceState/meta';

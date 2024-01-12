@@ -35,7 +35,7 @@ export default function RoomList({ rooms }: { rooms: RoomMeta[] }) {
           header={
             <div className="px-3">
               <Flex align="center" justify="space-between">
-                <Typography.Title level={3}>Chat</Typography.Title>
+                <Typography.Title level={3}>Messages</Typography.Title>
               </Flex>
               <Input placeholder="Search" />
             </div>

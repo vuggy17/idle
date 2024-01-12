@@ -33,4 +33,9 @@ export default class Room extends RoomDoc {
   get meta() {
     return this.workspace.meta.getRoomMeta(this.id);
   }
+
+  dispose() {
+    console.log('room disposing');
+    // throw new Error('Method not implemented.');
+  }
 }
