@@ -1,8 +1,8 @@
 import type { Doc } from 'yjs';
 
 import { Subject, Subscription } from 'rxjs';
-import { SharedPriorityTarget } from '../../utils/SharedPriorityTarget';
-import { MANUALLY_STOP, throwIfAborted } from '../../utils/throwIfAborted';
+import { SharedPriorityTarget } from '../../utils/shared-priority-target';
+import { MANUALLY_STOP, throwIfAborted } from '../../utils/throw-if-aborted';
 import { SyncEngineStep, SyncPeerStep } from './consts';
 import { SyncPeer, type SyncPeerStatus } from './peer';
 import type { SyncStorage } from './storage';

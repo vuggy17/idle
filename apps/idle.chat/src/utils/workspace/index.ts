@@ -1,5 +1,5 @@
 import { createLocalRoomListProvider } from './impl/local/list';
-import { localWorkspaceFactory } from './impl/local/workspaceFactory';
+import { localWorkspaceFactory } from './impl/local/workspace-factory';
 import { WorkspaceList } from './list';
 import WorkspaceManager from './manager';
 

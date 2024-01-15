@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
 
-import { wrapErrorBoundary } from '../../../router/wrapErrorBoundary';
-import useAuth from '../../../services/useAuth';
-import LoginForm, { LoginFormData } from '../components/LoginForm';
+import { wrapErrorBoundary } from '../../../router/wrap-error-boundary';
+import useAuth from '../../../services/use-auth';
+import LoginForm, { LoginFormData } from '../components/login-form';
 import { Routes } from '../../../router/routes';
 
 // test user

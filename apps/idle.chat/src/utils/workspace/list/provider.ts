@@ -1,6 +1,6 @@
 import { WorkspaceMetadata } from '../metadata';
-import WorkspaceFlavour from './workspaceFlavour';
-import { BlockSuiteWorkspace, BlobStorage } from './BlockSuiteWorkspace';
+import WorkspaceFlavour from './workspace-flavour';
+import { BlockSuiteWorkspace, BlobStorage } from './block-suite-workspace';
 
 export interface WorkspaceInfo {
   avatar?: string;

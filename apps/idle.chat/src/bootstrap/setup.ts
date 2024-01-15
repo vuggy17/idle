@@ -1,5 +1,5 @@
 import { createStore } from 'jotai';
-import { AuthServiceImpl } from '../features/auth/repositories/authRepository';
+import { AuthServiceImpl } from '../features/auth/repositories/auth-repository';
 import { currentUserAtom } from '../store/user';
 
 export default async function setup(store: ReturnType<typeof createStore>) {

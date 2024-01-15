@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { WorkspaceMetadata } from './metadata';
-import { IdleWorkspace } from '../workspaceState';
+import { IdleWorkspace } from '../workspace-state';
 import { WorkspaceEngine, WorkspaceEngineStatus } from './engine';
 
 const logger = console;

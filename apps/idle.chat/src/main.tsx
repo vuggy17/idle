@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
 import getCurrentStore from './store/atom';
 import './styles.css';
-import ErrorFallback from './ErrorFallback';
+import ErrorFallback from './error-fallback';
 
 function AppFallback() {
   return (

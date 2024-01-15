@@ -2,7 +2,7 @@ import { App as AntdApp } from 'antd';
 import useLocalStorageState from 'use-local-storage-state';
 import AppRouter from '../router';
 import { IdleContextProvider } from '../components/context';
-import { SerializableThemeConfig } from '../components/context/readThemeConfig';
+import { SerializableThemeConfig } from '../components/context/read-theme-config';
 import getCurrentStore from '../store/atom';
 
 export default function App() {

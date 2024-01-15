@@ -50,7 +50,7 @@
           {
             "enforceBuildableLibDependency": true,
             "allow": [
-              "@idle/chat"
+              "@chat/components/**"
             ],
             "depConstraints": [
               {

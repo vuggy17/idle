@@ -1,9 +1,9 @@
 import { ID } from '@idle/model';
-import { IdleWorkspace } from '../workspaceState';
+import { IdleWorkspace } from '../workspace-state';
 import { BlobStorage } from './engine';
 import { WorkspaceFactory } from './factory';
 import { WorkspaceList } from './list';
-import WorkspaceFlavour from './list/workspaceFlavour';
+import WorkspaceFlavour from './list/workspace-flavour';
 import { WorkspaceMetadata } from './metadata';
 import { WorkspacePool } from './pool';
 import Workspace from './workspace';
