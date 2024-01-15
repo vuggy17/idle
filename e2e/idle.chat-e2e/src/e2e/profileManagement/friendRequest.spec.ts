@@ -1,5 +1,5 @@
 import test, { expect } from '@playwright/test';
-import { friendRequests } from './../../fixtures/profileManagement.json';
+import { friendRequests } from './../../fixtures/profile-management.json';
 test.describe('Friend request', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:4200/discover/friend_requests');

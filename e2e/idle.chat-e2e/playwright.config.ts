@@ -41,8 +41,8 @@ export default defineConfig({
       testMatch: /global.setup\.ts/,
     },
     {
-      name: 'profileManagement',
-      testDir: 'src/e2e/profileManagement',
+      name: 'profile-management',
+      testDir: 'src/e2e/profile-management',
       // enable this line when login toke expire
       // dependencies: ['setup'],
       use: {

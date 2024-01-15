@@ -12,8 +12,8 @@ import { SyncStorage } from './storage';
 import {
   PriorityAsyncQueue,
   SharedPriorityTarget,
-} from '../../utils/SharedPriorityTarget';
-import { MANUALLY_STOP, throwIfAborted } from '../../utils/throwIfAborted';
+} from '../../utils/shared-priority-target';
+import { MANUALLY_STOP, throwIfAborted } from '../../utils/throw-if-aborted';
 
 export interface SyncPeerStatus {
   step: SyncPeerStep;

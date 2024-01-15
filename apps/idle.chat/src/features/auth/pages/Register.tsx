@@ -3,9 +3,9 @@ import { Card, Form, Layout, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { AppwriteException } from 'appwrite';
 import { useState } from 'react';
-import { wrapErrorBoundary } from '../../../router/wrapErrorBoundary';
-import RegisterForm, { RegisterFormData } from '../components/RegisterForm';
-import RegisterUseCase from '../useCases/register';
+import { wrapErrorBoundary } from '../../../router/wrap-error-boundary';
+import RegisterForm, { RegisterFormData } from '../components/register-form';
+import RegisterUseCase from '../use-cases/register';
 
 // test user
 const testUserRegisterInfo: RegisterFormData = {

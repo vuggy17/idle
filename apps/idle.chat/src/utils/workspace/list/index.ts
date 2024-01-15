@@ -4,8 +4,8 @@ import { RoomInformation } from './information';
 import { WorkspaceMetadata } from '../metadata';
 import { readWorkspaceListCache, writeWorkspaceListCache } from './cache';
 import { WorkspaceListProvider } from './provider';
-import { BlockSuiteWorkspace, BlobStorage } from './BlockSuiteWorkspace';
-import WorkspaceFlavour from './workspaceFlavour';
+import { BlockSuiteWorkspace, BlobStorage } from './block-suite-workspace';
+import WorkspaceFlavour from './workspace-flavour';
 
 // TODO: implement
 export interface WorkspaceListStatus {

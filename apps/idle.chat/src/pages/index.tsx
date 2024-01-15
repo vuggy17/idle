@@ -1,10 +1,10 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useAtomValue } from 'jotai';
-import createFirstAppData from '../bootstrap/createFirstAppData';
-import { FireBaseInstance } from '../Firebase';
-import ProtectedRoute from '../router/ProtectedRoute';
-import useNavigateHelper from '../hooks/useNavigateHelper';
+import createFirstAppData from '../bootstrap/create-first-app-data';
+import { FireBaseInstance } from '../firebase';
+import ProtectedRoute from '../router/protected-route';
+import useNavigateHelper from '../hooks/use-navigate-helper';
 import { workspaceListAtom } from '../utils/workspace/atom';
 import { WorkspaceFallback } from './workspace';
 import { Routes } from '../router/routes';

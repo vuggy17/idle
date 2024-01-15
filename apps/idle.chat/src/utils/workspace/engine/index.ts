@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { throwIfAborted } from '../utils/throwIfAborted';
+import { throwIfAborted } from '../utils/throw-if-aborted';
 import type { BlobEngine } from './blob';
 import type { SyncEngine, SyncEngineStatus } from './sync';
 

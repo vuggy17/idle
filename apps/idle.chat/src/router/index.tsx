@@ -17,14 +17,14 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            lazy: () => import('../features/messaging/pages/NoRoom'),
+            lazy: () => import('../features/messaging/pages/no-room'),
             handle: {
               crumb: 'workspace',
             },
           },
           {
             path: ':roomId',
-            lazy: () => import('../features/messaging/pages/RoomDetail'),
+            lazy: () => import('../features/messaging/pages/room-detail'),
             handle: {
               crumb: 'workspace',
             },
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
           {
             path: Routes.activity,
             lazy: () =>
-              import('../features/notifications/ui/NotificationCenter'),
+              import('../features/notifications/ui/notification-center'),
             handle: {
               crumb: Routes.activity,
             },
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
           {
             path: Routes.discover,
             lazy: () =>
-              import('../features/profileManagement/pages/DiscoverLayout'),
+              import('../features/profile-management/pages/discover-layout'),
             handle: {
               crumb: Routes.discover,
             },
@@ -55,13 +55,15 @@ const router = createBrowserRouter([
               {
                 index: true,
                 lazy: () =>
-                  import('../features/profileManagement/components/FindPeople'),
+                  import(
+                    '../features/profile-management/components/find-people'
+                  ),
               },
               {
                 path: 'friend_requests',
                 lazy: () =>
                   import(
-                    '../features/profileManagement/components/FriendInvitation'
+                    '../features/profile-management/components/friend-invitation'
                   ).then((res) => ({
                     Component: res.Component,
                     loader: res.Loader,
@@ -75,7 +77,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    lazy: () => import('../features/auth/pages/Login'),
+    lazy: () => import('../features/auth/pages/login'),
   },
   {
     path: '/',
@@ -83,11 +85,11 @@ const router = createBrowserRouter([
   },
   {
     path: 'register',
-    lazy: () => import('../features/auth/pages/Register'),
+    lazy: () => import('../features/auth/pages/register'),
   },
   {
     path: '*',
-    lazy: () => import('./NoMatch'),
+    lazy: () => import('./no-match'),
   },
 ]);
 

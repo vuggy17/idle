@@ -2,12 +2,12 @@ import { useAtom, useAtomValue } from 'jotai';
 import { PropsWithChildren, Suspense, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
-import useWorkspace from '../hooks/useWorkspace';
+import useWorkspace from '../hooks/use-workspace';
 import {
   currentWorkspaceAtom,
   workspaceListAtom,
 } from '../utils/workspace/atom';
-import WorkspaceLayout from '../layout/WorkspaceLayout';
+import WorkspaceLayout from '../layout/workspace-layout';
 
 const { useToken } = theme;
 

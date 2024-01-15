@@ -1,16 +1,16 @@
 import difference from 'lodash.difference';
 import { applyUpdate, encodeStateAsUpdate } from 'yjs';
 import { createId } from '@paralleldrive/cuid2';
-import { IdleWorkspace } from '../../../workspaceState';
+import { IdleWorkspace } from '../../../workspace-state';
 import { WorkspaceInfo, WorkspaceListProvider } from '../../list/provider';
-import WorkspaceFlavour from '../../list/workspaceFlavour';
+import WorkspaceFlavour from '../../list/workspace-flavour';
 import { WorkspaceMetadata } from '../../metadata';
 import {
   LOCAL_WORKSPACE_CREATED_BROADCAST_CHANNEL_KEY,
   LOCAL_WORKSPACE_LOCAL_STORAGE_KEY,
 } from './const';
 import { createLocalStorage } from './storage';
-import { createIndexeddbBlobStorage } from './blobIndexeddb';
+import { createIndexeddbBlobStorage } from './blob-indexeddb';
 
 // eslint-disable-next-line import/prefer-default-export
 export function createLocalRoomListProvider(): WorkspaceListProvider {
