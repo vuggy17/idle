@@ -14,7 +14,7 @@ export function Bootstrap() {
   const [loading, setLoading] = useState(true);
   const { jumpToWorkspace } = useNavigateHelper();
   const location = useLocation();
-  const isAtWorkspaceRoot = location.pathname.endsWith(Routes.workspace);
+  const isAtWorkspaceRoot = location.pathname === `/${Routes.workspace}`;
 
   const list = useAtomValue(workspaceListAtom);
 

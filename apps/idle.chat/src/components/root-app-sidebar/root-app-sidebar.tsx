@@ -52,11 +52,7 @@ function useNavIcons(configs: typeof menuConfig): MenuItem[] {
   return configs.map((menuItem) => ({
     key: menuItem.key,
     icon: <NavIcon type={menuItem.icon} matchPattern={menuItem.key} />,
-    label: (
-      <Link to={`${menuItem.key}`} relative="route">
-        {menuItem.label}
-      </Link>
-    ),
+    label: menuItem.label,
     'data-testid': `gnb-${menuItem.key}`,
   }));
 }

@@ -1,7 +1,7 @@
 import { Flex, theme } from 'antd';
 import { Bell, Compass, HomeSimpleDoor, MultiBubble } from 'iconoir-react';
 import { useMemo } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { RouteKey, Routes } from '../../router/routes';
 
 const { useToken } = theme;
@@ -19,7 +19,6 @@ export default function SideBarIcon({
   type: RouteKey;
   matchPattern: string;
 }) {
-  console.log('nav icon ', type);
   const {
     token: { colorPrimary },
   } = useToken();
@@ -42,19 +41,21 @@ export default function SideBarIcon({
     switch (type) {
       case 'workspace':
         return (
-          <HomeSimpleDoor
-            fill={isWorkspacePath(pathname) ? colorPrimary : 'none'}
-            className="h-full hover:scale-110 duration-200"
-          />
+          <Link to="." relative="route" className="h-full ">
+            <HomeSimpleDoor
+              fill={isWorkspacePath(pathname) ? colorPrimary : 'none'}
+              className="h-full"
+            />
+          </Link>
         );
 
       case 'dm':
         return (
-          <NavLink to={`${matchPattern}`} className="h-full duration-200">
+          <NavLink to={`${matchPattern}`} className="h-full " relative="route">
             {({ isActive }) => (
               <MultiBubble
                 fill={isActive ? colorPrimary : 'none'}
-                className="h-full hover:scale-110 "
+                className="h-full"
               />
             )}
           </NavLink>
@@ -62,22 +63,22 @@ export default function SideBarIcon({
 
       case 'activity':
         return (
-          <NavLink to={`${matchPattern}`} className="h-full ">
+          <NavLink to={`${matchPattern}`} className="h-full" relative="route">
             {({ isActive }) => (
               <Bell
                 fill={isActive ? colorPrimary : 'none'}
-                className="h-full hover:scale-110 "
+                className="h-full"
               />
             )}
           </NavLink>
         );
       case 'discover':
         return (
-          <NavLink to={`${matchPattern}`} className="h-full duration-200">
+          <NavLink to={`${matchPattern}`} className="h-full " relative="route">
             {({ isActive }) => (
               <Compass
                 fill={isActive ? colorPrimary : 'none'}
-                className="h-full hover:scale-110"
+                className="h-full"
               />
             )}
           </NavLink>
