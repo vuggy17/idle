@@ -39,7 +39,7 @@ export const RoomSetting = forwardRef<RoomSettingRef, RoomSettingProps>(
       localStorage.removeItem('last_room_id');
       jumpToWorkspace(workspace.id);
 
-      workspace.idleWorkSpace.removeRoom(roomId);
+      workspace.state.removeRoom(roomId);
     };
 
     return (

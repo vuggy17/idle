@@ -13,7 +13,7 @@ export default class IdleWorkspace {
   events = {
     roomAdded: new Subject<ID>(),
     roomRemoved: new Subject<ID>(),
-    roomMetaUpdated: new Subject<void>(),
+    roomsUpdated: new Subject<void>(),
   };
 
   constructor(options: StoreOptions) {
@@ -62,7 +62,9 @@ export default class IdleWorkspace {
       }
     });
 
-    this.events.roomMetaUpdated.next();
+    this.meta.roomMetasUpdated.subscribe(() => {
+      this.events.roomsUpdated.next();
+    });
   }
 
   /**
@@ -70,8 +72,14 @@ export default class IdleWorkspace {
    * If the `init` parameter is passed, a `surface`, `note`, and `paragraph` block
    * will be created in the page simultaneously.
    */
-  createRoom(options: { id?: ID; members: ID[]; type: RoomType }) {
-    const { id, members, type } = options;
+  createRoom(options: {
+    id?: ID;
+    members: ID[];
+    type: RoomType;
+    title?: string;
+  }) {
+    const DEFAULT_ROOM_NAME = 'New chat';
+    const { id, members, type, title } = options;
     const roomId = id ?? this._store.generateId();
     if (this._hasRoom(roomId)) {
       throw new Error('room already exists');
@@ -79,7 +87,7 @@ export default class IdleWorkspace {
 
     this.meta.addRoomMeta({
       id: roomId,
-      title: 'New chat room',
+      title: title || DEFAULT_ROOM_NAME,
       createDate: +new Date(),
       members,
       type,

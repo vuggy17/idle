@@ -373,7 +373,7 @@ export class SyncPeer {
         this.state.pushUpdatesQueue.length + (this.state.pushingUpdate ? 1 : 0),
     };
 
-    console.log('sync staus: ', this.status);
+    // console.log('sync staus: ', this.status);
   }
 
   async waitForLoaded(abort?: AbortSignal) {

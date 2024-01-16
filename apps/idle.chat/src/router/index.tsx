@@ -12,7 +12,7 @@ const router = createBrowserRouter([
 
     children: [
       {
-        path: `:workspaceId`,
+        path: ':workspaceId',
         lazy: () => import('../pages/workspace'),
         children: [
           {

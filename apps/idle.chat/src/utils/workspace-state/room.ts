@@ -1,16 +1,8 @@
-import { ID, TIME } from '@idle/model';
-import { Doc } from 'yjs';
-import Message from '../workspace/message';
+import { ID } from '@idle/model';
 // eslint-disable-next-line import/no-cycle
 import Workspace from './workspace';
 import RoomDoc from './room-doc';
 import IdleDoc from './doc';
-
-type RoomMeta = {
-  id: ID;
-  name: string;
-  avatar?: string;
-};
 
 export type RoomOptions = {
   id: ID;

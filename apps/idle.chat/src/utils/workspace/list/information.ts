@@ -47,10 +47,10 @@ export class RoomInformation {
       name: this._info.name,
     };
 
-    workspace.idleWorkSpace.meta.commonFieldsUpdated.subscribe(() => {
+    workspace.state.meta.commonFieldsUpdated.subscribe(() => {
       this.info = {
-        avatar: workspace.idleWorkSpace.meta.avatar ?? this.info.avatar,
-        name: workspace.idleWorkSpace.meta.name ?? this.info.name,
+        avatar: workspace.state.meta.avatar ?? this.info.avatar,
+        name: workspace.state.meta.name ?? this.info.name,
       };
     });
   }

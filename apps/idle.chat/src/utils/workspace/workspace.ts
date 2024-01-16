@@ -41,7 +41,7 @@ export default class Workspace {
   constructor(
     public meta: WorkspaceMetadata,
     public engine: WorkspaceEngine,
-    public idleWorkSpace: IdleWorkspace,
+    public state: IdleWorkspace,
   ) {
     this._status = {
       mode: 'closed',

@@ -67,7 +67,7 @@ export default function NewChatModal({ ...props }: ModalProps) {
   const { onOk, ...selectProps } = props;
   const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
   const currentUser = useAtomValue(currentUserAtom);
-  const { createRoomAndOpen } = useRoomHelper(workspace.idleWorkSpace);
+  const { createRoomAndOpen } = useRoomHelper(workspace.state);
   const [selectedUser, setSelectedUser] = useState<User[]>([]);
 
   const createOrNavigateChat = (
@@ -80,7 +80,7 @@ export default function NewChatModal({ ...props }: ModalProps) {
 
     const roomMembers = [selectedUser[0].id, currentUser.id];
 
-    createRoomAndOpen(roomMembers);
+    createRoomAndOpen(roomMembers, selectedUser[0]);
     // const executor = new CreatePrivateRoomUseCase();
     // executor.execute({
     //   target: selectedUser[0].id,
