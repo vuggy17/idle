@@ -153,6 +153,7 @@ function Component({ ...props }: SearchResultModalProps) {
             className="w-full justify-center relative items-center"
           >
             <PartialAvatar
+              alt={user.name}
               size={96}
               shape="circle"
               src={user.avatar || tempProfileCover}

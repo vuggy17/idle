@@ -14,31 +14,36 @@ function isValidHttpUrl(maybeUrl: string) {
 }
 
 const DEFAULT_SHAPE = 'square';
-type PartialAvatarProps = Omit<AvatarProps, 'src'> & { src: string };
+type PartialAvatarProps = Omit<AvatarProps, 'src' | 'alt'> & {
+  src: string;
+  alt: string;
+};
 
 /**
  * Auto fallback to letter avatar if src is not a valid url
+ *  @param alt: alt for image, should be username to fallback when we cannot load img url
+ *  @param src: image url
  */
 export default function PartialAvatar({ ...props }: PartialAvatarProps) {
-  const { alt, src: imgSrcOrUserName, shape, ...avatarProps } = props;
+  const { alt: altOrUserName, src, shape, ...avatarProps } = props;
 
-  return isValidHttpUrl(imgSrcOrUserName) ? (
+  return isValidHttpUrl(src) ? (
     <Avatar
-      alt={props.alt ?? imgSrcOrUserName}
-      src={imgSrcOrUserName}
+      alt={props.alt}
+      src={src}
       shape={shape ?? DEFAULT_SHAPE}
       {...avatarProps}
     />
   ) : (
     <Avatar
-      alt={props.alt ?? imgSrcOrUserName}
+      alt={props.alt}
       shape={shape ?? DEFAULT_SHAPE}
       {...avatarProps}
-      style={{ backgroundColor: stc(imgSrcOrUserName) }}
+      style={{ backgroundColor: stc(altOrUserName) }}
     >
       {
         // generate user name, ex: appwrite dev => AD
-        imgSrcOrUserName
+        altOrUserName
           .split(' ')
           .map((shortName) => shortName.charAt(0))
           .join('')

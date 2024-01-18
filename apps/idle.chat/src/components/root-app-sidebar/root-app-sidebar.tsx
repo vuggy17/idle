@@ -140,7 +140,8 @@ export default function RootAppSidebar() {
               placement="rightTop"
             >
               <PartialAvatar
-                src={currentUser.avatar || currentUser.name}
+                src={currentUser.avatar}
+                alt={currentUser.name}
                 shape="square"
                 size={42}
                 className="mx-auto hover:cursor-pointer"

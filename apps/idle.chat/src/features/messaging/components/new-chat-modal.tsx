@@ -58,7 +58,7 @@ const tagRender = (props: TagRenderProps) => {
   };
   return (
     <Flex>
-      <PartialAvatar src={avatar || name} />
+      <PartialAvatar src={avatar} alt={name} />
     </Flex>
   );
 };

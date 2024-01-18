@@ -204,6 +204,7 @@ function FriendRequestCard({
         <Flex gap={12} vertical className="w-full">
           <Flex gap={16} align="center">
             <PartialAvatar
+              alt={title}
               size={58}
               shape="square"
               src={avatar || title}

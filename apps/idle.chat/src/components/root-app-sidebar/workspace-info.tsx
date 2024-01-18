@@ -15,6 +15,7 @@ export default function WorkspaceInfo({ metadata }: WorkspaceInfoProps) {
   return (
     <Tooltip title={information.name}>
       <PartialAvatar
+        alt={information.name || ''}
         shape="square"
         src={information.avatar || ' https://placehold.co/600x400'}
         size={52}

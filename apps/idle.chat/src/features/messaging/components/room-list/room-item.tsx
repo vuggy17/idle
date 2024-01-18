@@ -57,7 +57,7 @@ export function RoomMetaRender({ meta }: { meta: RoomMeta }) {
   const { createDate, id, title } = meta;
   const sub = title;
   const lastUpdatedAt = createDate;
-  const img = null;
+  const img = '';
 
   const onRoomClick = () => {
     setCurrentRoom(meta.id);
@@ -71,7 +71,7 @@ export function RoomMetaRender({ meta }: { meta: RoomMeta }) {
       onClick={onRoomClick}
     >
       <Flex align="center" className="min-w-0 px-4">
-        <PartialAvatar src={img || title} className="shrink-0 mr-2" />
+        <PartialAvatar src={img} alt={title} className="shrink-0 mr-2" />
         <div className="flex-1 basis-0 min-w-0">
           <div className="flex">
             <Typography.Text ellipsis className="inline">

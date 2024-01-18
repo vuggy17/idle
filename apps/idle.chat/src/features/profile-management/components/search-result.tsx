@@ -34,7 +34,7 @@ export function CommonSearchResult({
   return (
     <List.Item {...listItemProps}>
       <List.Item.Meta
-        avatar={<PartialAvatar src={avatar || name} />}
+        avatar={<PartialAvatar src={avatar} alt={name} />}
         title={name}
         description={userDescription}
       />

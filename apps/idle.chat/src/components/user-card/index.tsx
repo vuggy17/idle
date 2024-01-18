@@ -7,14 +7,14 @@ type UserCardProps = {
   avatar?: string;
 };
 
-UserCard.defaultProps = {
-  avatar: '',
-};
-
-export default function UserCard({ name, userName, avatar }: UserCardProps) {
+export default function UserCard({
+  name,
+  userName,
+  avatar = '',
+}: UserCardProps) {
   return (
     <Space>
-      <PartialAvatar shape="square" src={avatar || userName} />
+      <PartialAvatar shape="square" src={avatar} alt={userName} />
       <Flex vertical>
         <Typography.Text strong>{name}</Typography.Text>
         <Typography.Text type="secondary" ellipsis>
