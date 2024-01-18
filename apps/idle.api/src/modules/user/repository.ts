@@ -8,6 +8,7 @@ export abstract class UserRepository {
   abstract findMany(query: string): Promise<UserEntity[]>;
   abstract getById(id: ID): Promise<UserEntity>;
   abstract getAll(): Promise<UserEntity[]>;
+  abstract getMany(ids: ID[], exclude?: ID): Promise<UserEntity[]>;
 }
 
 @Injectable()
@@ -28,6 +29,11 @@ export class UserRepositoryImpl implements UserRepository {
     }
   }
 
+  /**
+   * full text search
+   * @param query
+   * @returns
+   */
   async findMany(query: string): Promise<UserEntity[]> {
     const documents = await this._prisma.user.findMany({
       where: {
@@ -42,6 +48,22 @@ export class UserRepositoryImpl implements UserRepository {
 
   async getAll(): Promise<UserEntity[]> {
     const documents = await this._prisma.user.findMany();
+    return documents.map((doc) => new UserEntity(doc));
+  }
+
+  /**
+   * get users by ids
+   */
+  async getMany(ids: ID[], exclude?: ID): Promise<UserEntity[]> {
+    const documents = await this._prisma.user.findMany({
+      where: {
+        id: {
+          in: ids,
+          not: exclude,
+        },
+      },
+    });
+
     return documents.map((doc) => new UserEntity(doc));
   }
 }

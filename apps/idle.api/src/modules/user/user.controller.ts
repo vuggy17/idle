@@ -1,6 +1,7 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   GetUserSearchResultRequestDTO,
+  Bulk_GetUserInformationRequestDTO,
   GetUserSearchSuggestionRequestDTO,
 } from '@idle/model';
 import { UserService } from './user.service';
@@ -41,5 +42,13 @@ export class UserController {
   ) {
     const a = await this.userService.getProfile(userId, user.id);
     return a;
+  }
+
+  @Post('bulk')
+  async getUserInfo(
+    @Body() body: Bulk_GetUserInformationRequestDTO,
+    @AuthUser() user: UserEntity,
+  ) {
+    return this.userService.bulk_getInformation(body.ids, user.id);
   }
 }

@@ -136,4 +136,8 @@ export class UserService {
       pendingFriendRequest: null,
     };
   }
+
+  async bulk_getInformation(ids: ID[], loggedInUserId: ID) {
+    return this._userRepository.getMany(ids, loggedInUserId);
+  }
 }

@@ -29,3 +29,14 @@ export type GetUserSearchResultResponseDTO = {
 
   pendingFriendRequest: FriendRequestResponseDTO | null;
 }[];
+
+export type Bulk_GetUserInformationRequestDTO = {
+  ids: ID[];
+};
+
+export type Bulk_GetUserInformationResponseDTO = {
+  id: ID;
+  name: string;
+  avatar: string;
+  phone: string;
+}[];
