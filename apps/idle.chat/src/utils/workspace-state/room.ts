@@ -3,11 +3,13 @@ import { ID } from '@idle/model';
 import Workspace from './workspace';
 import RoomDoc from './room-doc';
 import IdleDoc from './doc';
+import { RoomMeta } from './meta';
 
 export type RoomOptions = {
   id: ID;
   workspace: Workspace;
   doc: IdleDoc;
+  meta: RoomMeta;
 };
 
 export default class Room extends RoomDoc {

@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { Binder } from 'immer-yjs/src';
 import { Array as YArray, Map as YMap, Text as YText, YEvent } from 'yjs';
 import IdleDoc from './doc';
+import { User } from '../../features/auth/entities/user';
 
 const RoomVariants = {
   private: 'private',
@@ -12,8 +13,9 @@ export type RoomType = keyof typeof RoomVariants;
 export interface RoomMeta {
   id: ID;
   title: string;
+  avatar: string;
   createDate: number;
-  members: ID[];
+  members: User[];
   type: RoomType;
 }
 
@@ -32,7 +34,7 @@ export default class WorkspaceMeta {
 
   _yMap: YMap<WorkspaceMetadataState>;
 
-  roomMetaAdded = new Subject<ID>();
+  roomMetaAdded = new Subject<RoomMeta>();
 
   roomMetaRemoved = new Subject<ID>();
 
@@ -61,23 +63,23 @@ export default class WorkspaceMeta {
 
   private _handleRomMetaEvent() {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { roomMetas: pageMetas, _prevRooms } = this;
+    const { roomMetas, _prevRooms } = this;
 
-    pageMetas.forEach((pageMeta) => {
-      if (!_prevRooms.has(pageMeta.id)) {
-        this.roomMetaAdded.next(pageMeta.id);
+    roomMetas.forEach((meta) => {
+      if (!_prevRooms.has(meta.id)) {
+        this.roomMetaAdded.next(meta);
       }
     });
 
     _prevRooms.forEach((prevPageId) => {
-      const isRemoved = !pageMetas.find((p) => p.id === prevPageId);
+      const isRemoved = !roomMetas.find((p) => p.id === prevPageId);
       if (isRemoved) {
         this.roomMetaRemoved.next(prevPageId);
       }
     });
 
     _prevRooms.clear();
-    pageMetas.forEach((page) => _prevRooms.add(page.id));
+    roomMetas.forEach((page) => _prevRooms.add(page.id));
 
     this.roomMetasUpdated.next();
   }
@@ -126,11 +128,11 @@ export default class WorkspaceMeta {
       this._proxy.rooms = [];
     }
 
-    this.binder.update((metadata) => {
+    this.binder.update((doc) => {
       if (index === undefined) {
-        metadata.rooms.push(room);
+        doc.rooms.push(room);
       } else {
-        metadata.rooms.splice(index, 0, room);
+        doc.rooms.splice(index, 0, room);
       }
     });
   }
@@ -141,8 +143,8 @@ export default class WorkspaceMeta {
     const index = this.roomMetas.findIndex((room) => room.id === roomId);
     if (index < 0) return;
 
-    this.binder.update((metadata) => {
-      metadata.rooms.splice(index, 1);
+    this.binder.update((doc) => {
+      doc.rooms.splice(index, 1);
     });
   }
 

@@ -3,9 +3,12 @@ import { useRef } from 'react';
 import { RoomMetaRender } from './room-item';
 import useConversationItemStyle from './use-conversation-item-style';
 import { RoomMeta } from '../../../../utils/workspace-state/meta';
+import { useAtomValue } from 'jotai';
+import { waitForCurrentWorkspaceAtom } from 'apps/idle.chat/src/utils/workspace/atom';
 
 export default function RoomList({ rooms }: { rooms: RoomMeta[] }) {
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
 
   const hideScrollbar = () => {
     if (!sidebarRef.current) return;
@@ -15,6 +18,12 @@ export default function RoomList({ rooms }: { rooms: RoomMeta[] }) {
   const displayScrollbar = () => {
     if (!sidebarRef.current) return;
     sidebarRef.current.style.overflowY = 'hidden';
+  };
+
+  const searchWorkspace = (query: string) => {
+    console.log('🚀 ~ searchWorkspace ~ query:', query);
+    const value = workspace.state.indexer.search.search(query);
+    console.log('🚀 ~ searchWorkspace ~ value:', value);
   };
 
   const { styles, cx } = useConversationItemStyle();
@@ -37,7 +46,12 @@ export default function RoomList({ rooms }: { rooms: RoomMeta[] }) {
               <Flex align="center" justify="space-between">
                 <Typography.Title level={3}>Messages</Typography.Title>
               </Flex>
-              <Input placeholder="Search" />
+              <Input
+                placeholder="Search"
+                onChange={(e) => {
+                  searchWorkspace(e.target.value);
+                }}
+              />
             </div>
           }
           className="overflow-hidden"

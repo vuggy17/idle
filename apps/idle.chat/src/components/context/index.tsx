@@ -2,6 +2,7 @@ import type { createStore } from 'jotai';
 import { PropsWithChildren, createContext, useMemo } from 'react';
 import { Provider } from 'jotai';
 import { ConfigProvider } from 'antd';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { readThemeConfig, SerializableThemeConfig } from './read-theme-config';
 import getCurrentStore from '../../store/atom';
 
@@ -17,6 +18,8 @@ export const IdleContext = createContext<IldeContextProps>({
   overrideThemeConfig: () => {},
   themeConfig: {},
 });
+
+const client = new QueryClient();
 
 export function IdleContextProvider({
   children,
@@ -36,9 +39,11 @@ export function IdleContextProvider({
           [overrideThemeConfig, store, themeConfig],
         )}
       >
-        <ConfigProvider theme={readThemeConfig(themeConfig)}>
-          {children}
-        </ConfigProvider>
+        <QueryClientProvider client={client}>
+          <ConfigProvider theme={readThemeConfig(themeConfig)}>
+            {children}
+          </ConfigProvider>
+        </QueryClientProvider>
       </IdleContext.Provider>
     </Provider>
   );

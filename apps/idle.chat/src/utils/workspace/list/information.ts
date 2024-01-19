@@ -6,7 +6,7 @@ import { WorkspaceListProvider, WorkspaceInfo } from './provider';
 
 const logger = console;
 
-const WORKSPACE_INFORMATION_CACHE_KEY = 'workspace-info';
+const WORKSPACE_INFORMATION_CACHE_KEY = 'workspace-info--';
 
 // eslint-disable-next-line import/prefer-default-export
 export class RoomInformation {

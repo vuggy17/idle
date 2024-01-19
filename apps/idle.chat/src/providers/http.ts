@@ -17,8 +17,9 @@ import {
   FindFriendRequestDTO,
   FindFriendResponseDTO,
   CreatePrivateRoomRequestDTO,
-  RoomDTO,
   CreateRoomResponseDTO,
+  Bulk_GetUserInformationRequestDTO,
+  Bulk_GetUserInformationResponseDTO,
 } from '@idle/model';
 import { Account } from 'appwrite';
 import { WithAbortSignal } from '../type';
@@ -79,6 +80,17 @@ export class HttpClient {
 
   async disableAccount(body: DeactivateAccountRequestDTO) {
     return this.client.post<DeactivateAccountResponseDTO>('auth/disable', body);
+  }
+
+  async getUserInformation({ ids }: Bulk_GetUserInformationRequestDTO) {
+    // get request with body is not permitted
+    // https://stackoverflow.com/questions/46404051/send-object-with-axios-get-request
+    const result = await this.client.post<Bulk_GetUserInformationResponseDTO>(
+      'users/bulk',
+      { ids },
+    );
+
+    return result.data;
   }
 
   async getUserSearchSuggestions({

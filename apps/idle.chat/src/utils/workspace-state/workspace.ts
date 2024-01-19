@@ -3,9 +3,13 @@ import { ID } from '@idle/model';
 import WorkspaceMeta, { RoomMeta, RoomType } from './meta';
 // eslint-disable-next-line import/no-cycle
 import Room from './room';
-import { Store, StoreOptions } from './store';
+import { Store } from './store';
+import { WorkspaceOptions } from './type';
+import { User } from '../../features/auth/entities/user';
+import { Search, WorkspaceExtension } from './extensions';
 
-export default class IdleWorkspace {
+@Search
+export default class IdleWorkspace extends WorkspaceExtension {
   private readonly _store: Store;
 
   readonly meta: WorkspaceMeta;
@@ -16,7 +20,8 @@ export default class IdleWorkspace {
     roomsUpdated: new Subject<void>(),
   };
 
-  constructor(options: StoreOptions) {
+  constructor(options: WorkspaceOptions) {
+    super();
     this._store = new Store(options);
     this.meta = new WorkspaceMeta(this.doc);
     this._bindRoomMetaEvents();
@@ -43,11 +48,12 @@ export default class IdleWorkspace {
   }
 
   private _bindRoomMetaEvents() {
-    this.meta.roomMetaAdded.subscribe((roomId) => {
+    this.meta.roomMetaAdded.subscribe((meta) => {
       const room = new Room({
-        id: roomId,
+        id: meta.id,
         doc: this.doc,
         workspace: this,
+        meta,
       });
       this._store.addRoom(room);
       this.events.roomAdded.next(room.id);
@@ -74,16 +80,22 @@ export default class IdleWorkspace {
    */
   createRoom(options: {
     id?: ID;
-    members: ID[];
+    members: User[];
     type: RoomType;
     title?: string;
+    avatar?: string;
   }) {
+    function generateAvatar() {
+      return '';
+    }
+
     const DEFAULT_ROOM_NAME = 'New chat';
     const { id, members, type, title } = options;
     const roomId = id ?? this._store.generateId();
     if (this._hasRoom(roomId)) {
       throw new Error('room already exists');
     }
+    const avatar = options.avatar || generateAvatar();
 
     this.meta.addRoomMeta({
       id: roomId,
@@ -91,6 +103,7 @@ export default class IdleWorkspace {
       createDate: +new Date(),
       members,
       type,
+      avatar,
     });
     return this.getRoom(roomId) as Room;
   }

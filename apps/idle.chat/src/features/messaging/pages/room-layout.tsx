@@ -18,8 +18,8 @@ function Component({ children }: PropsWithChildren) {
   const { jumpToRoom } = useNavigateHelper();
 
   useLayoutEffect(() => {
-    if (!params.roomId) {
-      const lastRoomId = localStorage.getItem('last_room_id') || '';
+    const lastRoomId = localStorage.getItem('last_room_id');
+    if (!params.roomId && lastRoomId) {
       jumpToRoom(workspace.id, lastRoomId);
     }
   }, [params, jumpToRoom, setCurrentRoom, workspace.id]);

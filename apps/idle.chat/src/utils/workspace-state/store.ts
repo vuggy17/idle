@@ -5,11 +5,7 @@ import { createId } from '@paralleldrive/cuid2';
 // eslint-disable-next-line import/no-cycle
 import Room from './room';
 import IdleDoc from './doc';
-
-export type StoreOptions = {
-  idGenerator: 'cuid';
-  id?: ID;
-};
+import { StoreOptions } from './type';
 
 export class Store {
   readonly id: ID;

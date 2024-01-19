@@ -35,7 +35,7 @@ function RoomDetailPage({ roomId }: { roomId: ID }) {
   return (
     <Layout>
       <Layout.Header className="bg-transparent px-0">
-        <RoomDetailHeader room={room} workspace={workspace.state} />
+        <RoomDetailHeader room={room} />
       </Layout.Header>
       <Layout.Content className="h-full">
         <RoomDetail workspace={workspace.state} roomId={roomId} />

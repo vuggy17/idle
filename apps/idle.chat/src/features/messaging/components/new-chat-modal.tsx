@@ -78,7 +78,7 @@ export default function NewChatModal({ ...props }: ModalProps) {
       return;
     }
 
-    const roomMembers = [selectedUser[0].id, currentUser.id];
+    const roomMembers = [selectedUser[0], currentUser];
 
     createRoomAndOpen(roomMembers, selectedUser[0]);
     // const executor = new CreatePrivateRoomUseCase();

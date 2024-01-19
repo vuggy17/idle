@@ -3,6 +3,7 @@ import * as Y from 'yjs';
 import { Subject } from 'rxjs';
 import { JSONObject, UpdateFn } from 'immer-yjs/src';
 import IdleDoc from './doc';
+import { RoomMeta } from './meta';
 
 export default class RoomDoc<State extends JSONObject = Record<string, any>> {
   readonly id: ID;
@@ -33,11 +34,12 @@ export default class RoomDoc<State extends JSONObject = Record<string, any>> {
     return this._loaded;
   }
 
-  get spaceDoc() {
+  get roomDoc() {
     return this._yRoomDoc;
   }
 
   async load() {
+    console.log('==========================load room');
     if (this.loaded) {
       return this;
     }

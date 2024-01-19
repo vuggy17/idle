@@ -2,10 +2,10 @@
 import PartialAvatar from '@chat/components/user-card/partial-avatar';
 import { Flex, Space, Typography, Avatar, theme, FlexProps } from 'antd';
 import { SidebarExpand } from 'iconoir-react';
-import { IdleWorkspace as Workspace } from 'apps/idle.chat/src/utils/workspace-state';
 import { useRef } from 'react';
 import Room from '../../../../utils/workspace-state/room';
 import { RoomSetting, RoomSettingRef } from '../room-setting';
+import { assertExists } from 'apps/idle.chat/src/utils/assert';
 
 const { useToken } = theme;
 
@@ -28,15 +28,12 @@ function HeaderButton({ children, ...rest }: FlexProps) {
   );
 }
 
-export default function RoomDetailHeader({
-  room,
-  workspace,
-}: {
-  room: Room;
-  workspace: Workspace;
-}) {
+export default function RoomDetailHeader({ room }: { room: Room }) {
   const roomSettingRef = useRef<RoomSettingRef>(null);
-  const avatars = ['https://placehold.co/400', 'https://placehold.co/400'];
+  const roomMeta = room.meta;
+  assertExists(roomMeta);
+  const { members, avatar, title } = roomMeta;
+
   return (
     <Flex
       justify="space-between"
@@ -44,7 +41,7 @@ export default function RoomDetailHeader({
       className="bg-white ml-px pl-6 pr-4"
     >
       <Space>
-        <PartialAvatar src="https://placehold.co/400" alt="haha" size="large" />
+        <PartialAvatar src={avatar} alt={title} size="large" />
         <div>
           <Typography.Text>{room.meta?.title}</Typography.Text>
         </div>
@@ -52,11 +49,11 @@ export default function RoomDetailHeader({
       <Space>
         <HeaderButton>
           <Avatar.Group>
-            {avatars.map((url, index) => (
+            {members.map(({ avatar, name }, index) => (
               <PartialAvatar
-                key={`avatar${url}${Math.random()}`}
-                src={url}
-                alt="haha"
+                key={`avatar${avatar}${Math.random()}`}
+                src={avatar}
+                alt={name}
               />
             ))}
           </Avatar.Group>
@@ -65,10 +62,9 @@ export default function RoomDetailHeader({
             type="secondary"
             className="align-middle ml-1 mr-3 group-hover:text-gray-800"
           >
-            {avatars.length}
+            {members.length}
           </Typography.Text>
         </HeaderButton>
-
         <HeaderButton onClick={() => roomSettingRef.current?.open()}>
           <SidebarExpand
             className="text-sm duration-200 h-9 mx-2 rotate-180"
@@ -76,12 +72,7 @@ export default function RoomDetailHeader({
           />
         </HeaderButton>
       </Space>
-
-      <RoomSetting
-        ref={roomSettingRef}
-        name={room?.meta?.title || 'haha'}
-        roomId={room.id}
-      />
+      <RoomSetting ref={roomSettingRef} name={title} roomId={room.id} />
     </Flex>
   );
 }
