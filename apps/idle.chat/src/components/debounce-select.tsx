@@ -11,6 +11,28 @@ export interface DebounceSelectProps<ValueType = any>
   prefetch?: boolean;
 }
 
+/**
+ * @function DebounceSelect
+ * @description A debounced select component for fetching options asynchronously.
+ * @param {DebounceSelectProps} props - The component props.
+ * @returns {JSX.Element} The rendered component.
+ * @example
+ * // Example usage of DebounceSelect
+ * const fetchOptions = async (search) => {
+ *   // Your implementation to fetch options based on the search value
+ * };
+ *
+ * function MyComponent() {
+ *   return (
+ *     <DebounceSelect
+ *       fetchOptions={fetchOptions}
+ *       debounceTimeout={500}
+ *       prefetch={true}
+ *       config={{ maxWait: 1000 }}
+ *     />
+ *   );
+ * }
+ */
 export function DebounceSelect<
   ValueType extends {
     key?: string;
@@ -51,7 +73,6 @@ export function DebounceSelect<
     config,
   );
 
-  console.log('options', options);
   useEffect(() => {
     if (prefetch) {
       fetchWithSequenceControl('');

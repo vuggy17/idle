@@ -1,8 +1,8 @@
 import { Flex, List, Typography } from 'antd';
 import { useAtom, useAtomValue } from 'jotai';
+import { waitForCurrentWorkspaceAtom } from 'apps/idle.chat/src/utils/workspace/atom';
 import { currentRoomIdAtom } from '../../../../store/room';
 import useNavigateHelper from '../../../../hooks/use-navigate-helper';
-import { waitForCurrentWorkspaceAtom } from 'apps/idle.chat/src/utils/workspace/atom';
 import PartialAvatar from '../../../../components/user-card/partial-avatar';
 import { RoomMeta } from '../../../../utils/workspace-state/meta';
 
@@ -13,41 +13,6 @@ export type RoomItem = {
   img: string;
   lastUpdatedAt: number;
 };
-
-// export default function RoomItem({
-//   isActive,
-//   title,
-//   img,
-//   sub,
-//   lastUpdatedAt,
-// }: {
-//   isActive: boolean;
-//   title: string;
-//   img: string;
-//   sub: string;
-//   lastUpdatedAt: number;
-// }) {
-//   return (
-//     <List.Item className={`min-w-0 ${isActive ? 'active' : ''}`}>
-//       <Flex align="center" className="min-w-0 px-4">
-//         <PartialAvatar src={img || title} className="shrink-0 mr-2" />
-//         <div className="flex-1 basis-0 min-w-0">
-//           <div className="flex">
-//             <Typography.Text ellipsis className="inline">
-//               {title}
-//             </Typography.Text>
-//             <Typography.Text type="secondary" className="text-xs inline">
-//               {lastUpdatedAt}
-//             </Typography.Text>
-//           </div>
-//           <Typography.Text type="secondary" ellipsis>
-//             {sub}
-//           </Typography.Text>
-//         </div>
-//       </Flex>
-//     </List.Item>
-//   );
-// }
 
 export function RoomMetaRender({ meta }: { meta: RoomMeta }) {
   const [currentRoom, setCurrentRoom] = useAtom(currentRoomIdAtom);
@@ -70,22 +35,43 @@ export function RoomMetaRender({ meta }: { meta: RoomMeta }) {
       className={`min-w-0 ${isSelected ? 'active' : ''}`}
       onClick={onRoomClick}
     >
-      <Flex align="center" className="min-w-0 px-4">
-        <PartialAvatar src={img} alt={title} className="shrink-0 mr-2" />
-        <div className="flex-1 basis-0 min-w-0">
-          <div className="flex">
-            <Typography.Text ellipsis className="inline">
-              {title}
-            </Typography.Text>
-            <Typography.Text type="secondary" className="text-xs inline">
-              {lastUpdatedAt}
-            </Typography.Text>
-          </div>
-          <Typography.Text type="secondary" ellipsis>
-            {sub}
+      <RoomItemInner
+        img={img}
+        title={title}
+        lastUpdatedAt={lastUpdatedAt}
+        sub={title}
+      />
+    </List.Item>
+  );
+}
+
+export function RoomItemInner({
+  img,
+  title,
+  lastUpdatedAt,
+  sub,
+}: {
+  img: string;
+  title: string;
+  lastUpdatedAt: number;
+  sub: string;
+}) {
+  return (
+    <Flex align="center" className="min-w-0 px-4">
+      <PartialAvatar src={img} alt={title} className="shrink-0 mr-2" />
+      <div className="flex-1 basis-0 min-w-0">
+        <div className="flex">
+          <Typography.Text ellipsis className="inline">
+            {title}
+          </Typography.Text>
+          <Typography.Text type="secondary" className="text-xs inline">
+            {lastUpdatedAt}
           </Typography.Text>
         </div>
-      </Flex>
-    </List.Item>
+        <Typography.Text type="secondary" ellipsis>
+          {sub}
+        </Typography.Text>
+      </div>
+    </Flex>
   );
 }

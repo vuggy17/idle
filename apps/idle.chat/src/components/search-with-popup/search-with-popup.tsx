@@ -9,8 +9,8 @@ import {
   Typography,
   theme,
 } from 'antd';
-import { cloneElement, useCallback, useEffect, useRef, useState } from 'react';
-import useClickOutsideListener from '../../hooks/use-click-outside-listener';
+import { cloneElement, useEffect, useRef, useState } from 'react';
+import { ClickOutsideListener } from './clickoutside-listener';
 
 export type SearchWithPopupProps = {
   value?: string;
@@ -66,16 +66,11 @@ export default function SearchWithPopup({
   const hasAnySearchSuggestions = options ? options.length > 0 : false;
   const didUserTyped = !!query;
 
-  // reference to suggestion popup
-  useClickOutsideListener(
-    popupContainerRef,
-    useCallback(() => {
-      setOpen(false);
-    }, []),
-  );
-
   return (
-    <div ref={popupContainerRef}>
+    <ClickOutsideListener
+      onClick={() => setOpen(false)}
+      ref={popupContainerRef}
+    >
       <Dropdown
         open={open}
         getPopupContainer={() => popupContainerRef.current as HTMLDivElement}
@@ -151,6 +146,6 @@ export default function SearchWithPopup({
           placeholder="Search for people"
         />
       </Dropdown>
-    </div>
+    </ClickOutsideListener>
   );
 }

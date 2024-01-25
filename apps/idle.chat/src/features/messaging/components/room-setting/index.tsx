@@ -45,8 +45,8 @@ export const RoomSetting = forwardRef<RoomSettingRef, RoomSettingProps>(
     return (
       <Drawer
         title={name}
-        maskStyle={{
-          backgroundColor: 'transparent',
+        styles={{
+          mask: { backgroundColor: 'transparent' },
         }}
         placement="right"
         size="large"

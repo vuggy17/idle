@@ -1,10 +1,8 @@
 import { ID } from '@idle/model';
-import React from 'react';
 import { IdleWorkspace } from 'apps/idle.chat/src/utils/workspace-state';
 import useRoomMetas from 'apps/idle.chat/src/hooks/use-room-meta';
-import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import HttpProvider from 'apps/idle.chat/src/providers/http';
-import { User } from '../../auth/entities/user';
 
 function useRoomMeta(workspace: IdleWorkspace, roomId: ID) {
   const list = useRoomMetas(workspace);
@@ -34,7 +32,8 @@ export function useRoomMembers(workspace: IdleWorkspace, roomId: ID) {
 
   // Return the user information from the queries
   return useSuspenseQuery({
-    queryKey:[ 'room-members',workspace.id, roomId],
-    queryFn: ()=> HttpProvider.getUserInformation({ ids: members })
+    queryKey: ['room-members', workspace.id, roomId],
+    queryFn: () =>
+      HttpProvider.getUserInformation({ ids: members.map((m) => m.id) }),
   });
 }
