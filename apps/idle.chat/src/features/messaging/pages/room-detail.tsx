@@ -9,6 +9,7 @@ import { RoomLayout } from './room-layout';
 import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
 import RoomDetailHeader from '../components/room-detail/room-detail-header';
 import RoomDetail from '../components/room-detail/room-detail';
+import { recentRoomIdsAtom } from '@chat/components/workspace-header/use-command-groups';
 
 const useForceUpdate = () => {
   const [, setCount] = useState(0);
@@ -30,6 +31,11 @@ const useSafeRoom = (workspaceState: Workspace, roomId: string) => {
 function RoomDetailPage({ roomId }: { roomId: ID }) {
   const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
   const room = useSafeRoom(workspace.state, roomId);
+  const setRecentRoom = useSetAtom(recentRoomIdsAtom);
+
+  useEffect(() => {
+    setRecentRoom((prevs) => [...new Set([...prevs, roomId])].slice(0, 3));
+  }, [roomId]);
 
   if (!room) return 'page not found';
   return (

@@ -1,9 +1,9 @@
 import { WorkspaceOptions } from '../../type';
 import { extensionFactory } from '../factory';
-import { QueryContent, SearchIndexer } from './search';
+import { QueryContent, RoomIndexer } from './search';
 
 type Indexer = {
-  search: SearchIndexer;
+  room: RoomIndexer;
 };
 
 export interface SearchExtension {
@@ -17,14 +17,13 @@ export const Search = extensionFactory<keyof SearchExtension>(
       indexer: Indexer;
 
       search(query: QueryContent) {
-        console.log('serach');
-        return this.indexer.search.search(query);
+        return this.indexer.room.search(query);
       }
 
       constructor(storeOptions: WorkspaceOptions) {
         super(storeOptions);
         this.indexer = {
-          search: new SearchIndexer(this.doc, this.meta),
+          room: new RoomIndexer(this.doc, this.meta),
         };
       }
     },

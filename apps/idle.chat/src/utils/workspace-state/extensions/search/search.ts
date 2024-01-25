@@ -9,7 +9,12 @@ const DocumentIndexer = FlexSearch.Document;
 const { Index } = FlexSearch;
 
 type IndexMeta = Readonly<{
-  content: string; // chat name, member name, message text
+  name: string;
+  members: string[]; // members name
+}>;
+
+type IndexStore = Readonly<{
+  name: string;
   members: {
     id: string;
     name: string;
@@ -20,7 +25,7 @@ type IndexMeta = Readonly<{
 export type QueryContent = string | Partial<DocumentSearchOptions<boolean>>;
 type SearchResult = {
   id: string;
-  doc: { content: string; members: string[] };
+  doc: { name: string; members: string[] }; // room name, member's name
 };
 type SearchResults = { field: string; result: SearchResult[] };
 
@@ -58,10 +63,10 @@ function tokenize(locale: string) {
   };
 }
 
-export class SearchIndexer {
+export class RoomIndexer {
   private readonly _indexer: FlexSearch.Document<IndexMeta, string[]>;
 
-  private _reindexMap: Map<string, IndexMeta> | null = null;
+  private _reindexMap: Map<string, IndexStore> | null = null;
 
   constructor(
     private readonly _doc: IdleDoc,
@@ -71,8 +76,9 @@ export class SearchIndexer {
     this._indexer = new DocumentIndexer<IndexMeta, string[]>({
       document: {
         id: 'id',
-        index: ['content'],
-        store: ['content', 'members'],
+        index: ['name'],
+        tag: 'members',
+        store: ['name'],
       },
       encode: tokenize(locale),
       tokenize: 'forward',
@@ -104,46 +110,20 @@ export class SearchIndexer {
     });
   }
 
-  private _handleRoomIndexing(roomId: any, room: Doc) {
+  private _handleRoomIndexing(roomId: string, room: Doc) {
     if (!room) {
       return;
     }
     this.refreshRoomIndex(roomId);
-    // const messages = room.getArray('messages');
-    // messages.observeDeep((events) => {
-    //   const keys = events.flatMap((e) => {
-    //     // eslint-disable-next-line no-bitwise
-    //     if ((e.path?.length | 0) > 0) {
-    //       return [[e.path[0], 'update'] as [string, 'update']];
-    //     }
-    //     return Array.from(e.changes.keys.entries()).map(
-    //       ([k, { action }]) => [k, action] as [string, typeof action],
-    //     );
-    //   });
-
-    //   if (keys.length) {
-    //     keys.forEach(([key, action]) => {
-    //       this._refreshIndex(roomId, key, action, messages.get(key));
-    //     });
-    //   }
-    // });
   }
 
   refreshRoomIndex(roomId: any) {
     const meta = this._meta.getRoomMeta(roomId);
     assertExists(meta);
-    // this._refreshIndex(roomId, key, 'add', meta);
-
     this._reindexMap?.set(roomId, {
-      content: meta.title,
+      name: meta.title,
       members: meta.members,
     });
-
-    // const yBlocks = room.getMap('blocks') as Y.Map<unknown>;
-    // yBlocks.forEach((_, key) => {
-    //   this._refreshIndex(roomId, key, 'add', yBlocks.get(key));
-    // });
-    // console.log(room.);
   }
 
   private _getRoom(key: string) {
@@ -161,7 +141,10 @@ export class SearchIndexer {
       const meta = this._reindexMap.get(id);
       if (meta) {
         this._reindexMap.delete(id);
-        this._indexer.add(id, meta);
+        this._indexer.add(id, {
+          name: meta.name,
+          members: meta.members.map((mem) => mem.name),
+        });
       }
     }
 
@@ -174,10 +157,7 @@ export class SearchIndexer {
   search(query: QueryContent) {
     return new Map(
       this._search(query).flatMap(({ result }) =>
-        result.map((r) => [
-          r.id,
-          { content: r.doc.content, members: r.doc.members },
-        ]),
+        result.map((r) => [r.id, { name: r.doc.name }]),
       ),
     );
   }
@@ -192,35 +172,5 @@ export class SearchIndexer {
     return this._indexer.search(query, {
       enrich: true,
     }) as unknown as SearchResults[];
-  }
-
-  private _refreshIndex(
-    page: string,
-    id: string,
-    action: 'add' | 'update' | 'delete',
-    message?: Y.Map<unknown>,
-  ) {
-    switch (action) {
-      case 'add':
-      case 'update': {
-        if (message) {
-          const content = message.get('text') as string;
-          assertExists(content);
-          if (content) {
-            this._reindexMap?.set(id, {
-              content,
-              // space: page,
-              // tags: [page],
-            });
-          }
-        }
-        break;
-      }
-      case 'delete': {
-        this._reindexMap?.delete(id);
-        this._indexer.remove(id);
-        break;
-      }
-    }
   }
 }
