@@ -36,7 +36,7 @@ type ChannelMessage = {
 };
 
 export const dbVersion = 1;
-export const DEFAULT_DB_NAME = 'affine-local';
+export const DEFAULT_DB_NAME = 'local';
 
 export class IndexDBStorage implements SyncStorage {
   private readonly _name = 'indexdb';

@@ -5,14 +5,14 @@ import { JSONObject, UpdateFn } from 'immer-yjs/src';
 import IdleDoc from './doc';
 import { RoomMeta } from './meta';
 
-export default class RoomDoc<State extends JSONObject = Record<string, any>> {
+export default class RoomDoc<Message extends JSONObject = Record<string, any>> {
   readonly id: ID;
 
   readonly rootDoc: IdleDoc;
 
   protected readonly _yRoomDoc: Y.Doc;
 
-  protected readonly _yMessages: Y.Array<State>;
+  protected readonly _yMessages: Y.Array<Message>;
 
   private _loaded!: boolean;
 
@@ -38,8 +38,11 @@ export default class RoomDoc<State extends JSONObject = Record<string, any>> {
     return this._yRoomDoc;
   }
 
+  addMessage(message: Message) {
+    this.roomDoc.getArray('messages').push([message]);
+  }
+
   async load() {
-    console.log('==========================load room');
     if (this.loaded) {
       return this;
     }
@@ -86,7 +89,7 @@ export default class RoomDoc<State extends JSONObject = Record<string, any>> {
     this._onLoad.next();
   };
 
-  update(fn: UpdateFn<State>) {
+  update(fn: UpdateFn<Message>) {
     console.log(this);
     throw new Error('not implemented yet');
   }

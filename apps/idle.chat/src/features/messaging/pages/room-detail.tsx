@@ -39,7 +39,7 @@ function RoomDetailPage({ roomId }: { roomId: ID }) {
 
   if (!room) return 'page not found';
   return (
-    <Layout>
+    <Layout className='h-full'>
       <Layout.Header className="bg-transparent px-0">
         <RoomDetailHeader room={room} />
       </Layout.Header>
