@@ -1,4 +1,4 @@
-import { Flex, Modal, ModalProps } from 'antd';
+import { Flex, Modal, ModalProps, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { currentUserAtom } from '../../../store/user';
@@ -73,14 +73,8 @@ export default function NewChatModal({ ...props }: ModalProps) {
   const createOrNavigateChat = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    if (selectedUser.length > 1) {
-      // create group room
-      return;
-    }
-
-    const roomMembers = [selectedUser[0], currentUser];
-
-    createRoomAndOpen(roomMembers, selectedUser[0]);
+    const roomMembers = [...selectedUser, currentUser];
+    createRoomAndOpen(roomMembers, '');
     // const executor = new CreatePrivateRoomUseCase();
     // executor.execute({
     //   target: selectedUser[0].id,
@@ -97,13 +91,41 @@ export default function NewChatModal({ ...props }: ModalProps) {
         disabled: selectedUser.length === 0,
       }}
     >
-      <div className="h-40">
+      <Space direction="vertical" className="w-full" size="large">
         <PeoplePicker
+          value={selectedUser.map((item) => ({
+            value: item.id,
+          }))}
+          showRemoveIcon={false}
           onChange={(_, options) => {
             setSelectedUser((options as any[]).map((op) => op.other));
           }}
         />
-      </div>
+
+        <Flex gap={8}>
+          {selectedUser.map((user) => (
+            <Tag
+              key={user.id}
+              className="pl-1  py-1"
+              closable
+              onClose={() => {
+                setSelectedUser((prev) =>
+                  prev.filter((item) => item.id !== user.id),
+                );
+              }}
+            >
+              <Space className="pr-3">
+                <PartialAvatar
+                  src={user.avatar}
+                  shape="circle"
+                  alt={user.name}
+                />
+                <Typography.Text>{user.name}</Typography.Text>
+              </Space>
+            </Tag>
+          ))}
+        </Flex>
+      </Space>
     </Modal>
   );
 }

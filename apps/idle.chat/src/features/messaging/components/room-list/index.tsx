@@ -1,7 +1,7 @@
 import { ConfigProvider, Flex, List, Typography } from 'antd';
 import { useRef } from 'react';
 import { RoomMetaRender } from './room-item';
-import useConversationItemStyle from './use-conversation-item-style';
+import useSelectableListStyle from './use-conversation-item-style';
 import { RoomMeta } from '../../../../utils/workspace-state/meta';
 
 export default function RoomList({ rooms }: { rooms: RoomMeta[] }) {
@@ -17,7 +17,7 @@ export default function RoomList({ rooms }: { rooms: RoomMeta[] }) {
     sidebarRef.current.style.overflowY = 'hidden';
   };
 
-  const { styles, cx } = useConversationItemStyle();
+  const { styles, cx } = useSelectableListStyle();
 
   return (
     <div

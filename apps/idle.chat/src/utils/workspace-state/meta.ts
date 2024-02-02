@@ -7,6 +7,7 @@ import { User } from '../../features/auth/entities/user';
 
 const RoomVariants = {
   private: 'private',
+  group: 'group',
 } as const;
 export type RoomType = keyof typeof RoomVariants;
 
@@ -152,18 +153,21 @@ export default class WorkspaceMeta {
    * @internal Use {@link Workspace.setRoomMeta} instead
    */
   setRoomMeta(id: string, props: Partial<RoomMeta>) {
-    const rooms = (this.rooms as RoomMeta[]) ?? [];
-    const index = rooms.findIndex((page: RoomMeta) => id === page.id);
+    this.binder.update((doc) => {
+      const rooms = (doc.rooms as RoomMeta[]) ?? [];
+      const index = rooms.findIndex((page: RoomMeta) => id === page.id);
 
-    if (!this.rooms) {
-      this._proxy.rooms = [];
-    }
-    if (index === -1) return;
-    if (!this.rooms) throw new Error('setRoomMeta: room not found');
+      if (!this.rooms) {
+        this._proxy.rooms = [];
+      }
+      if (index === -1) return;
+      if (!this.rooms) throw new Error('setRoomMeta: room not found');
 
-    const page = this.rooms[index] as Record<string, unknown>;
-    Object.entries(props).forEach(([key, value]) => {
-      page[key] = value;
+      const room = doc.rooms[index] as Record<string, unknown>;
+      Object.entries(props).forEach(([key, value]) => {
+        room[key] = value;
+      });
+      this._proxy.rooms = doc.rooms;
     });
   }
 

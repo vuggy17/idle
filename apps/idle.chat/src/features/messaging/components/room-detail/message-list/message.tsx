@@ -14,6 +14,9 @@ type MessageProps = {
 export default function Message({ self, content, author }: MessageProps) {
   return (
     <MessageLayoutOuter
+      title={
+        !self ? <Typography.Text strong>{author.name}</Typography.Text> : null
+      }
       content={<Typography.Text>{content}</Typography.Text>}
       thumbnail={<PartialAvatar src={author.avatar} alt={author.name} />}
       Layout={self ? MessageLayoutSelf : MessageLayout}
@@ -24,16 +27,21 @@ export default function Message({ self, content, author }: MessageProps) {
 function MessageLayoutOuter({
   thumbnail,
   content,
+  title,
   Layout,
 }: {
   thumbnail: ReactNode;
   content: ReactNode;
+  title: ReactNode;
   Layout: any;
 }) {
   return (
     <Layout>
       {thumbnail}
-      {content}
+      <Flex vertical>
+        {title}
+        {content}
+      </Flex>
     </Layout>
   );
 }
@@ -44,7 +52,7 @@ function CommonMessageRow({
   ...props
 }: PropsWithChildren<Omit<FlexProps, 'algin' | 'gap'>>) {
   // hover:bg-[#0000000f]"
-  const mergedCls = cx(className, "py-1 px-3 mx-1 rounded");
+  const mergedCls = cx(className, 'py-1 px-3 mx-1 rounded');
   return (
     <Flex align="center" className={mergedCls} gap={8} {...props}>
       {children}
@@ -54,7 +62,7 @@ function CommonMessageRow({
 
 function MessageLayout({ children }: PropsWithChildren) {
   return (
-    <div >
+    <div>
       <CommonMessageRow>{children}</CommonMessageRow>
     </div>
   );
@@ -62,8 +70,8 @@ function MessageLayout({ children }: PropsWithChildren) {
 
 function MessageLayoutSelf({ children }: PropsWithChildren) {
   return (
-      <CommonMessageRow justify="right" className="flex-row-reverse">
-        {children}
-      </CommonMessageRow>
+    <CommonMessageRow justify="right" className="flex-row-reverse">
+      {children}
+    </CommonMessageRow>
   );
 }

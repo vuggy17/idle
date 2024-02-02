@@ -5,20 +5,24 @@ import {
 import HttpProvider from '../../../providers/http';
 
 type PeoplePickerProps = {
+  showRemoveIcon?: boolean;
   onChange?: DebounceSelectProps['onChange'];
+  value?: DebounceSelectProps['value'];
 };
-
-export default function PeoplePicker({ ...props }: PeoplePickerProps) {
+const FORCE_USE_DEFAULT_ICON = undefined;
+export default function PeoplePicker({
+  showRemoveIcon = true,
+  ...props
+}: PeoplePickerProps) {
   return (
     <DebounceSelect
       prefetch
       mode="multiple"
       placeholder="Select users"
       fetchOptions={fetchUserList}
-      onChange={(newValue, option) => {
-        props.onChange?.(newValue, option);
-      }}
       style={{ width: '100%' }}
+      removeIcon={showRemoveIcon ? FORCE_USE_DEFAULT_ICON : null} // if set to undefined, the component lib use its default one
+      {...props}
     />
   );
 }

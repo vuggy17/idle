@@ -3,7 +3,7 @@ import { ConfigProvider, theme } from 'antd';
 import { createStyles } from 'antd-style';
 
 const { useToken } = theme;
-export default function useConversationItemStyle() {
+export default function useSelectableListStyle() {
   const { getPrefixCls } = React.useContext(ConfigProvider.ConfigContext);
   const listPrefixCls = getPrefixCls('list');
   const { token } = useToken();
@@ -11,6 +11,8 @@ export default function useConversationItemStyle() {
   return createStyles(({ css }) => ({
     list: css`
       .${listPrefixCls}-item {
+        border-radius: ${token.borderRadiusSM}px;
+        transition: all ${token.motionDurationMid} ${token.motionEaseInOut};
         &:hover {
           cursor: pointer;
           background-color: ${token.controlItemBgHover};

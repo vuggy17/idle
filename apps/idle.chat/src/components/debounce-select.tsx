@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Select, Spin } from 'antd';
 import type { SelectProps } from 'antd/es/select';
 import { Options as DebounceOptions, useDebouncedCallback } from 'use-debounce';
 
-export interface DebounceSelectProps<ValueType = any>
-  extends Omit<SelectProps<ValueType | ValueType[]>, 'options' | 'children'> {
+export interface DebounceSelectProps<
+  ValueType extends { value: string | number } = any,
+> extends Omit<SelectProps<ValueType | ValueType[]>, 'options' | 'children'> {
   fetchOptions: (search: string) => Promise<ValueType[]>;
   debounceTimeout?: number;
   config?: DebounceOptions;
   prefetch?: boolean;
+  blacklist?: ValueType['value'][];
 }
 
 /**
@@ -40,6 +42,7 @@ export function DebounceSelect<
     value: string | number;
   } = any,
 >({
+  blacklist = [],
   fetchOptions,
   debounceTimeout = 800,
   prefetch = false,
@@ -50,22 +53,28 @@ export function DebounceSelect<
   const [options, setOptions] = useState<ValueType[]>([]);
   const fetchRef = useRef(0);
 
-  const fetchWithSequenceControl = (value: string) => {
-    fetchRef.current += 1;
-    const fetchId = fetchRef.current;
-    setOptions([]);
-    setFetching(true);
+  const fetchWithSequenceControl = useCallback(
+    (value: string) => {
+      fetchRef.current += 1;
+      const fetchId = fetchRef.current;
+      setOptions([]);
+      setFetching(true);
 
-    fetchOptions(value).then((newOptions) => {
-      if (fetchId !== fetchRef.current) {
-        // for fetch callback order
-        return;
-      }
-
-      setOptions(newOptions);
-      setFetching(false);
-    });
-  };
+      fetchOptions(value).then((newOptions) => {
+        if (fetchId !== fetchRef.current) {
+          // for fetch callback order
+          return;
+        }
+        const optionsWithBlacklist = newOptions.map((option) => ({
+          ...option,
+          disabled: !!blacklist.find((item) => option.value === item),
+        }));
+        setOptions(optionsWithBlacklist);
+        setFetching(false);
+      });
+    },
+    [blacklist, fetchOptions],
+  );
 
   const debounceFetcher = useDebouncedCallback(
     fetchWithSequenceControl,

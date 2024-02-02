@@ -13,6 +13,15 @@ export default function useIdleWorkspaceHelper(workspace: IdleWorkspace) {
           avatar,
         });
       },
+      createGroupRoom(members: User[], title: string, avatar?: string) {
+        console.log('group room');
+        return workspace.createRoom({
+          members,
+          type: 'group',
+          title,
+          avatar,
+        });
+      },
     }),
     [workspace],
   );
