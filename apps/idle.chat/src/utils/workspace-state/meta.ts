@@ -1,6 +1,6 @@
 import { ID } from '@idle/model';
 import { Subject } from 'rxjs';
-import { Binder } from 'immer-yjs/src';
+import { Binder } from 'immer-yjs';
 import { Array as YArray, Map as YMap, Text as YText, YEvent } from 'yjs';
 import IdleDoc from './doc';
 import { User } from '../../features/auth/entities/user';

@@ -2,7 +2,7 @@ import { Flex, theme } from 'antd';
 import { Bell, Compass, HomeSimpleDoor, MultiBubble } from 'iconoir-react';
 import { useMemo } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { RouteKey, Routes } from '../../router/routes';
+import { RouteKey, Routes } from '../../../router/routes';
 
 const { useToken } = theme;
 

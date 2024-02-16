@@ -1,18 +1,18 @@
 import { ID } from '@idle/model';
 import * as Y from 'yjs';
 import { Subject } from 'rxjs';
-import { JSONObject, UpdateFn } from 'immer-yjs/src';
 import IdleDoc from './doc';
-import { RoomMeta } from './meta';
 
-export default class RoomDoc<Message extends JSONObject = Record<string, any>> {
+export default class RoomDoc<
+  State extends Record<string, unknown> = Record<string, any>,
+> {
   readonly id: ID;
 
   readonly rootDoc: IdleDoc;
 
   protected readonly _yRoomDoc: Y.Doc;
 
-  protected readonly _yMessages: Y.Array<Message>;
+  protected readonly _yMessages: Y.Map<State[keyof State]>;
 
   private _loaded!: boolean;
 
@@ -23,7 +23,7 @@ export default class RoomDoc<Message extends JSONObject = Record<string, any>> {
     this.rootDoc = rootDoc;
 
     this._yRoomDoc = this._initSubDoc();
-    this._yMessages = this._yRoomDoc.getArray('messages');
+    this._yMessages = this._yRoomDoc.getMap('messages');
   }
 
   get yMessages() {
@@ -36,10 +36,6 @@ export default class RoomDoc<Message extends JSONObject = Record<string, any>> {
 
   get roomDoc() {
     return this._yRoomDoc;
-  }
-
-  addMessage(message: Message) {
-    this.roomDoc.getArray('messages').push([message]);
   }
 
   async load() {
@@ -89,8 +85,10 @@ export default class RoomDoc<Message extends JSONObject = Record<string, any>> {
     this._onLoad.next();
   };
 
-  update(fn: UpdateFn<Message>) {
-    console.log(this);
-    throw new Error('not implemented yet');
+  /**
+   * If `shouldTransact` is `false`, the transaction will not be push to the history stack.
+   */
+  transact(fn: () => void, shouldTransact = true) {
+    this._yRoomDoc.transact(fn, shouldTransact ? this.rootDoc.clientID : null);
   }
 }

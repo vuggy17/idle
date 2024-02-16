@@ -3,11 +3,11 @@ import { AutoComplete, Flex, Input, Typography } from 'antd';
 import { useAtom, useAtomValue } from 'jotai';
 import { useDebouncedCallback } from 'use-debounce';
 import { ID } from '@idle/model';
-import { waitForCurrentWorkspaceAtom } from '../../utils/workspace/atom';
-import useWorkspaceInfo from '../../hooks/use-workspace-info';
-import PartialAvatar from '../user-card/partial-avatar';
-import { RoomMeta } from '../../utils/workspace-state/meta';
-import useNavigateHelper from '../../hooks/use-navigate-helper';
+import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
+import useWorkspaceInfo from '../../../hooks/use-workspace-info';
+import PartialAvatar from '../../user-card/partial-avatar';
+import { RoomMeta } from '../../../utils/workspace-state/meta';
+import useNavigateHelper from '../../../hooks/use-navigate-helper';
 import { globalSearchQueryAtom, useCommandGroups } from './use-command-groups';
 
 export default function WorkspaceSearch() {

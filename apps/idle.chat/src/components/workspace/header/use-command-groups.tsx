@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import { atom, useAtomValue } from 'jotai';
 import groupBy from 'lodash.groupby';
 import { atomWithStorage } from 'jotai/utils';
-import useNavigateHelper from '../../hooks/use-navigate-helper';
-import { IdleWorkspace } from '../../utils/workspace-state';
-import { waitForCurrentWorkspaceAtom } from '../../utils/workspace/atom';
-import { RoomMeta } from '../../utils/workspace-state/meta';
-import useRoomMetas from '../../hooks/use-room-meta';
+import useNavigateHelper from '../../../hooks/use-navigate-helper';
+import { IdleWorkspace } from '../../../utils/workspace-state';
+import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
+import { RoomMeta } from '../../../utils/workspace-state/meta';
+import useRoomMetas from '../../../hooks/use-room-meta';
 
 type CommandCategory = 'room' | 'recent';
 

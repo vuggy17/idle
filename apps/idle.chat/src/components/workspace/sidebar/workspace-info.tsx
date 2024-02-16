@@ -1,7 +1,7 @@
 import { Tooltip } from 'antd';
-import WorkspaceFlavour from '../../utils/workspace/list/workspace-flavour';
-import useWorkspaceInfo from '../../hooks/use-workspace-info';
-import PartialAvatar from '../user-card/partial-avatar';
+import WorkspaceFlavour from '../../../utils/workspace/list/workspace-flavour';
+import useWorkspaceInfo from '../../../hooks/use-workspace-info';
+import PartialAvatar from '../../user-card/partial-avatar';
 
 type WorkspaceInfoProps = {
   metadata: {

@@ -77,7 +77,7 @@ export default function RoomDetailHeader({ room }: { room: Room }) {
         <Flex
           justify="space-between"
           align="center"
-          className="ml-px pl-6 pr-4"
+          className="ml-px pl-4 pr-4"
         >
           <Space>
             <PartialAvatar src={avatar} alt={title} size="large" />

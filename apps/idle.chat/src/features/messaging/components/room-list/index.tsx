@@ -33,9 +33,13 @@ export default function RoomList({ rooms }: { rooms: RoomMeta[] }) {
       >
         <List
           header={
-            <div className="px-3">
-              <Flex align="center" justify="space-between" className="mb-[2px]">
-                <Typography.Title level={4} className="mb-0 mt-0">
+            <div className="px-6 pt-3">
+              <Flex align="center" justify="space-between" className="mb-0">
+                <Typography.Title
+                  level={4}
+                  className="mt-0"
+                  style={{ marginBottom: 0 }}
+                >
                   Messages
                 </Typography.Title>
               </Flex>

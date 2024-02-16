@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 import { useParams } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { currentRoomIdAtom } from 'apps/idle.chat/src/store/room';
-import { Suspense, memo, useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { ID } from '@idle/model';
 import { IdleWorkspace as Workspace } from 'apps/idle.chat/src/utils/workspace-state';
 import { RoomLayout } from './room-layout';
@@ -38,33 +38,6 @@ function RoomDetailPage({ roomId }: { roomId: ID }) {
 
   const room = useSafeRoom(workspace.state, roomId);
   const setRecentRoom = useSetAtom(recentRoomIdsAtom);
-  // room?.addMessages([
-  //   {
-  //     props: {
-  //       text: 'haha',
-  //     },
-  //   },
-  //   {
-  //     props: {
-  //       text: 'haha1',
-  //     },
-  //   },
-  //   {
-  //     props: {
-  //       text: 'haha2',
-  //     },
-  //   },
-  //   {
-  //     props: {
-  //       text: 'haha3',
-  //     },
-  //   },
-  //   {
-  //     props: {
-  //       text: 'haha4',
-  //     },
-  //   },
-  // ]);
 
   useEffect(() => {
     setRecentRoom((prevs) => [...new Set([...prevs, roomId])].slice(0, 3));
@@ -73,8 +46,7 @@ function RoomDetailPage({ roomId }: { roomId: ID }) {
   if (!room) return 'room not found';
   return <DetailRoomImpl room={room} />;
 }
-// const DetailRoomImpl = memo(
-  function DetailRoomImpl({ room }: { room: Room }) {
+function DetailRoomImpl({ room }: { room: Room }) {
   const currentRoomId = room.id;
   const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
 
@@ -106,7 +78,6 @@ function RoomDetailPage({ roomId }: { roomId: ID }) {
     </Layout>
   );
 }
-// );
 
 export function Component() {
   const setCurrentRoomId = useSetAtom(currentRoomIdAtom);

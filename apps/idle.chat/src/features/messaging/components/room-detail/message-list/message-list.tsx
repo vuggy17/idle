@@ -1,4 +1,6 @@
-import Message from './message';
+import { Message } from 'apps/idle.chat/src/utils/workspace-state/message/message';
+import Room from '../../../../../utils/workspace-state/room';
+import MessageComponent from './message';
 
 const messages = [
   {
@@ -163,14 +165,26 @@ const messages = [
 const isSelf = (id: string) => {
   return id === 'a3b0wq5mcp3gxl28fh8vuo2k';
 };
-export default function MessageList() {
+export default function MessageList({ messages }: { messages: Message[] }) {
   return (
     <div>
       {messages.map((m, index) => (
-        <Message
-          self={isSelf(m.author.id)}
-          author={m.author}
-          content={m.content}
+        <MessageComponent
+          key={index}
+          author={{
+            id: 'a3b0wq5mcp3gxl28fh8vuo2k',
+            email: 'personA@gmail.com',
+            phone: '',
+            name: 'Person A',
+            avatar: '',
+            createdAt: 1703238268,
+            updatedAt: 1703238268,
+          }}
+          self={false}
+          content={(m.props as any).text}
+          // self={isSelf(m.author.id)}
+          // author={m.author}
+          // content={m.content}
         />
       ))}
     </div>

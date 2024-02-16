@@ -32,7 +32,7 @@ export function RoomMetaRender({ meta }: { meta: RoomMeta }) {
   const isSelected = currentRoom === meta.id;
   return (
     <List.Item
-      className={`min-w-0 ${isSelected ? 'active' : ''}`}
+      className={`min-w-0 mx-2 ${isSelected ? 'active' : ''}`}
       onClick={onRoomClick}
     >
       <RoomItemInner

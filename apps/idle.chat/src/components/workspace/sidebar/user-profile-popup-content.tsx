@@ -13,13 +13,13 @@ import {
 } from 'antd';
 import { lazy, useState, Suspense } from 'react';
 import SetsStatusModal from './set-status-modal';
-import { User } from '../../features/auth/entities/user';
-import useAuth from '../../services/use-auth';
-import ModalFallback from '../fallbacks/modal-fallback';
-import UserCard from '../user-card';
+import { User } from '../../../features/auth/entities/user';
+import useAuth from '../../../services/use-auth';
+import ModalFallback from '../../fallbacks/modal-fallback';
+import UserCard from '../../user-card';
 
 const PreferencePage = lazy(
-  () => import('../../features/profile-management/pages/preference'),
+  () => import('../../../features/profile-management/pages/preference'),
 );
 
 type MenuItem = Required<MenuProps>['items'][number];

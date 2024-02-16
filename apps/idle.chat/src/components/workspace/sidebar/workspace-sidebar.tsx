@@ -12,14 +12,14 @@ import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { Link, useMatches } from 'react-router-dom';
 import { Plus } from 'iconoir-react';
-import { waitForCurrentWorkspaceAtom } from '../../utils/workspace/atom';
-import { AppPages } from '../../router/routes';
-import { currentUserAtom } from '../../store/user';
+import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
+import { AppPages } from '../../../router/routes';
+import { currentUserAtom } from '../../../store/user';
 import NavIcon from './icon';
 import UserProfilePopupContent from './user-profile-popup-content';
 import WorkspaceInfo from './workspace-info';
-import NewChatModal from '../../features/messaging/components/new-chat-modal';
-import PartialAvatar from '../user-card/partial-avatar';
+import NewChatModal from '../../../features/messaging/components/new-chat-modal';
+import PartialAvatar from '../../user-card/partial-avatar';
 
 const { useToken } = theme;
 
@@ -57,7 +57,7 @@ function useNavIcons(configs: typeof menuConfig): MenuItem[] {
   }));
 }
 
-export default function RootAppSidebar() {
+export default function WorkspaceSidebar() {
   const { token } = useToken();
   const currentUser = useAtomValue(currentUserAtom);
   const workspace = useAtomValue(waitForCurrentWorkspaceAtom);
@@ -78,9 +78,6 @@ export default function RootAppSidebar() {
     >
       <Flex
         className="h-full pb-6 pt-4"
-        style={{
-          boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 0 12px inset',
-        }}
         vertical
         justify="space-between"
         align="center"
@@ -93,7 +90,8 @@ export default function RootAppSidebar() {
           theme={{
             components: {
               Menu: {
-                itemBg: token.colorBgLayout,
+                itemBg: 'transparent',
+                // itemBg: token.colorBgLayout,
                 // collapsedIconSize: 20,  this wont work
                 // TODO: let's report a issue 💪
                 fontSizeLG: 20, // icon size, see: https://github.com/ant-design/ant-design/blob/3233ac498ff2f2c611b727dc99cc399d9e074a65/components/menu/style/index.tsx#L993C9-L993C26
@@ -119,7 +117,7 @@ export default function RootAppSidebar() {
               onClick={() => setIsNewChatModalOpen(true)}
               type="primary"
               size="large"
-              className="align-top block mx-auto mb-4 hover:rotate-45"
+              className="align-top block mx-auto mb-4"
               icon={
                 <Plus
                   height={18}

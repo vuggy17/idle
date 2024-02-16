@@ -14,12 +14,10 @@ type MessageProps = {
 export default function Message({ self, content, author }: MessageProps) {
   return (
     <MessageLayoutOuter
-      title={
-        !self ? <Typography.Text strong>{author.name}</Typography.Text> : null
-      }
+      title={<Typography.Text strong className='leading-4'>{author.name}</Typography.Text>}
       content={<Typography.Text>{content}</Typography.Text>}
       thumbnail={<PartialAvatar src={author.avatar} alt={author.name} />}
-      Layout={self ? MessageLayoutSelf : MessageLayout}
+      Layout={MessageLayout}
     />
   );
 }
