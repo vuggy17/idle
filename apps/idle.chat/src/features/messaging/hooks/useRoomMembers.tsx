@@ -1,17 +1,17 @@
 import { ID } from '@idle/model';
-import { IdleWorkspace } from 'apps/idle.chat/src/utils/workspace-state';
+import { DocumentWorkspace } from 'apps/idle.chat/src/utils/workspace-state';
 import useRoomMetas from 'apps/idle.chat/src/hooks/use-room-meta';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import HttpProvider from 'apps/idle.chat/src/providers/http';
 
-function useRoomMeta(workspace: IdleWorkspace, roomId: ID) {
+function useRoomMeta(workspace: DocumentWorkspace, roomId: ID) {
   const list = useRoomMetas(workspace);
   const meta = list.find((meta) => meta.id === roomId);
   if (!meta) throw new Error('room not found on current workspace');
   return meta;
 }
 
-// export default function useRoomMembers(workspace: IdleWorkspace, roomId: ID) {
+// export default function useRoomMembers(workspace: DocumentWorkspace, roomId: ID) {
 //   const meta = useRoomMeta(workspace, roomId);
 //   const { members } = meta;
 //   // call api to get user information if not found on map
@@ -26,7 +26,7 @@ function useRoomMeta(workspace: IdleWorkspace, roomId: ID) {
  * @param roomId
  * @returns
  */
-export function useRoomMembers(workspace: IdleWorkspace, roomId: ID) {
+export function useRoomMembers(workspace: DocumentWorkspace, roomId: ID) {
   const meta = useRoomMeta(workspace, roomId);
   const { members } = meta;
 

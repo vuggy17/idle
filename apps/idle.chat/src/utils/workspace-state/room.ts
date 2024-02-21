@@ -39,7 +39,7 @@ export default class Room extends RoomDoc<FlatMessageMap> {
 
   readonly events = {
     ready: new Subject<void>(),
-    blockUpdated: new Subject<{
+    messageUpdated: new Subject<{
       type: 'add';
       id: string;
     }>(),
@@ -59,6 +59,8 @@ export default class Room extends RoomDoc<FlatMessageMap> {
     this._idGenerator = idGenerator;
 
     this._messageList = new MessageList(this._yMessages);
+
+    this.events.ready.subscribe(() => console.log('room ready'));
   }
 
   get ready() {
@@ -115,10 +117,9 @@ export default class Room extends RoomDoc<FlatMessageMap> {
       );
       return;
     }
-    console.log('_handleYMessageAdd');
     this._messageList.onMessageAdded(id, this);
 
-    this.events.blockUpdated.next({ type: 'add', id });
+    this.events.messageUpdated.next({ type: 'add', id });
   }
 
   private _handleYEvent(event: Y.YEvent<YMessage | Y.Text | Y.Array<unknown>>) {
@@ -143,16 +144,23 @@ export default class Room extends RoomDoc<FlatMessageMap> {
     }
   };
 
-  override async load(initFn?: () => Promise<void> | void) {
+  override load(initFn?: () => Promise<void> | void) {
     if (this.ready) {
-      throw new Error('Cannot load page more than once');
+      return this;
     }
+    console.log('room load called');
+    super.load();
 
-    await super.load();
-    this._trySyncFromExistingDoc();
+    // console.log('load', this._yMessages.toJSON());
+
+    this._initYMessages();
+
+    this._yMessages.forEach((_, id) => {
+      this._handleYMessageAdd(id);
+    });
 
     if (initFn) {
-      await initFn();
+      initFn();
     }
 
     this._ready = true;
@@ -161,27 +169,11 @@ export default class Room extends RoomDoc<FlatMessageMap> {
     return this;
   }
 
-  private _trySyncFromExistingDoc() {
-    console.log(
-      '🚀 ~ Room ~ _trySyncFromExistingDoc ~ _trySyncFromExistingDoc:',
-    );
-    if (this.ready) {
-      throw new Error('Cannot sync from existing doc more than once');
-    }
-
-    this._initYMessages();
-
-    this._yMessages.forEach((_, id) => {
-      // console.log(id);
-      this._handleYMessageAdd(id);
-    });
-  }
-
   dispose() {
     console.log('room disposing');
     // throw new Error('Method not implemented.');
 
-    this.events.blockUpdated.unsubscribe();
+    this.events.messageUpdated.unsubscribe();
 
     if (this.ready) {
       this._yMessages.unobserveDeep(this._handleYEvents);
@@ -190,6 +182,7 @@ export default class Room extends RoomDoc<FlatMessageMap> {
   }
 
   private _initYMessages() {
+    // console.log('init y message', this._yMessages.toJSON());
     this._yMessages.observeDeep(this._handleYEvents);
   }
 }

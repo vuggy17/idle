@@ -9,7 +9,7 @@ import { User } from '../../features/auth/entities/user';
 import { Search, WorkspaceExtension } from './extensions';
 
 @Search
-export default class IdleWorkspace extends WorkspaceExtension {
+export default class DocumentWorkspace extends WorkspaceExtension {
   private readonly _store: Store;
 
   readonly meta: WorkspaceMeta;
@@ -33,6 +33,10 @@ export default class IdleWorkspace extends WorkspaceExtension {
 
   get doc() {
     return this._store.doc;
+  }
+
+  get syncEngine() {
+    return this._store.syncEngine;
   }
 
   get rooms() {
@@ -91,7 +95,7 @@ export default class IdleWorkspace extends WorkspaceExtension {
 
     const DEFAULT_ROOM_NAME = 'New chat';
     const { id, members, type, title } = options;
-    const roomId = id ?? this._store.generateId();
+    const roomId = id || this._store.idGenerator();
     if (this._hasRoom(roomId)) {
       throw new Error('room already exists');
     }
@@ -131,5 +135,9 @@ export default class IdleWorkspace extends WorkspaceExtension {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  start() {
+    this.syncEngine.start();
   }
 }

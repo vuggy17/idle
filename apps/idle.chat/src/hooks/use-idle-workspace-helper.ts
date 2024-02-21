@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { IdleWorkspace } from '../utils/workspace-state';
+import { DocumentWorkspace } from '../utils/workspace-state';
 import { User } from '../features/auth/entities/user';
 
-export default function useIdleWorkspaceHelper(workspace: IdleWorkspace) {
+export default function useIdleWorkspaceHelper(workspace: DocumentWorkspace) {
   return useMemo(
     () => ({
       createPrivateRoom(members: User[], title: string, avatar?: string) {

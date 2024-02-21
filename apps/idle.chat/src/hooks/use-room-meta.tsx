@@ -1,6 +1,6 @@
 import { Atom, atom, useAtomValue } from 'jotai';
 import uniqueId from '../utils/unique-id';
-import { IdleWorkspace } from '../utils/workspace-state';
+import { DocumentWorkspace } from '../utils/workspace-state';
 import { RoomMeta } from '../utils/workspace-state/meta';
 
 const data = [
@@ -20,9 +20,9 @@ const data = [
   })),
 ];
 
-const weakMap = new WeakMap<IdleWorkspace, Atom<RoomMeta[]>>();
+const weakMap = new WeakMap<DocumentWorkspace, Atom<RoomMeta[]>>();
 
-export default function useRoomMetas(workspace: IdleWorkspace): RoomMeta[] {
+export default function useRoomMetas(workspace: DocumentWorkspace): RoomMeta[] {
   if (!weakMap.has(workspace)) {
     const roomMetasAtom = atom<RoomMeta[]>(workspace.meta.roomMetas);
     weakMap.set(workspace, roomMetasAtom);

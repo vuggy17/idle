@@ -3,7 +3,7 @@ import { atom, useAtomValue } from 'jotai';
 import groupBy from 'lodash.groupby';
 import { atomWithStorage } from 'jotai/utils';
 import useNavigateHelper from '../../../hooks/use-navigate-helper';
-import { IdleWorkspace } from '../../../utils/workspace-state';
+import { DocumentWorkspace } from '../../../utils/workspace-state';
 import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
 import { RoomMeta } from '../../../utils/workspace-state/meta';
 import useRoomMetas from '../../../hooks/use-room-meta';
@@ -44,7 +44,7 @@ function useRecentRoom(): RoomMeta[] {
 function roomToCommand(
   category: CommandCategory,
   room: RoomMeta,
-  workspace: IdleWorkspace,
+  workspace: DocumentWorkspace,
   navigate: ReturnType<typeof useNavigateHelper>,
 ): Command {
   return {
@@ -63,7 +63,7 @@ function roomToCommand(
  * @param workspace - The current workspace object.
  * @returns Array of commands that can be used for navigation.
  */
-function useRoomCommand(workspace: IdleWorkspace) {
+function useRoomCommand(workspace: DocumentWorkspace) {
   const recentRooms = useRecentRoom();
   const navigate = useNavigateHelper();
   const list = useRoomMetas(workspace);

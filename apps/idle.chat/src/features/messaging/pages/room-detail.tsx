@@ -4,7 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { currentRoomIdAtom } from 'apps/idle.chat/src/store/room';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { ID } from '@idle/model';
-import { IdleWorkspace as Workspace } from 'apps/idle.chat/src/utils/workspace-state';
+import { DocumentWorkspace as Workspace } from 'apps/idle.chat/src/utils/workspace-state';
 import { RoomLayout } from './room-layout';
 import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
 import RoomDetailHeader from '../components/room-detail/room-detail-header';
@@ -51,10 +51,10 @@ function DetailRoomImpl({ room }: { room: Room }) {
   const currentWorkspace = useAtomValue(waitForCurrentWorkspaceAtom);
 
   useEffect(() => {
-    const subscription = room.events.blockUpdated.subscribe(() => {
-      room.workspace.setRoomMeta(room.id, {
-        createDate: Date.now(),
-      });
+    const subscription = room.events.messageUpdated.subscribe(() => {
+      // room.workspace.setRoomMeta(room.id, {
+      //   createDate: Date.now(),
+      // });
     });
 
     return () => {
@@ -92,7 +92,7 @@ export function Component() {
   const { roomId } = params;
   return (
     <RoomLayout>
-      <Suspense>{roomId ? <RoomDetailPage roomId={roomId} /> : null}</Suspense>
+      <Suspense fallback="ccacccc">{roomId ? <RoomDetailPage roomId={roomId} /> : null}</Suspense>
     </RoomLayout>
   );
 }

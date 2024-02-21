@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import differenceWith from 'lodash.differencewith';
-import { RoomInformation } from './information';
+import { WorkspaceInformation } from './information';
 import { WorkspaceMetadata } from '../metadata';
 import { readWorkspaceListCache, writeWorkspaceListCache } from './cache';
 import { WorkspaceListProvider } from './provider';
@@ -23,7 +23,10 @@ const logger = console;
 export class WorkspaceList {
   private readonly abortController = new AbortController();
 
-  private readonly roomInformationList = new Map<string, RoomInformation>();
+  private readonly workspaceInformationList = new Map<
+    string,
+    WorkspaceInformation
+  >();
 
   onStatusChanged = new Subject<WorkspaceListStatus>();
 
@@ -217,7 +220,7 @@ export class WorkspaceList {
    * get workspace information, if not exists, create it.
    */
   getInformation(meta: WorkspaceMetadata) {
-    const exists = this.roomInformationList.get(meta.id);
+    const exists = this.workspaceInformationList.get(meta.id);
     if (exists) {
       return exists;
     }
@@ -232,9 +235,9 @@ export class WorkspaceList {
     if (!provider) {
       throw new Error(`Unknown workspace flavour: ${roomMetadata.flavour}`);
     }
-    const information = new RoomInformation(roomMetadata, provider);
+    const information = new WorkspaceInformation(roomMetadata, provider);
     information.fetch();
-    this.roomInformationList.set(roomMetadata.id, information);
+    this.workspaceInformationList.set(roomMetadata.id, information);
     return information;
   }
 

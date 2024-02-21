@@ -12,6 +12,7 @@ import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { Link, useMatches } from 'react-router-dom';
 import { Plus } from 'iconoir-react';
+import WorkspaceFlavour from 'apps/idle.chat/src/utils/workspace/list/workspace-flavour';
 import { waitForCurrentWorkspaceAtom } from '../../../utils/workspace/atom';
 import { AppPages } from '../../../router/routes';
 import { currentUserAtom } from '../../../store/user';
@@ -84,7 +85,7 @@ export default function WorkspaceSidebar() {
       >
         {/* workspace icon */}
         <WorkspaceInfo
-          metadata={{ flavour: workspace.flavour, id: workspace.id }}
+          metadata={{ flavour: WorkspaceFlavour.LOCAL, id: workspace.id }}
         />
         <ConfigProvider
           theme={{

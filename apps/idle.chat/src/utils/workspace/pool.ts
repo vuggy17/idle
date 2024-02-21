@@ -64,7 +64,7 @@ export class WorkspacePool {
     )) {
       if (rc === 0 && workspace.canGracefulStop()) {
         // we can safely close the workspace
-        logger.info(`close workspace [${workspace.flavour}] ${workspace.id}`);
+        logger.info(`close workspace ${workspace.id}`);
         workspace.forceStop();
 
         this.openedWorkspace.delete(id);

@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { throwIfAborted } from '../utils/throw-if-aborted';
 import type { BlobEngine } from './blob';
-import type { SyncEngine, SyncEngineStatus } from './sync';
+import type { SyncEngine, SyncEngineStatus } from '../sync';
 
 export interface WorkspaceEngineStatus {
   sync: SyncEngineStatus;
@@ -62,4 +62,4 @@ export class WorkspaceEngine {
 }
 
 export * from './blob';
-export * from './sync';
+export * from '../sync';

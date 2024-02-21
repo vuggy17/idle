@@ -12,8 +12,9 @@ import { SyncStorage } from './storage';
 import {
   PriorityAsyncQueue,
   SharedPriorityTarget,
-} from '../../utils/shared-priority-target';
-import { MANUALLY_STOP, throwIfAborted } from '../../utils/throw-if-aborted';
+} from '../utils/shared-priority-target';
+import { MANUALLY_STOP, throwIfAborted } from '../utils/throw-if-aborted';
+import { ConsoleLogger, NoopLogger } from '../../logger';
 
 export interface SyncPeerStatus {
   step: SyncPeerStep;
@@ -34,7 +35,7 @@ export class SyncPeer {
 
   onStatusChange = new Subject<SyncPeerStatus>();
 
-  logger = console;
+  logger = new NoopLogger('SyncPeer');
 
   readonly abort = new AbortController();
 
@@ -57,7 +58,7 @@ export class SyncPeer {
 
   private set status(s: SyncPeerStatus) {
     if (!isEqual(s, this._status)) {
-      this.logger.debug('status change', s);
+      // this.logger.debug('status change', s);
       this._status = s;
       this.onStatusChange.next(s);
     }
@@ -144,12 +145,15 @@ export class SyncPeer {
   async sync(abortOuter: AbortSignal) {
     this.initState();
     const abortInner = new AbortController();
+
     abortOuter.addEventListener('abort', (reason) => {
       abortInner.abort(reason);
     });
+
     let dispose: (() => void) | null = null;
     try {
       this.reportSyncStatus();
+
       // start listen storage updates
       dispose = await this.storage.subscribe(
         this.handleStorageUpdates,
@@ -159,6 +163,7 @@ export class SyncPeer {
         },
       );
       throwIfAborted(abortInner.signal);
+
       // Step 1: load root doc
       await this.connectDoc(this.rootDoc, abortInner.signal);
       // Step 2: load subdocs
@@ -168,8 +173,11 @@ export class SyncPeer {
           doc,
         })),
       );
+
       this.reportSyncStatus();
+
       this.rootDoc.on('subdocs', this.handleSubdocsUpdate);
+
       // Finally: start sync
       await Promise.all([
         // load subdocs
@@ -372,27 +380,41 @@ export class SyncPeer {
       pendingPushUpdates:
         this.state.pushUpdatesQueue.length + (this.state.pushingUpdate ? 1 : 0),
     };
-
-    // console.log('sync staus: ', this.status);
   }
 
   async waitForLoaded(abort?: AbortSignal) {
+    this.logger.debug('waiting for load');
     if (this.status.step > SyncPeerStep.Loaded) {
+      this.logger.debug(
+        'wait for loaded resolve with this.status.step > SyncPeerStep.Loaded',
+      );
       return Promise.resolve();
     }
     return Promise.race([
       new Promise<void>((resolve) => {
         this.onStatusChange.subscribe((status) => {
           if (status.step > SyncPeerStep.Loaded) {
+            this.logger.debug(
+              'wait for loaded resolve with staus change, status: ',
+              this.status,
+            );
             resolve();
           }
         });
       }),
       new Promise((_, reject) => {
         if (abort?.aborted) {
+          this.logger.debug(
+            'wait for loaded rejected due to aborted 1 ',
+            this.status,
+          );
           reject(abort?.reason);
         }
         abort?.addEventListener('abort', () => {
+          this.logger.debug(
+            'wait for loaded rejected due to aborted 1 ',
+            this.status,
+          );
           reject(abort.reason);
         });
       }),

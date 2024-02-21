@@ -1,5 +1,5 @@
 import { ID } from '@idle/model';
-import { IdleWorkspace } from 'apps/idle.chat/src/utils/workspace-state';
+import { DocumentWorkspace } from 'apps/idle.chat/src/utils/workspace-state';
 import MessageList from './message-list/message-list';
 import MessageInput from './message-input';
 import { Flex } from 'antd';
@@ -9,7 +9,7 @@ export default function RoomDetail({
   workspace,
   roomId,
 }: {
-  workspace: IdleWorkspace;
+  workspace: DocumentWorkspace;
   roomId: ID;
 }) {
   const room = useWorkspaceRoom(workspace, roomId);
@@ -18,7 +18,7 @@ export default function RoomDetail({
   return (
     <Flex vertical className="h-full">
       <section className="flex-1 overflow-auto">
-        <MessageList messages={room.messages} />
+        <MessageList room={room} />
       </section>
       <div className="px-4 mb-6">
         <MessageInput placeholder={`Message #${room.meta?.title}`} />

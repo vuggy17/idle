@@ -1,7 +1,7 @@
 import { Message } from 'apps/idle.chat/src/utils/workspace-state/message/message';
 import Room from '../../../../../utils/workspace-state/room';
 import MessageComponent from './message';
-
+import { use } from 'foxact/use';
 const messages = [
   {
     id: 'i8yrcfq3oi95q6hmo2h7on7l',
@@ -165,10 +165,34 @@ const messages = [
 const isSelf = (id: string) => {
   return id === 'a3b0wq5mcp3gxl28fh8vuo2k';
 };
-export default function MessageList({ messages }: { messages: Message[] }) {
+
+// function useRoom(room: Room) {
+//   console.log('room', room);
+//   if (!room.ready) {
+//     // room.load();
+
+//     use(
+//       new Promise<void>((resolve, reject) => {
+//         const subscription = room.events.ready.subscribe(() => {
+//           console.log('room.loaded', room.loaded)
+//           resolve()
+//         });
+
+//         setTimeout(() => {
+//           // console.log('page end');
+//           subscription.unsubscribe();
+//           reject(new Error('Page load stuck'));
+//         }, 3 * 1000);
+//       }),
+//     );
+//   }
+// }
+export default function MessageList({ room }: { room: Room }) {
+  // useRoom(room);
+  console.log('room', room)
   return (
     <div>
-      {messages.map((m, index) => (
+      {room.messages.map((m, index) => (
         <MessageComponent
           key={index}
           author={{

@@ -1,13 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { ID } from '@idle/model';
-import { IdleWorkspace } from '../utils/workspace-state';
+import { DocumentWorkspace } from '../utils/workspace-state';
 import useIdleWorkspaceHelper from './use-idle-workspace-helper';
 import useNavigateHelper from './use-navigate-helper';
 import { User } from '../features/auth/entities/user';
 import { assertExists } from '../utils/assert';
 import { RoomMeta } from '../utils/workspace-state/meta';
 
-export default function useRoomHelper(workspace: IdleWorkspace) {
+export default function useRoomHelper(workspace: DocumentWorkspace) {
   const { jumpToRoom } = useNavigateHelper();
   const { createGroupRoom } = useIdleWorkspaceHelper(workspace);
 

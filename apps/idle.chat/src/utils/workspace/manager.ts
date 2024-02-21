@@ -1,5 +1,5 @@
 import { ID } from '@idle/model';
-import { IdleWorkspace } from '../workspace-state';
+import { DocumentWorkspace } from '../workspace-state';
 import { BlobStorage } from './engine';
 import { WorkspaceFactory } from './factory';
 import { WorkspaceList } from './list';
@@ -74,7 +74,7 @@ export default class WorkspaceManager {
   createWorkspace(
     flavour: WorkspaceFlavour,
     initial: (
-      workspace: IdleWorkspace,
+      workspace: DocumentWorkspace,
       blobStorage: BlobStorage,
     ) => Promise<void>,
   ): Promise<ID> {

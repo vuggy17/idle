@@ -1,7 +1,7 @@
 import difference from 'lodash.difference';
 import { applyUpdate, encodeStateAsUpdate } from 'yjs';
 import { createId } from '@paralleldrive/cuid2';
-import { IdleWorkspace } from '../../../workspace-state';
+import { DocumentWorkspace } from '../../../workspace-state';
 import { WorkspaceInfo, WorkspaceListProvider } from '../../list/provider';
 import WorkspaceFlavour from '../../list/workspace-flavour';
 import { WorkspaceMetadata } from '../../metadata';
@@ -62,17 +62,18 @@ export function createLocalRoomListProvider(): WorkspaceListProvider {
      * @param initial callback to put initial data to workspace
      */
     async create(initial) {
-      function cuid() {
-        return createId;
-      }
       const id = createId();
 
       const blobStorage = createIndexeddbBlobStorage(id);
       const syncStorage = createLocalStorage(id);
 
-      const workspace = new IdleWorkspace({
+      const workspace = new DocumentWorkspace({
         id,
         idGenerator: 'cuid',
+        docSources: {
+          main: syncStorage,
+          shadow: [],
+        },
       });
 
       await initial(workspace, blobStorage);
@@ -146,22 +147,26 @@ export function createLocalRoomListProvider(): WorkspaceListProvider {
     async getInformation(id: string): Promise<WorkspaceInfo | undefined> {
       // get information from root doc
 
-      const storage = await createLocalStorage(id);
+      const storage = createLocalStorage(id);
       const data = await storage.pull(id, new Uint8Array([]));
 
       if (!data) {
         return undefined;
       }
 
-      const wp = new IdleWorkspace({
-        idGenerator: 'cuid',
+      const workspace = new DocumentWorkspace({
         id,
+        idGenerator: 'cuid',
+        docSources: {
+          main: storage,
+          shadow: [],
+        },
       });
 
-      applyUpdate(wp.doc, data.data);
+      applyUpdate(workspace.doc, data.data);
       return {
-        name: wp.meta.name,
-        avatar: wp.meta.avatar,
+        name: workspace.meta.name,
+        avatar: workspace.meta.avatar,
       };
     },
   };

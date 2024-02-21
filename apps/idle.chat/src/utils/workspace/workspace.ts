@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { WorkspaceMetadata } from './metadata';
-import { IdleWorkspace } from '../workspace-state';
+import { DocumentWorkspace } from '../workspace-state';
 import { WorkspaceEngine, WorkspaceEngineStatus } from './engine';
 
 const logger = console;
@@ -41,7 +41,7 @@ export default class Workspace {
   constructor(
     public meta: WorkspaceMetadata,
     public engine: WorkspaceEngine,
-    public state: IdleWorkspace,
+    public state: DocumentWorkspace,
   ) {
     this._status = {
       mode: 'closed',

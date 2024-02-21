@@ -1,9 +1,9 @@
 import { ID } from '@idle/model';
 import { useEffect, useState } from 'react';
-import { IdleWorkspace } from '../utils/workspace-state';
+import { DocumentWorkspace } from '../utils/workspace-state';
 
 export function useWorkspaceRoom(
-  workspaceState: IdleWorkspace,
+  workspaceState: DocumentWorkspace,
   roomId: ID | null,
 ) {
   const [room, setRoom] = useState(
@@ -27,13 +27,14 @@ export function useWorkspaceRoom(
     };
   }, [workspaceState, roomId]);
 
-  useEffect(() => {
-    if (room && !room.loaded) {
-      room.load().catch((err) => {
-        console.error('Failed to load room', err);
-      });
-    }
-  }, [room]);
+  // useEffect(() => {
+  //   console.log('effect');
+  //   setTimeout(() => {
+  //     if (room && !room.loaded) {
+  //       room.load();
+  //     }
+  //   }, 1000);
+  // }, [room]);
 
   return room;
 }

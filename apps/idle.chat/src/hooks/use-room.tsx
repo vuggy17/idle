@@ -1,7 +1,7 @@
 // import { ID } from '@idle/model';
 // import { Atom, atom, useAtomValue } from 'jotai';
 // import { useEffect } from 'react';
-// import { IdleWorkspace as Workspace } from '../utils/workspace-state';
+// import { DocumentWorkspace as Workspace } from '../utils/workspace-state';
 // import Room from '../utils/workspace-state/room';
 // import { assertExists } from '../utils/assert';
 

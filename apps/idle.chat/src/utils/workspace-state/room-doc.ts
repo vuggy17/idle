@@ -23,7 +23,11 @@ export default class RoomDoc<
     this.rootDoc = rootDoc;
 
     this._yRoomDoc = this._initSubDoc();
+    this._yRoomDoc.on('load', () => {
+      console.log('DOC LOADED');
+    });
     this._yMessages = this._yRoomDoc.getMap('messages');
+    // console.log('this._yRoomDoc', this._yRoomDoc);
   }
 
   get yMessages() {
@@ -38,21 +42,13 @@ export default class RoomDoc<
     return this._yRoomDoc;
   }
 
-  async load() {
-    if (this.loaded) {
-      return this;
-    }
-
-    const promise = new Promise((resolve) => {
-      this._onLoad.subscribe(() => {
-        resolve(undefined);
-      });
-    });
-
+  load() {
     this._yRoomDoc.load();
 
-    await promise;
-
+    console.log(this._yRoomDoc.toJSON());
+    // console.log(this._yRoomDoc.isLoaded);
+    // console.log(this._yRoomDoc.toJSON());
+    // console.log(this._yRoomDoc.toJSON());
     return this;
   }
 
@@ -69,7 +65,7 @@ export default class RoomDoc<
       this._loaded = false;
       this.rootDoc.on('subdocs', this._onSubdocEvent);
     }
-
+    // console.log('_initSubDoc', subDoc);
     return subDoc;
   };
 

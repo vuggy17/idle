@@ -8,6 +8,8 @@ import {
   workspaceListAtom,
 } from '../utils/workspace/atom';
 import WorkspaceLayout from '../layout/workspace-layout';
+import Workspace from '../utils/workspace/workspace';
+import { WorkspaceMetadata } from '../utils/workspace/metadata';
 
 const { useToken } = theme;
 
@@ -41,9 +43,16 @@ export function Component() {
   const [_, setCurrentWorkspace] = useAtom(currentWorkspaceAtom);
   const list = useAtomValue(workspaceListAtom);
 
-  // read last workspace from path, then open it instead
-  const firstWorkspaceMeta = list[0];
-  const workspace = useWorkspace(firstWorkspaceMeta);
+  const getRecentWorkspace = (workspaceList: WorkspaceMetadata[]) => {
+    const lastOpenWorkspaceId = localStorage.getItem('last_workspace_id');
+
+    const index = workspaceList.findIndex(
+      (workspace) => workspace.id === lastOpenWorkspaceId,
+    );
+    return workspaceList[index] ?? workspaceList[0];
+  };
+
+  const workspace = useWorkspace(getRecentWorkspace(list));
   useEffect(() => {
     if (!workspace) {
       setCurrentWorkspace(null);
@@ -53,7 +62,7 @@ export function Component() {
     setCurrentWorkspace(workspace);
 
     localStorage.setItem('last_workspace_id', workspace.id);
-  }, [firstWorkspaceMeta, list, setCurrentWorkspace, workspace]);
+  }, [list, setCurrentWorkspace, workspace]);
   return (
     <Suspense fallback={<WorkspaceFallback />}>
       <SideBarConfig>

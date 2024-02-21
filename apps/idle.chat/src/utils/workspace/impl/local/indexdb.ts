@@ -1,7 +1,7 @@
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
 import { diffUpdate, encodeStateVectorFromUpdate } from 'yjs';
 import { ID } from '@idle/model';
-import { SyncStorage } from '../../engine/sync/storage';
+import { SyncStorage } from '../../sync/storage';
 import mergeUpdates from '../../utils/merge-updates';
 
 type UpdateMessage = {
